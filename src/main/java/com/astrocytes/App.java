@@ -1,7 +1,6 @@
 package com.astrocytes;
 
 import com.astrocytes.widgets.GraphicalWidget;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
 import javax.imageio.ImageIO;
@@ -25,13 +24,6 @@ public class App {
     private Operations operations = new OperationsImpl();
     private BufferedImage image;
     private BufferedImage currentView;
-
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) { }
-    }
 
     public App() {
         JFrame frame = new JFrame("Astrocytes Detector");
