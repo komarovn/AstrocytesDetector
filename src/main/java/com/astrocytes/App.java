@@ -44,7 +44,7 @@ public class App {
         frame.setVisible(true);
     }
 
-    private void setMenuBar(JFrame frame) {
+    private void setMenuBar(final JFrame frame) {
         menuBar = new JMenuBar();
 
         JMenu file = new JMenu("File");
