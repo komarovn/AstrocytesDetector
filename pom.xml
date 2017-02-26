@@ -28,7 +28,7 @@
             <artifactId>appframework</artifactId>
             <version>1.0</version>
         </dependency>
-         
+
         <!-- https://mvnrepository.com/artifact/org.openpnp/opencv -->
         <dependency>
             <groupId>org.openpnp</groupId>
@@ -38,8 +38,8 @@
     </dependencies>
 
     <build>
-        <finalName>astrocytes_detector</finalName>
-        <outputDirectory>/${project.build.finalName}/WEB-INF/classes</outputDirectory>
+        <finalName>target</finalName>
+        <outputDirectory>${project.basedir}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
 
         <plugins>
             <plugin>
