@@ -54,7 +54,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>main.java.EntryPoint</mainClass>
+                            <mainClass>main.java.com.astrocytes.EntryPoint</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

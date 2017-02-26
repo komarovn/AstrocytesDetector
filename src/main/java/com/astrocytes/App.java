@@ -27,6 +27,9 @@ public class App {
 
     public App() {
         JFrame frame = new JFrame("Astrocytes Detector");
+        mainPanel = new JPanel();
+        mainPanel.setPreferredSize(new Dimension(1000, 600));
+        mainPanel.setMinimumSize(new Dimension(1000, 600));
         frame.setContentPane(mainPanel);
         mainPanel.setLayout(new BorderLayout());
         setMenuBar(frame);
