@@ -28,7 +28,7 @@
             <artifactId>appframework</artifactId>
             <version>1.0</version>
         </dependency>
-
+         
         <!-- https://mvnrepository.com/artifact/org.openpnp/opencv -->
         <dependency>
             <groupId>org.openpnp</groupId>
