@@ -16,24 +16,23 @@ import java.io.IOException;
  * Created by Nikolay Komarov on 23.02.2017.
  */
 public class App {
+    private JFrame frame = new JFrame("Astrocytes Detector");
+
     private JPanel mainPanel;
-    private JPanel pictureBox;
     private JMenuBar menuBar;
     private GraphicalWidget graphicalWidget;
 
     private Operations operations = new OperationsImpl();
     private BufferedImage image;
-    private BufferedImage currentView;
 
     public App() {
-        JFrame frame = new JFrame("Astrocytes Detector");
         mainPanel = new JPanel();
         mainPanel.setPreferredSize(new Dimension(1000, 600));
-        mainPanel.setMinimumSize(new Dimension(1000, 600));
+        frame.setMaximumSize(new Dimension(1920, 1080));
         frame.setContentPane(mainPanel);
         mainPanel.setLayout(new BorderLayout());
         setMenuBar(frame);
-        setPictureBox();
+        setGraphicalWidget();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -64,6 +63,7 @@ public class App {
                         Mat sourceImage = ImageHelper.convertBufferedImageToMat(bufferedImage);
                         operations.setSourceImage(sourceImage);
                         image = bufferedImage;
+                        updateWindowSize();
                         updateCurrentView();
                     } catch (IOException e1) {
                         e1.printStackTrace();
@@ -162,14 +162,24 @@ public class App {
         frame.setJMenuBar(menuBar);
     }
 
-    private void setPictureBox() {
+    private void setGraphicalWidget() {
         graphicalWidget = new GraphicalWidget();
         mainPanel.add(graphicalWidget);
+    }
+
+    private void updateGrahicalWidget() {
+        graphicalWidget.updateWidget();
     }
 
     private void updateCurrentView() {
         graphicalWidget.setImage(image);
         graphicalWidget.updateWidget();
+    }
+
+    private void updateWindowSize() {
+        Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setSize(new Dimension(screenDimension.width, (int) (screenDimension.getHeight() - menuBar.getSize().getHeight())));
+        frame.repaint();
     }
 
 }

@@ -35,9 +35,7 @@ public class GraphicalWidget extends JPanel {
         currentY = 0;
         zoomScale = zoomLevels.get(3);
         setSize(new Dimension(widthWidget, heightWidget));
-        setMaximumSize(new Dimension(widthWidget, heightWidget));
         setPreferredSize(new Dimension(widthWidget, heightWidget));
-        setMinimumSize(new Dimension(widthWidget, heightWidget));
         MouseAdapter mouseAdapter = new MouseAdapter() {
             Integer startPointX, startPointY;
             Integer endPointX, endPointY;
@@ -182,6 +180,13 @@ public class GraphicalWidget extends JPanel {
 
     public void updateWidget() {
         updateUI();
+    }
+
+    public void updateWidget(Integer width, Integer height) {
+        setSize(new Dimension(width, height));
+        widthWidget = width;
+        heightWidget = height;
+        updateWidget();
     }
 
     private void updateCurrentView(int deltaX, int deltaY) {
