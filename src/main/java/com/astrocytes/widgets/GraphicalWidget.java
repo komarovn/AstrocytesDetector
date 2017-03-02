@@ -41,6 +41,7 @@ public class GraphicalWidget extends JPanel {
         MouseAdapter mouseAdapter = new MouseAdapter() {
             Integer startPointX, startPointY;
             Integer endPointX, endPointY;
+            Boolean isZoomIn;
 
             @Override
             public void mousePressed(MouseEvent e) {
@@ -94,6 +95,7 @@ public class GraphicalWidget extends JPanel {
                         int currentIndex = zoomLevels.indexOf(zoomScale);
                         if (currentIndex != 0) {
                             zoomScale = zoomLevels.get(currentIndex - 1);
+                            isZoomIn = false;
                             changeZoomedImage();
                         }
                     }
@@ -101,6 +103,7 @@ public class GraphicalWidget extends JPanel {
                         int currentIndex = zoomLevels.indexOf(zoomScale);
                         if (currentIndex != zoomLevels.size() - 1) {
                             zoomScale = zoomLevels.get(currentIndex + 1);
+                            isZoomIn = true;
                             changeZoomedImage();
                         }
                     }
@@ -108,18 +111,24 @@ public class GraphicalWidget extends JPanel {
             }
 
             private void changeZoomedImage() {
-                if (zoomScale.equals(zoomLevels.get(3))) {
-                    zoomedImage = ImageHelper.cloneBufferedImage(image);
+                AffineTransform affineTransform = new AffineTransform();
+                affineTransform.scale(zoomScale, zoomScale);
+                AffineTransformOp affineTransformOp = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_BILINEAR);
+                int w = (int) (image.getWidth() * zoomScale);
+                int h = (int) (image.getHeight() * zoomScale);
+                int centerXBefore = currentX + widthImage / 2;
+                int centerYBefore = currentY + heightImage / 2;
+                zoomedImage = new BufferedImage(w, h, image.getType());
+                zoomedImage = affineTransformOp.filter(ImageHelper.cloneBufferedImage(image), zoomedImage);
+                int centerXAfter = centerXBefore * 2;
+                int centerYAfter = centerYBefore * 2;
+                if (!isZoomIn) {
+                    centerXAfter = centerXBefore / 2;
+                    centerYAfter = centerYBefore / 2;
                 }
-                else {
-                    AffineTransform affineTransform = new AffineTransform();
-                    affineTransform.scale(zoomScale, zoomScale);
-                    AffineTransformOp affineTransformOp = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_BILINEAR);
-                    int w = (int) (image.getWidth() * zoomScale);
-                    int h = (int) (image.getHeight() * zoomScale);
-                    zoomedImage = new BufferedImage(w, h, image.getType());
-                    zoomedImage = affineTransformOp.filter(ImageHelper.cloneBufferedImage(image), zoomedImage);
-                }
+                int deltaX = (centerXAfter - widthImage / 2) - currentX;
+                int deltaY = (centerYAfter - heightImage / 2) - currentY;
+
                 if (widthWidget >= zoomedImage.getWidth()) {
                     widthImage = zoomedImage.getWidth();
                 }
@@ -133,7 +142,7 @@ public class GraphicalWidget extends JPanel {
                     heightImage = heightWidget;
                 }
                 currentView = ImageHelper.cloneBufferedImage(zoomedImage);
-                updateCurrentView((int) (widthImage / zoomScale), (int) (heightImage / zoomScale));
+                updateCurrentView(deltaX, deltaY);
             }
         };
         addMouseListener(mouseAdapter);
