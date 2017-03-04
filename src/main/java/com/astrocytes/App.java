@@ -1,6 +1,7 @@
 package com.astrocytes;
 
 import com.astrocytes.dialogs.DialogCannyEdgeDetection;
+import com.astrocytes.resources.StringResources;
 import com.astrocytes.widgets.GraphicalWidget;
 import org.opencv.core.Mat;
 
@@ -17,7 +18,7 @@ import java.io.IOException;
  * Created by Nikolay Komarov on 23.02.2017.
  */
 public class App {
-    private JFrame frame = new JFrame("Astrocytes Detector");
+    private JFrame frame = new JFrame(StringResources.ASTROCYTES_DETECTOR);
 
     private JPanel mainPanel;
     private JMenuBar menuBar;
@@ -42,10 +43,10 @@ public class App {
     private void setMenuBar(final JFrame frame) {
         menuBar = new JMenuBar();
 
-        JMenu file = new JMenu("File");
-        JMenu operationsMenu = new JMenu("Operations");
+        JMenu file = new JMenu(StringResources.FILE);
+        JMenu operationsMenu = new JMenu(StringResources.OPERATIONS);
 
-        JMenuItem openFile = new JMenuItem("Open File...");
+        JMenuItem openFile = new JMenuItem(StringResources.OPEN_FILE);
         openFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Event.CTRL_MASK));
         openFile.addActionListener(new ActionListener() {
             @Override
@@ -73,7 +74,7 @@ public class App {
             }
         });
 
-        JMenuItem saveAs = new JMenuItem("Save As...");
+        JMenuItem saveAs = new JMenuItem(StringResources.SAVE_AS);
         saveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK));
         saveAs.addActionListener(new ActionListener() {
             @Override
@@ -100,7 +101,7 @@ public class App {
                 }
             }
         });
-        JMenuItem exit = new JMenuItem("Exit");
+        JMenuItem exit = new JMenuItem(StringResources.EXIT);
         exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, Event.CTRL_MASK));
         exit.addActionListener(new ActionListener() {
             @Override
@@ -109,7 +110,7 @@ public class App {
             }
         });
 
-        JMenuItem edgeDetection = new JMenuItem("Edge Detection");
+        JMenuItem edgeDetection = new JMenuItem(StringResources.EDGE_DETECTION);
         edgeDetection.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.SHIFT_MASK));
         edgeDetection.addActionListener(new ActionListener() {
             @Override
@@ -122,7 +123,7 @@ public class App {
                 }
             }
         });
-        JMenuItem dilateAndErode = new JMenuItem("Dilate and Erode");
+        JMenuItem dilateAndErode = new JMenuItem(StringResources.DILATE_AND_ERODE);
         dilateAndErode.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -133,7 +134,7 @@ public class App {
                 }
             }
         });
-        JMenuItem grayscale = new JMenuItem("Grayscale");
+        JMenuItem grayscale = new JMenuItem(StringResources.GRAYSCALE);
         grayscale.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -144,7 +145,7 @@ public class App {
                 }
             }
         });
-        JMenuItem findAstrocytes = new JMenuItem("Find Astrocytes");
+        JMenuItem findAstrocytes = new JMenuItem(StringResources.FIND_ASTROCYTES);
         findAstrocytes.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

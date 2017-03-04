@@ -1,5 +1,7 @@
 package com.astrocytes.dialogs;
 
+import com.astrocytes.resources.StringResources;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,7 +13,7 @@ public class DialogCannyEdgeDetection extends JDialog {
     private JPanel mainPanel;
 
     public DialogCannyEdgeDetection(JFrame owner) {
-        super(owner, "Canny Edge Detection", true);
+        super(owner, StringResources.CANNY_EDGE_DETECTION, true);
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         add(mainPanel);
