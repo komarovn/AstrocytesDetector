@@ -1,5 +1,6 @@
 package com.astrocytes;
 
+import com.astrocytes.dialogs.DialogCannyEdgeDetection;
 import com.astrocytes.widgets.GraphicalWidget;
 import org.opencv.core.Mat;
 
@@ -77,20 +78,25 @@ public class App {
         saveAs.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                final JFileChooser saveFileDialog = new JFileChooser();
-                saveFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("JPG Image", "jpg"));
-                saveFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("PNG Image", "png"));
-                saveFileDialog.setAcceptAllFileFilterUsed(false);
-                int result = saveFileDialog.showSaveDialog(frame);
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    File fileToSave = saveFileDialog.getSelectedFile();
-                    BufferedImage bufferedImage = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
-                    try {
-                        String type = saveFileDialog.getTypeDescription(fileToSave);
-                        ImageIO.write(bufferedImage, "png", fileToSave);
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
+                if (image != null) {
+                    final JFileChooser saveFileDialog = new JFileChooser();
+                    saveFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("JPG Image", "jpg"));
+                    saveFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("PNG Image", "png"));
+                    saveFileDialog.setAcceptAllFileFilterUsed(false);
+                    int result = saveFileDialog.showSaveDialog(frame);
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        File fileToSave = saveFileDialog.getSelectedFile();
+                        BufferedImage bufferedImage = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
+                        try {
+                            String type = saveFileDialog.getTypeDescription(fileToSave);
+                            ImageIO.write(bufferedImage, "png", fileToSave);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
                     }
+                }
+                else {
+                    // TODO: show message about empty image
                 }
             }
         });
@@ -109,6 +115,7 @@ public class App {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (image != null) {
+                    DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(frame);
                     operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(image), 20, 70);
                     image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
                     updateCurrentView();
