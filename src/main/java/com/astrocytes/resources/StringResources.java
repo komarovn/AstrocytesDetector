@@ -27,4 +27,10 @@ public abstract class StringResources {
 
     public static final String FIND_ASTROCYTES = "Find Astrocytes";
 
+    public static final String OK = "OK";
+
+    public static final String CANCEL = "Cancel";
+
+    public static final String RESET = "Reset";
+
 }

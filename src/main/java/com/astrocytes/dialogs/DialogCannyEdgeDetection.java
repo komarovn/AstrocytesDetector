@@ -15,4 +15,5 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
     }
 
 
+
 }
