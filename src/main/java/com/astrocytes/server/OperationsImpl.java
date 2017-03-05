@@ -50,9 +50,10 @@ public class OperationsImpl implements Operations {
     }
 
     @Override
-    public Mat applyMathMorphology(Mat source, Integer kernelSize) {
+    public Mat applyMathMorphology(Mat source, Integer radius) {
         Mat dest = new Mat();
-        Mat kernel = getStructuringElement(Imgproc.CV_SHAPE_ELLIPSE, new Size(5, 5), new Point(2, 2));
+        int instrumentSize = radius * 2 + 1;
+        Mat kernel = getStructuringElement(Imgproc.CV_SHAPE_ELLIPSE, new Size(instrumentSize, instrumentSize), new Point(radius, radius));
         Imgproc.morphologyEx(source, dest, MORPH_CLOSE, kernel, new Point(-1, -1), 1);
         dest.copyTo(getOutputImage());
         return dest;

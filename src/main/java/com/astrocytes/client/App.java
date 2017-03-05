@@ -140,7 +140,8 @@ public class App {
                 if (image != null) {
                     DialogDilateErode dialog = new DialogDilateErode(frame);
                     if (dialog.getStatus()) {
-                        operations.applyMathMorphology(ImageHelper.convertBufferedImageToMat(image), 5);
+                        operations.applyMathMorphology(ImageHelper.convertBufferedImageToMat(image),
+                                (Integer) AppParameters.getParameter(ClientConstants.RADIUS_DIL_ER));
                         image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
                         updateCurrentView();
                     }

@@ -99,13 +99,13 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
                         if (state.getValue() > maxThreshold.getValue()) {
                             maxThreshold.setValue(state.getValue());
                         }
-                        minTextbox.setValue(state.getValue());
+                        minTextbox.setText(String.valueOf(state.getValue()));
                     }
                     else {
                         if (state.getValue() < minThreshold.getValue()) {
                             minThreshold.setValue(state.getValue());
                         }
-                        maxTextBox.setValue(state.getValue());
+                        maxTextBox.setText(String.valueOf(state.getValue()));
                     }
 
                 }

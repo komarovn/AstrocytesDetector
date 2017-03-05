@@ -5,6 +5,8 @@ import com.astrocytes.client.resources.StringResources;
 import com.astrocytes.shared.AppParameters;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +17,7 @@ import java.text.NumberFormat;
  */
 public class DialogDilateErode extends AbstractDialog {
     private final int RADIUS_DEFAULT = 2;
+    private JSlider radiusSlider;
 
     public DialogDilateErode(JFrame owner) {
         super(owner, StringResources.DILATE_AND_ERODE);
@@ -27,7 +30,6 @@ public class DialogDilateErode extends AbstractDialog {
 
     private class DilateErodeBlock extends JPanel {
         private JFormattedTextField radiusTextbox;
-        private JSlider radiusSlider;
         private JLabel radiusLabel;
 
         public DilateErodeBlock() {
@@ -62,6 +64,14 @@ public class DialogDilateErode extends AbstractDialog {
 
         private void addListeners(final JSlider slider, final JFormattedTextField textField) {
             AbstractDialog.addListeners(slider, textField);
+
+            slider.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    JSlider state = (JSlider) e.getSource();
+                    textField.setText(String.valueOf(state.getValue()));
+                }
+            });
         }
     }
 
@@ -70,10 +80,15 @@ public class DialogDilateErode extends AbstractDialog {
         proceedAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                AppParameters.setParameter(ClientConstants.RADIUS_DIL_ER, getInstrumentRadius());
                 setStatus(true);
                 setVisible(false);
             }
         };
+    }
+
+    public int getInstrumentRadius() {
+        return radiusSlider.getValue();
     }
 
 }

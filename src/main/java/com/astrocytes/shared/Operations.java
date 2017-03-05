@@ -16,10 +16,10 @@ public interface Operations {
     /**
      * Making dilation and erosion with contours after Canny method applying.
      *
-     * @param source     - black and white image
-     * @param kernelSize - size of structuring element; must be odd and > 0
+     * @param source - black and white image
+     * @param radius - radius of structuring element; must be > 0
      */
-    public Mat applyMathMorphology(Mat source, Integer kernelSize);
+    public Mat applyMathMorphology(Mat source, Integer radius);
 
     /**
      * Converting color image into gray image.

@@ -6,7 +6,7 @@ package com.astrocytes.client.resources;
 public abstract class ClientConstants {
 
     public static final String CANNY_MIN_THRESH = "cannyMinThresh";
-
     public static final String CANNY_MAX_THRESH = "cannyMaxThresh";
+    public static final String RADIUS_DIL_ER = "radiusDilEr";
 
 }
