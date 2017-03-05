@@ -31,8 +31,14 @@ public class GraphicalWidget extends JPanel {
     private BufferedImage zoomedImage;
 
     public GraphicalWidget() {
+        this(null, null);
+    }
+
+    public GraphicalWidget(Integer width, Integer height) {
         currentX = 0;
         currentY = 0;
+        widthWidget = width == null ? widthWidget : width;
+        heightWidget = height == null ? heightWidget : height;
         zoomScale = zoomLevels.get(3);
         setSize(new Dimension(widthWidget, heightWidget));
         setPreferredSize(new Dimension(widthWidget, heightWidget));

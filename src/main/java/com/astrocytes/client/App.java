@@ -1,7 +1,8 @@
 package com.astrocytes.client;
 
-import com.astrocytes.client.ImageHelper;
 import com.astrocytes.client.dialogs.DialogCannyEdgeDetection;
+import com.astrocytes.client.dialogs.DialogDilateErode;
+import com.astrocytes.client.dialogs.DialogFindAstrocytes;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
 import com.astrocytes.server.OperationsImpl;
@@ -123,8 +124,6 @@ public class App {
                 if (image != null) {
                     DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(frame);
                     if (dialog.getStatus()) {
-                        //int minThresh = dialog.getMinThresh();
-                        //int maxThresh = dialog.getMaxThresh();
                         operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(image),
                                 (Integer) AppParameters.getParameter(ClientConstants.CANNY_MIN_THRESH),
                                 (Integer) AppParameters.getParameter(ClientConstants.CANNY_MAX_THRESH));
@@ -139,9 +138,12 @@ public class App {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (image != null) {
-                    operations.applyMathMorphology(ImageHelper.convertBufferedImageToMat(image), 5);
-                    image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
-                    updateCurrentView();
+                    DialogDilateErode dialog = new DialogDilateErode(frame);
+                    if (dialog.getStatus()) {
+                        operations.applyMathMorphology(ImageHelper.convertBufferedImageToMat(image), 5);
+                        image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
+                        updateCurrentView();
+                    }
                 }
             }
         });
@@ -161,9 +163,12 @@ public class App {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (image != null) {
-                    operations.drawAstrocyteCenters(ImageHelper.convertBufferedImageToMat(image));
-                    image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
-                    updateCurrentView();
+                    DialogFindAstrocytes dialog = new DialogFindAstrocytes(frame);
+                    if (dialog.getStatus()) {
+                        operations.drawAstrocyteCenters(ImageHelper.convertBufferedImageToMat(image));
+                        image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
+                        updateCurrentView();
+                    }
                 }
             }
         });
@@ -197,7 +202,8 @@ public class App {
 
     private void updateWindowSize() {
         Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setSize(new Dimension(screenDimension.width, (int) (screenDimension.getHeight() - menuBar.getSize().getHeight())));
+        //frame.setSize(new Dimension(screenDimension.width, (int) (screenDimension.getHeight() - menuBar.getSize().getHeight())));
+        frame.setSize(new Dimension(1920, 1080));
         frame.repaint();
     }
 

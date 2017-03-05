@@ -38,4 +38,9 @@ public abstract class StringResources {
 
     public static final String MAXIMUM_THRESHOLD = "Maximum Threshold: ";
 
+    /* --- Dilate and Erode --- */
+    public static final String RADIUS_DILATE_ERODE = "Radius of instrument: ";
+
+    /* --- Find astrocytes --- */
+
 }
