@@ -1,5 +1,7 @@
 package com.astrocytes.dialogs;
 
+import com.astrocytes.AppParameters;
+import com.astrocytes.resources.ClientConstants;
 import com.astrocytes.resources.StringResources;
 
 import javax.swing.*;
@@ -143,9 +145,8 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
         proceedAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO: write action
-                int minThreshold = getMinThresh();
-                int maxThreshold = getMaxThresh();
+                AppParameters.setParameter(ClientConstants.CANNY_MIN_THRESH, getMinThresh());
+                AppParameters.setParameter(ClientConstants.CANNY_MAX_THRESH, getMaxThresh());
                 setVisible(false);
             }
         };

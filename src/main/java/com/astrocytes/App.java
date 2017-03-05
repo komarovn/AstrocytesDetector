@@ -1,6 +1,7 @@
 package com.astrocytes;
 
 import com.astrocytes.dialogs.DialogCannyEdgeDetection;
+import com.astrocytes.resources.ClientConstants;
 import com.astrocytes.resources.StringResources;
 import com.astrocytes.widgets.GraphicalWidget;
 import org.opencv.core.Mat;
@@ -118,9 +119,11 @@ public class App {
                 if (image != null) {
                     DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(frame);
                     if (dialog.getStatus()) {
-                        int minThresh = dialog.getMinThresh();
-                        int maxThresh = dialog.getMaxThresh();
-                        operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(image), minThresh, maxThresh);
+                        //int minThresh = dialog.getMinThresh();
+                        //int maxThresh = dialog.getMaxThresh();
+                        operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(image),
+                                (Integer) AppParameters.getParameter(ClientConstants.CANNY_MIN_THRESH),
+                                (Integer) AppParameters.getParameter(ClientConstants.CANNY_MAX_THRESH));
                         image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
                         updateCurrentView();
                     }
