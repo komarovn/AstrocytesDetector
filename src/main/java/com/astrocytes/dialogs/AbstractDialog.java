@@ -14,16 +14,14 @@ public class AbstractDialog extends JDialog {
 
     public AbstractDialog(JFrame owner, String title) {
         super(owner, title, true);
-        //initializeComponents();
-        add(new MainPanel(new JPanel()));
-        //setSize(new Dimension(400, 200));
+        initializeComponents();
         pack();
         setResizable(false);
         setVisible(true);
     }
 
     protected void initializeComponents() {
-
+        add(new MainPanel(new JPanel()));
     }
 
     protected class MainPanel extends JPanel {
@@ -39,13 +37,12 @@ public class AbstractDialog extends JDialog {
             gridBagConstraints.anchor = GridBagConstraints.WEST;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.insets = new Insets(4, 4, 4, 4);
-
             add(contentBlock, gridBagConstraints);
+
             gridBagConstraints.gridy = 0;
             gridBagConstraints.gridx++;
             gridBagConstraints.gridheight = GridBagConstraints.REMAINDER;
             gridBagConstraints.fill = GridBagConstraints.VERTICAL;
-            gridBagConstraints.anchor = GridBagConstraints.NORTH;
             gridBagConstraints.weighty = 1;
             gridBagConstraints.weightx = 0;
             actionPane = new ActionPane();
@@ -77,6 +74,8 @@ public class AbstractDialog extends JDialog {
         }
 
         private void addListeners() {
+            initProceedAction();
+            ok.addActionListener(proceedAction);
             reset.addActionListener(closeDialog);
         }
 
@@ -88,4 +87,15 @@ public class AbstractDialog extends JDialog {
             setVisible(false);
         }
     };
+
+    protected ActionListener proceedAction;
+
+    protected void initProceedAction() {
+        proceedAction = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Write specific implementation
+            }
+        };
+    }
 }

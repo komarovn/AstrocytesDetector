@@ -33,4 +33,9 @@ public abstract class StringResources {
 
     public static final String RESET = "Reset";
 
+    /* --- Canny --- */
+    public static final String MINIMUM_THRESHOLD = "Minimum Threshold: ";
+
+    public static final String MAXIMUM_THRESHOLD = "Maximum Threshold: ";
+
 }
