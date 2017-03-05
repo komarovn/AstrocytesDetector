@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
  * Created by Nikolay Komarov on 04.03.2017.
  */
 public class AbstractDialog extends JDialog {
+    private Boolean status = true; // ok or reset button was pressed
 
     public AbstractDialog(JFrame owner, String title) {
         super(owner, title, true);
@@ -84,6 +85,7 @@ public class AbstractDialog extends JDialog {
     private ActionListener closeDialog = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
+            status = false;
             setVisible(false);
         }
     };
@@ -97,5 +99,9 @@ public class AbstractDialog extends JDialog {
                 // Write specific implementation
             }
         };
+    }
+
+    public Boolean getStatus() {
+        return status;
     }
 }

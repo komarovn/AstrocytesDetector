@@ -117,11 +117,13 @@ public class App {
             public void actionPerformed(ActionEvent e) {
                 if (image != null) {
                     DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(frame);
-                    int minThresh = dialog.getMinThresh();
-                    int maxThresh = dialog.getMaxThresh();
-                    operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(image), minThresh, maxThresh);
-                    image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
-                    updateCurrentView();
+                    if (dialog.getStatus()) {
+                        int minThresh = dialog.getMinThresh();
+                        int maxThresh = dialog.getMaxThresh();
+                        operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(image), minThresh, maxThresh);
+                        image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
+                        updateCurrentView();
+                    }
                 }
             }
         });
