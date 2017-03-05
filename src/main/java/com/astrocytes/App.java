@@ -117,7 +117,9 @@ public class App {
             public void actionPerformed(ActionEvent e) {
                 if (image != null) {
                     DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(frame);
-                    operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(image), 20, 70);
+                    int minThresh = dialog.getMinThresh();
+                    int maxThresh = dialog.getMaxThresh();
+                    operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(image), minThresh, maxThresh);
                     image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
                     updateCurrentView();
                 }
