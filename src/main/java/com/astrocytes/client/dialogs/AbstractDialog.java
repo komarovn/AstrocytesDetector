@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * Created by Nikolay Komarov on 04.03.2017.
@@ -107,5 +109,32 @@ public class AbstractDialog extends JDialog {
 
     public Boolean getStatus() {
         return status;
+    }
+
+    protected static void addListeners(final JSlider slider, final JFormattedTextField textField) {
+        KeyListener keyListener = new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (e.getKeyChar() < '0' || e.getKeyChar() > '9') {
+                    e.consume();
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (!textField.getText().equals("")) {
+                    slider.setValue(Integer.parseInt(textField.getText()));
+                }
+                else {
+                    slider.setValue(slider.getMinimum());
+                }
+            }
+        };
+        textField.addKeyListener(keyListener);
     }
 }

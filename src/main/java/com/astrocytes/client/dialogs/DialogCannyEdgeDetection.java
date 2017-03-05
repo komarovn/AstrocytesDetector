@@ -90,31 +90,7 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
         }
 
         private void addListeners(final JSlider slider, final JFormattedTextField textField, final Boolean isMinimum) {
-            KeyListener keyListener = new KeyListener() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    if (e.getKeyChar() < '0' || e.getKeyChar() > '9') {
-                        e.consume();
-                    }
-                }
-
-                @Override
-                public void keyPressed(KeyEvent e) {
-
-                }
-
-                @Override
-                public void keyReleased(KeyEvent e) {
-                    if (!textField.getValue().equals("")) {
-                        slider.setValue(Integer.parseInt(textField.getText()));
-                    }
-                    else {
-                        textField.setValue(0);
-                    }
-                }
-            };
-            textField.addKeyListener(keyListener);
-
+            AbstractDialog.addListeners(slider, textField);
             slider.addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
