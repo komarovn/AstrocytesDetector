@@ -1,6 +1,6 @@
-package com.astrocytes.dialogs;
+package com.astrocytes.client.dialogs;
 
-import com.astrocytes.resources.StringResources;
+import com.astrocytes.client.resources.StringResources;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
  * Created by Nikolay Komarov on 04.03.2017.
  */
 public class AbstractDialog extends JDialog {
-    private Boolean status = true; // ok or reset button was pressed
+    private Boolean status = false; // ok or reset button was pressed
 
     public AbstractDialog(JFrame owner, String title) {
         super(owner, title, true);
@@ -96,9 +96,13 @@ public class AbstractDialog extends JDialog {
         proceedAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Write specific implementation
+                status = true;
             }
         };
+    }
+
+    protected void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public Boolean getStatus() {

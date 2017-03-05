@@ -1,6 +1,6 @@
-package com.astrocytes.widgets;
+package com.astrocytes.client.widgets;
 
-import com.astrocytes.ImageHelper;
+import com.astrocytes.client.ImageHelper;
 
 import javax.swing.*;
 import java.awt.*;

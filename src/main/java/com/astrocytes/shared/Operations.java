@@ -1,4 +1,4 @@
-package com.astrocytes;
+package com.astrocytes.shared;
 
 import org.opencv.core.Mat;
 

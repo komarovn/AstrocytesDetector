@@ -1,9 +1,13 @@
-package com.astrocytes;
+package com.astrocytes.client;
 
-import com.astrocytes.dialogs.DialogCannyEdgeDetection;
-import com.astrocytes.resources.ClientConstants;
-import com.astrocytes.resources.StringResources;
-import com.astrocytes.widgets.GraphicalWidget;
+import com.astrocytes.client.ImageHelper;
+import com.astrocytes.client.dialogs.DialogCannyEdgeDetection;
+import com.astrocytes.client.resources.ClientConstants;
+import com.astrocytes.client.resources.StringResources;
+import com.astrocytes.server.OperationsImpl;
+import com.astrocytes.shared.AppParameters;
+import com.astrocytes.shared.Operations;
+import com.astrocytes.client.widgets.GraphicalWidget;
 import org.opencv.core.Mat;
 
 import javax.imageio.ImageIO;

@@ -1,8 +1,8 @@
-package com.astrocytes.dialogs;
+package com.astrocytes.client.dialogs;
 
-import com.astrocytes.AppParameters;
-import com.astrocytes.resources.ClientConstants;
-import com.astrocytes.resources.StringResources;
+import com.astrocytes.shared.AppParameters;
+import com.astrocytes.client.resources.ClientConstants;
+import com.astrocytes.client.resources.StringResources;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -12,8 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 
 /**
@@ -147,6 +145,7 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
             public void actionPerformed(ActionEvent e) {
                 AppParameters.setParameter(ClientConstants.CANNY_MIN_THRESH, getMinThresh());
                 AppParameters.setParameter(ClientConstants.CANNY_MAX_THRESH, getMaxThresh());
+                setStatus(true);
                 setVisible(false);
             }
         };

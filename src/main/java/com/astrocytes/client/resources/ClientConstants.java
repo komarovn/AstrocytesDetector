@@ -1,4 +1,4 @@
-package com.astrocytes.resources;
+package com.astrocytes.client.resources;
 
 /**
  * Created by Nikolay Komarov on 05.03.2017.

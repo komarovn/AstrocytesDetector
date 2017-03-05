@@ -1,5 +1,6 @@
 package com.astrocytes;
 
+import com.astrocytes.client.App;
 import org.opencv.core.Core;
 
 import javax.swing.*;

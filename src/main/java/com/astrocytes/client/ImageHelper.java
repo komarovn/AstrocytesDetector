@@ -1,4 +1,4 @@
-package com.astrocytes;
+package com.astrocytes.client;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
