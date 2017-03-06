@@ -21,10 +21,10 @@ public class GraphicalWidget extends JPanel {
     private BufferedImage currentView;
 
     private Integer currentX, currentY;
-    private Integer widthWidget = 1920;
-    private Integer heightWidget = 1080;
-    private Integer widthImage = 1920;
-    private Integer heightImage = 1080;
+    private Integer widthWidget = 500;
+    private Integer heightWidget = 500;
+    private Integer widthImage = 500;
+    private Integer heightImage = 500;
 
     private Double zoomScale;
     private java.util.List<Double> zoomLevels = new ArrayList<>(Arrays.asList(new Double[]{0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0}));
@@ -192,7 +192,16 @@ public class GraphicalWidget extends JPanel {
         setSize(new Dimension(width, height));
         widthWidget = width;
         heightWidget = height;
+        if (image != null) {
+            setImage(image);
+        }
+        else {
+            widthImage = width;
+            heightImage = height;
+        }
         updateWidget();
+        setPreferredSize(new Dimension(widthWidget, heightWidget));
+        repaint();
     }
 
     private void updateCurrentView(int deltaX, int deltaY) {

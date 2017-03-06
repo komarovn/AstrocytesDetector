@@ -27,27 +27,47 @@ public class App {
     private JFrame frame = new JFrame(StringResources.ASTROCYTES_DETECTOR);
 
     private JPanel mainPanel;
-    private JMenuBar menuBar;
     private GraphicalWidget graphicalWidget;
+    private MainPanelBlock mainPanelBlock = new MainPanelBlock();
 
     private Operations operations = new OperationsImpl();
     private BufferedImage image;
 
     public App() {
         mainPanel = new JPanel();
-        mainPanel.setPreferredSize(new Dimension(1000, 600));
-        frame.setMaximumSize(new Dimension(1920, 1080));
-        frame.setContentPane(mainPanel);
-        mainPanel.setLayout(new BorderLayout());
+        frame.setLayout(new BorderLayout());
+        frame.add(mainPanel);
         setMenuBar(frame);
-        setGraphicalWidget();
+        setMainPanel();
+        setResizeListener();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        frame.setSize(new Dimension(1000, 600));
+        frame.repaint();
+    }
+
+    private void setMainPanel() {
+        mainPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1;
+        gridBagConstraints.weighty = 1;
+        mainPanel.add(mainPanelBlock, gridBagConstraints);
+    }
+
+    private void setResizeListener() {
+        mainPanel.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                updateGrahicalWidget();
+            }
+        });
     }
 
     private void setMenuBar(final JFrame frame) {
-        menuBar = new JMenuBar();
+        JMenuBar menuBar = new JMenuBar();
 
         JMenu file = new JMenu(StringResources.FILE);
         JMenu operationsMenu = new JMenu(StringResources.OPERATIONS);
@@ -73,6 +93,7 @@ public class App {
                         image = bufferedImage;
                         updateWindowSize();
                         updateCurrentView();
+                        updateGrahicalWidget();
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -176,6 +197,7 @@ public class App {
 
         file.add(openFile);
         file.add(saveAs);
+        file.addSeparator();
         file.add(exit);
         operationsMenu.add(edgeDetection);
         operationsMenu.add(dilateAndErode);
@@ -187,13 +209,10 @@ public class App {
         frame.setJMenuBar(menuBar);
     }
 
-    private void setGraphicalWidget() {
-        graphicalWidget = new GraphicalWidget();
-        mainPanel.add(graphicalWidget);
-    }
-
     private void updateGrahicalWidget() {
-        graphicalWidget.updateWidget();
+        int h = mainPanelBlock.getHeight();
+        int w = mainPanelBlock.getWidth();
+        graphicalWidget.updateWidget(w, h);
     }
 
     private void updateCurrentView() {
@@ -202,10 +221,25 @@ public class App {
     }
 
     private void updateWindowSize() {
-        Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
-        //frame.setSize(new Dimension(screenDimension.width, (int) (screenDimension.getHeight() - menuBar.getSize().getHeight())));
         frame.setSize(new Dimension(1920, 1080));
         frame.repaint();
+    }
+
+    protected class MainPanelBlock extends JPanel {
+
+        public MainPanelBlock() {
+            setLayout(new GridBagLayout());
+            GridBagConstraints gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.weightx = 0;
+            gridBagConstraints.weighty = 0;
+            gridBagConstraints.anchor = GridBagConstraints.WEST;
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
+
+            graphicalWidget = new GraphicalWidget();
+            add(graphicalWidget, gridBagConstraints);
+        }
     }
 
 }
