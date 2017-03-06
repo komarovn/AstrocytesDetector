@@ -43,7 +43,7 @@ public class App {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(new Dimension(1000, 600));
+        frame.setSize(new Dimension(ClientConstants.DEFAULT_WINDOW_WIDTH, ClientConstants.DEFAULT_WINDOW_HEIGHT));
         frame.repaint();
     }
 
@@ -221,7 +221,7 @@ public class App {
     }
 
     private void updateWindowSize() {
-        frame.setSize(new Dimension(1920, 1080));
+        frame.setSize(new Dimension(ClientConstants.DEFAULT_WINDOW_WIDTH, ClientConstants.DEFAULT_WINDOW_HEIGHT));
         frame.repaint();
     }
 
