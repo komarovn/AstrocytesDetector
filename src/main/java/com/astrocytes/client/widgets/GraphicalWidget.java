@@ -51,7 +51,7 @@ public class GraphicalWidget extends JPanel {
         currentY = 0;
         widthWidget = width == null ? ClientConstants.DEFAULT_GRAPHICAL_WIDGET_WIDTH : width;
         heightWidget = height == null ? ClientConstants.DEFAULT_GRAPHICAL_WIDGET_HEIGHT : height;
-        zoomScale = zoomLevels.get(3);
+        resetZoomScale();
         setSize(new Dimension(widthWidget, heightWidget));
         setPreferredSize(new Dimension(widthWidget, heightWidget));
         addListeners();
@@ -178,6 +178,10 @@ public class GraphicalWidget extends JPanel {
         }
     }
 
+    private void resetZoomScale() {
+        zoomScale = zoomLevels.get(3);
+    }
+
     public void setImage(BufferedImage image) {
         this.image = image;
         if (image != null) {
@@ -191,6 +195,7 @@ public class GraphicalWidget extends JPanel {
             } else {
                 heightImage = heightWidget;
             }
+            resetZoomScale();
             zoomedImage = ImageHelper.cloneBufferedImage(this.image);
             updateCurrentView(0, 0);
         }
