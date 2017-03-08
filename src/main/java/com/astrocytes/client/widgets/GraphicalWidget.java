@@ -20,7 +20,7 @@ import java.util.*;
 public class GraphicalWidget extends JPanel {
 
     private BufferedImage image;
-    private BufferedImage currentView;
+    protected BufferedImage currentView;
 
     private Integer currentX, currentY;
     private Integer widthWidget;

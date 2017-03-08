@@ -4,6 +4,7 @@ import com.astrocytes.client.ImageHelper;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
 import com.astrocytes.client.widgets.GraphicalWidget;
+import com.astrocytes.client.widgets.PreviewGraphicalWidget;
 import com.astrocytes.server.OperationsImpl;
 import com.astrocytes.shared.AppParameters;
 import com.astrocytes.shared.Operations;
@@ -25,14 +26,12 @@ import java.text.NumberFormat;
 public class DialogDilateErode extends AbstractDialog {
     private final int RADIUS_DEFAULT = 2;
     private JSlider radiusSlider;
-    private BufferedImage previewImage;
-    private GraphicalWidget preview;
+    private PreviewGraphicalWidget preview;
 
     public DialogDilateErode(JFrame owner, BufferedImage image) {
         super(owner, StringResources.DILATE_AND_ERODE);
-        previewImage = image;
-        preview.setImage(previewImage);
-        processPreviewImage();
+        preview.setImage(image);
+        preview.processPreviewImage();
         setVisible(true);
     }
 
@@ -57,10 +56,12 @@ public class DialogDilateErode extends AbstractDialog {
             radiusTextbox.setColumns(5);
             radiusSlider = new JSlider(1, 7, RADIUS_DEFAULT);
 
-            preview = new GraphicalWidget(ClientConstants.PREVIEW_WINDOW_WIDTH, ClientConstants.PREVIEW_WINDOW_HEIGHT);
-            preview.setZoomEnabled(false);
-            preview.setBorder(BorderFactory.createLineBorder(Color.darkGray));
-            preview.setImage(previewImage);
+            preview = new PreviewGraphicalWidget(ClientConstants.PREVIEW_WINDOW_WIDTH, ClientConstants.PREVIEW_WINDOW_HEIGHT) {
+                @Override
+                public void processPreviewImage() {
+                    processPreview();
+                }
+            };
 
             gridBagConstraints.anchor = GridBagConstraints.WEST;
             gridBagConstraints.gridwidth = 2;
@@ -84,7 +85,6 @@ public class DialogDilateErode extends AbstractDialog {
             add(radiusSlider, gridBagConstraints);
 
             addListeners(radiusSlider, radiusTextbox);
-            addListenersForPreview();
         }
 
         private void addListeners(final JSlider slider, final JFormattedTextField textField) {
@@ -97,27 +97,7 @@ public class DialogDilateErode extends AbstractDialog {
                     textField.setText(String.valueOf(state.getValue()));
                 }
             });
-            slider.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    super.mouseReleased(e);
-                    if (previewImage != null) {
-                        processPreviewImage();
-                    }
-                }
-            });
-        }
-
-        private void addListenersForPreview() {
-            preview.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    super.mouseReleased(e);
-                    if (previewImage != null) {
-                        processPreviewImage();
-                    }
-                }
-            });
+            slider.addMouseListener(preview.getMouseAdapter());
         }
     }
 
@@ -137,16 +117,12 @@ public class DialogDilateErode extends AbstractDialog {
         return radiusSlider.getValue();
     }
 
-    private void processPreviewImage() {
+    private void processPreview() {
         BufferedImage currentView = preview.getCurrentView();
         Operations operations = new OperationsImpl();
         operations.applyMathMorphology(ImageHelper.convertBufferedImageToMat(currentView), radiusSlider.getValue());
         BufferedImage newCurrentView = ImageHelper.convertMatToBufferedImage(operations.getOutputImage()) ;
-        updatePreview(newCurrentView);
-    }
-
-    private void updatePreview(BufferedImage newCurrentView) {
-        preview.setCurrentView(newCurrentView);
+        preview.updatePreview(newCurrentView);
     }
 
 }

@@ -2,6 +2,7 @@ package com.astrocytes.client.dialogs;
 
 import com.astrocytes.client.ImageHelper;
 import com.astrocytes.client.widgets.GraphicalWidget;
+import com.astrocytes.client.widgets.PreviewGraphicalWidget;
 import com.astrocytes.server.OperationsImpl;
 import com.astrocytes.shared.AppParameters;
 import com.astrocytes.client.resources.ClientConstants;
@@ -26,14 +27,12 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
     private JFormattedTextField maxTextBox;
     private JSlider minThreshold;
     private JSlider maxThreshold;
-    private BufferedImage previewImage;
-    private GraphicalWidget preview;
+    private PreviewGraphicalWidget preview;
 
     public DialogCannyEdgeDetection(JFrame owner, BufferedImage image) {
         super(owner, StringResources.CANNY_EDGE_DETECTION);
-        previewImage = image;
-        preview.setImage(previewImage);
-        processPreviewImage();
+        preview.setImage(image);
+        preview.processPreviewImage();
         setVisible(true);
     }
 
@@ -66,10 +65,12 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
             minThresholdLabel = new JLabel(StringResources.MINIMUM_THRESHOLD);
             maxThresholdLabel =new JLabel(StringResources.MAXIMUM_THRESHOLD);
 
-            preview = new GraphicalWidget(ClientConstants.PREVIEW_WINDOW_WIDTH, ClientConstants.PREVIEW_WINDOW_HEIGHT);
-            preview.setZoomEnabled(false);
-            preview.setBorder(BorderFactory.createLineBorder(Color.darkGray));
-            preview.setImage(previewImage);
+            preview = new PreviewGraphicalWidget(ClientConstants.PREVIEW_WINDOW_WIDTH, ClientConstants.PREVIEW_WINDOW_HEIGHT) {
+                @Override
+                public void processPreviewImage() {
+                    processPreview();
+                }
+            };
 
             gridBagConstraints.insets.left = 4;
             gridBagConstraints.insets.bottom = 4;
@@ -107,7 +108,6 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
 
             addListeners(minThreshold, minTextbox, true);
             addListeners(maxThreshold, maxTextBox, false);
-            addListenersForPreview();
         }
 
         private void addListeners(final JSlider slider, final JFormattedTextField textField, final Boolean isMinimum) {
@@ -130,29 +130,8 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
                     }
                 }
             });
-            slider.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    super.mouseReleased(e);
-                    if (previewImage != null) {
-                        processPreviewImage();
-                    }
-                }
-            });
+            slider.addMouseListener(preview.getMouseAdapter());
         }
-
-        private void addListenersForPreview() {
-            preview.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    super.mouseReleased(e);
-                    if (previewImage != null) {
-                        processPreviewImage();
-                    }
-                }
-            });
-        }
-
     }
 
     @Override
@@ -176,15 +155,12 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
         return maxThreshold.getValue();
     }
 
-    private void processPreviewImage() {
+    private void processPreview() {
         BufferedImage currentView = preview.getCurrentView();
         Operations operations = new OperationsImpl();
         operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(currentView), minThreshold.getValue(), maxThreshold.getValue());
         BufferedImage newCurrentView = ImageHelper.convertMatToBufferedImage(operations.getOutputImage()) ;
-        updatePreview(newCurrentView);
+        preview.updatePreview(newCurrentView);
     }
 
-    private void updatePreview(BufferedImage newCurrentView) {
-        preview.setCurrentView(newCurrentView);
-    }
 }
