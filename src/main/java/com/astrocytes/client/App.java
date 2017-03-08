@@ -159,7 +159,7 @@ public class App {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (image != null) {
-                    DialogDilateErode dialog = new DialogDilateErode(frame);
+                    DialogDilateErode dialog = new DialogDilateErode(frame, graphicalWidget.getImage());
                     if (dialog.getStatus()) {
                         operations.applyMathMorphology(ImageHelper.convertBufferedImageToMat(image),
                                 (Integer) AppParameters.getParameter(ClientConstants.RADIUS_DIL_ER));
