@@ -26,14 +26,24 @@ public class GraphicalWidget extends JPanel {
     private Integer widthImage = 500;
     private Integer heightImage = 500;
 
+    private Boolean zoomEnabled = true;
     private Double zoomScale;
     private java.util.List<Double> zoomLevels = new ArrayList<>(Arrays.asList(new Double[]{0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0}));
     private BufferedImage zoomedImage;
 
+    /**
+     * Default constructor. Creates a new graphical widget with default size 500 px for width and 500 px for height.
+     */
     public GraphicalWidget() {
         this(null, null);
     }
 
+    /**
+     * Create a new graphical widget with specific size.
+     *
+     * @param width - a width of creating graphical widget;
+     * @param height - a height of creating graphical widget;
+     */
     public GraphicalWidget(Integer width, Integer height) {
         currentX = 0;
         currentY = 0;
@@ -151,7 +161,9 @@ public class GraphicalWidget extends JPanel {
         };
         addMouseListener(mouseAdapter);
         addMouseMotionListener(mouseAdapter);
-        addMouseWheelListener(mouseAdapter);
+        if (zoomEnabled) {
+            addMouseWheelListener(mouseAdapter);
+        }
     }
 
     @Override
@@ -180,6 +192,11 @@ public class GraphicalWidget extends JPanel {
         updateCurrentView(0, 0);
     }
 
+    /**
+     * Get the full image displayed on graphical widget.
+     *
+     * @return an image which is currently displayed on whidget or <code>null</code>, if there is no image.
+     */
     public BufferedImage getImage() {
         return image;
     }
@@ -188,6 +205,12 @@ public class GraphicalWidget extends JPanel {
         updateUI();
     }
 
+    /**
+     * Resizing of the graphical widget
+     *
+     * @param width - a new size parameter for width;
+     * @param height - a new size parameter for height.
+     */
     public void updateWidget(Integer width, Integer height) {
         setSize(new Dimension(width, height));
         widthWidget = width;
@@ -214,4 +237,14 @@ public class GraphicalWidget extends JPanel {
         currentView = zoomedImage.getSubimage(currentX, currentY, widthImage, heightImage);
         updateWidget();
     }
+
+    /**
+     * Enable or disable zoom option for graphical widget.
+     *
+     * @param isEnabled - if true, enable zoom, false otherwise.
+     */
+    public void setZoomEnabled(Boolean isEnabled) {
+        zoomEnabled = isEnabled;
+    }
+
 }

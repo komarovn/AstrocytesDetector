@@ -1,5 +1,6 @@
 package com.astrocytes.client.dialogs;
 
+import com.astrocytes.client.widgets.GraphicalWidget;
 import com.astrocytes.shared.AppParameters;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
@@ -37,6 +38,7 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
     private class CannyEdgeDetectionBlock extends JPanel {
         private JLabel minThresholdLabel;
         private JLabel maxThresholdLabel;
+        private GraphicalWidget preview;
 
         public CannyEdgeDetectionBlock() {
             setLayout(new GridBagLayout());
@@ -58,8 +60,15 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
             minThresholdLabel = new JLabel(StringResources.MINIMUM_THRESHOLD);
             maxThresholdLabel =new JLabel(StringResources.MAXIMUM_THRESHOLD);
 
+            preview = new GraphicalWidget(220, 220);
+            preview.setBorder(BorderFactory.createLineBorder(Color.darkGray));
+
             gridBagConstraints.insets.left = 4;
             gridBagConstraints.insets.bottom = 4;
+            gridBagConstraints.gridwidth = 2;
+            add(preview, gridBagConstraints);
+            gridBagConstraints.gridwidth = 1;
+            gridBagConstraints.gridy++;
             add(minThresholdLabel, gridBagConstraints);
             gridBagConstraints.gridx++;
             gridBagConstraints.fill = GridBagConstraints.NONE;
@@ -70,6 +79,7 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridwidth = 2;
             gridBagConstraints.insets.bottom = 6;
+            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
             add(minThreshold, gridBagConstraints);
 
             gridBagConstraints.insets.bottom = 4;
@@ -77,12 +87,14 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
             gridBagConstraints.gridy++;
             add(maxThresholdLabel, gridBagConstraints);
             gridBagConstraints.gridx++;
+            gridBagConstraints.fill = GridBagConstraints.NONE;
             gridBagConstraints.insets.left = 6;
             add(maxTextBox, gridBagConstraints);
             gridBagConstraints.insets.left = 4;
             gridBagConstraints.gridy++;
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridwidth = 2;
+            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
             add(maxThreshold, gridBagConstraints);
 
             addListeners(minThreshold, minTextbox, true);
