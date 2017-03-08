@@ -143,7 +143,7 @@ public class App {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (image != null) {
-                    DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(frame);
+                    DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(frame, graphicalWidget.getImage());
                     if (dialog.getStatus()) {
                         operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(image),
                                 (Integer) AppParameters.getParameter(ClientConstants.CANNY_MIN_THRESH),

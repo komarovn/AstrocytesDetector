@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.text.NumberFormat;
 
 /**
@@ -25,9 +26,14 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
     private JFormattedTextField maxTextBox;
     private JSlider minThreshold;
     private JSlider maxThreshold;
+    private BufferedImage previewImage;
+    private GraphicalWidget preview;
 
-    public DialogCannyEdgeDetection(JFrame owner) {
+    public DialogCannyEdgeDetection(JFrame owner, BufferedImage image) {
         super(owner, StringResources.CANNY_EDGE_DETECTION);
+        previewImage = image;
+        preview.setImage(previewImage);
+        setVisible(true);
     }
 
     @Override
@@ -38,7 +44,6 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
     private class CannyEdgeDetectionBlock extends JPanel {
         private JLabel minThresholdLabel;
         private JLabel maxThresholdLabel;
-        private GraphicalWidget preview;
 
         public CannyEdgeDetectionBlock() {
             setLayout(new GridBagLayout());
@@ -61,7 +66,9 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
             maxThresholdLabel =new JLabel(StringResources.MAXIMUM_THRESHOLD);
 
             preview = new GraphicalWidget(220, 220);
+            preview.setZoomEnabled(false);
             preview.setBorder(BorderFactory.createLineBorder(Color.darkGray));
+            preview.setImage(previewImage);
 
             gridBagConstraints.insets.left = 4;
             gridBagConstraints.insets.bottom = 4;

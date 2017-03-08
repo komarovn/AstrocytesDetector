@@ -20,7 +20,6 @@ public class AbstractDialog extends JDialog {
         initializeComponents();
         pack();
         setResizable(false);
-        setVisible(true);
     }
 
     protected void initializeComponents() {

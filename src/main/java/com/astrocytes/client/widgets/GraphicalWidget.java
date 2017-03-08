@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -52,6 +53,10 @@ public class GraphicalWidget extends JPanel {
         zoomScale = zoomLevels.get(3);
         setSize(new Dimension(widthWidget, heightWidget));
         setPreferredSize(new Dimension(widthWidget, heightWidget));
+        addListeners();
+    }
+
+    private void addListeners() {
         MouseAdapter mouseAdapter = new MouseAdapter() {
             Integer startPointX, startPointY;
             Integer endPointX, endPointY;
@@ -103,7 +108,7 @@ public class GraphicalWidget extends JPanel {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
                 super.mouseWheelMoved(e);
-                if (image != null) {
+                if (zoomEnabled && image != null) {
                     int notches = e.getWheelRotation();
                     if (notches > 0) {
                         int currentIndex = zoomLevels.indexOf(zoomScale);
@@ -161,9 +166,7 @@ public class GraphicalWidget extends JPanel {
         };
         addMouseListener(mouseAdapter);
         addMouseMotionListener(mouseAdapter);
-        if (zoomEnabled) {
-            addMouseWheelListener(mouseAdapter);
-        }
+        addMouseWheelListener(mouseAdapter);
     }
 
     @Override
@@ -176,20 +179,20 @@ public class GraphicalWidget extends JPanel {
 
     public void setImage(BufferedImage image) {
         this.image = image;
-        if (widthWidget >= image.getWidth()) {
-            widthImage = image.getWidth();
+        if (image != null) {
+            if (widthWidget >= image.getWidth()) {
+                widthImage = image.getWidth();
+            } else {
+                widthImage = widthWidget;
+            }
+            if (heightWidget >= image.getHeight()) {
+                heightImage = image.getHeight();
+            } else {
+                heightImage = heightWidget;
+            }
+            zoomedImage = ImageHelper.cloneBufferedImage(this.image);
+            updateCurrentView(0, 0);
         }
-        else {
-            widthImage = widthWidget;
-        }
-        if (heightWidget >= image.getHeight()) {
-            heightImage = image.getHeight();
-        }
-        else {
-            heightImage = heightWidget;
-        }
-        zoomedImage = ImageHelper.cloneBufferedImage(this.image);
-        updateCurrentView(0, 0);
     }
 
     /**
@@ -199,6 +202,20 @@ public class GraphicalWidget extends JPanel {
      */
     public BufferedImage getImage() {
         return image;
+    }
+
+    /**
+     * Get the current view displayed on graphical widget.
+     *
+     * @return an image of the current view which is displayed on widget or <code>null</code>, if there is
+     *         no image to display.
+     */
+    public BufferedImage getCurrentView() {
+        return currentView;
+    }
+
+    public void setCurrentView(BufferedImage newCurrentView) {
+        currentView = newCurrentView;
     }
 
     public void updateWidget() {
