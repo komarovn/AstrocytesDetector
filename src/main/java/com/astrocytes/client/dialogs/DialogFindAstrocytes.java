@@ -14,6 +14,7 @@ public class DialogFindAstrocytes extends AbstractDialog {
 
     public DialogFindAstrocytes(JFrame owner) {
         super(owner, StringResources.FIND_ASTROCYTES);
+        setVisible(true);
     }
 
     @Override

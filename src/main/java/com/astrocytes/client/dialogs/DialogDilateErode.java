@@ -21,6 +21,7 @@ public class DialogDilateErode extends AbstractDialog {
 
     public DialogDilateErode(JFrame owner) {
         super(owner, StringResources.DILATE_AND_ERODE);
+        setVisible(true);
     }
 
     @Override

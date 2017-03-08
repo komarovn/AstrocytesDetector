@@ -38,13 +38,14 @@ public class AbstractDialog extends JDialog {
             gridBagConstraints.weighty = 0.33;
             gridBagConstraints.anchor = GridBagConstraints.WEST;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
-            gridBagConstraints.insets = new Insets(4, 4, 4, 4);
+            gridBagConstraints.insets = new Insets(4, 0, 4, 6);
             add(contentBlock, gridBagConstraints);
 
             gridBagConstraints.gridy = 0;
             gridBagConstraints.gridx++;
             gridBagConstraints.gridheight = GridBagConstraints.REMAINDER;
-            gridBagConstraints.fill = GridBagConstraints.VERTICAL;
+            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.anchor = GridBagConstraints.NORTH;
             gridBagConstraints.weighty = 1;
             gridBagConstraints.weightx = 0;
             actionPane = new ActionPane();
@@ -67,7 +68,8 @@ public class AbstractDialog extends JDialog {
             gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
             gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints.gridx = 1;
-            gridBagConstraints.insets = new Insets(4, 4, 4, 4);
+            gridBagConstraints.insets = new Insets(4, 2, 4, 4);
+            gridBagConstraints.anchor = GridBagConstraints.NORTH;
 
             add(ok, gridBagConstraints);
             gridBagConstraints.gridy++;
