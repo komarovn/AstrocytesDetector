@@ -62,6 +62,7 @@ public class OperationsImpl implements Operations {
     @Override
     public Mat convertGrayscale(Mat source) {
         if (source.channels() < 3) {
+            source.copyTo(getOutputImage());
             return source;
         }
         Mat dest = new Mat(source.rows(), source.cols(), CvType.CV_8UC1);

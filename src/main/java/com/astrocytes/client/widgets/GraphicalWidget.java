@@ -212,11 +212,17 @@ public class GraphicalWidget extends JPanel {
      *         no image to display.
      */
     public BufferedImage getCurrentView() {
-        return currentView;
+        updateCurrentView(0, 0);
+        BufferedImage currentViewCropped = new BufferedImage(currentView.getColorModel(),
+                currentView.getRaster().createCompatibleWritableRaster(currentView.getWidth(), currentView.getHeight()),
+                currentView.isAlphaPremultiplied(), null);
+        currentView.copyData(currentViewCropped.getRaster());
+        return currentViewCropped;
     }
 
     public void setCurrentView(BufferedImage newCurrentView) {
         currentView = newCurrentView;
+        updateWidget();
     }
 
     public void updateWidget() {

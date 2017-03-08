@@ -7,7 +7,6 @@ import com.astrocytes.shared.AppParameters;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
 import com.astrocytes.shared.Operations;
-import org.opencv.core.Mat;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -129,6 +128,12 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
                         }
                         maxTextBox.setText(String.valueOf(state.getValue()));
                     }
+                }
+            });
+            slider.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    super.mouseReleased(e);
                     if (previewImage != null) {
                         processPreviewImage();
                     }
