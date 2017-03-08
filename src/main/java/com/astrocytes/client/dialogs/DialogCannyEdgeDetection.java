@@ -1,18 +1,19 @@
 package com.astrocytes.client.dialogs;
 
+import com.astrocytes.client.ImageHelper;
 import com.astrocytes.client.widgets.GraphicalWidget;
+import com.astrocytes.server.OperationsImpl;
 import com.astrocytes.shared.AppParameters;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
+import com.astrocytes.shared.Operations;
+import org.opencv.core.Mat;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.text.NumberFormat;
 
@@ -33,6 +34,7 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
         super(owner, StringResources.CANNY_EDGE_DETECTION);
         previewImage = image;
         preview.setImage(previewImage);
+        processPreviewImage();
         setVisible(true);
     }
 
@@ -65,7 +67,7 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
             minThresholdLabel = new JLabel(StringResources.MINIMUM_THRESHOLD);
             maxThresholdLabel =new JLabel(StringResources.MAXIMUM_THRESHOLD);
 
-            preview = new GraphicalWidget(220, 220);
+            preview = new GraphicalWidget(ClientConstants.PREVIEW_WINDOW_WIDTH, ClientConstants.PREVIEW_WINDOW_HEIGHT);
             preview.setZoomEnabled(false);
             preview.setBorder(BorderFactory.createLineBorder(Color.darkGray));
             preview.setImage(previewImage);
@@ -106,6 +108,7 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
 
             addListeners(minThreshold, minTextbox, true);
             addListeners(maxThreshold, maxTextBox, false);
+            addListenersForPreview();
         }
 
         private void addListeners(final JSlider slider, final JFormattedTextField textField, final Boolean isMinimum) {
@@ -126,7 +129,21 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
                         }
                         maxTextBox.setText(String.valueOf(state.getValue()));
                     }
+                    if (previewImage != null) {
+                        processPreviewImage();
+                    }
+                }
+            });
+        }
 
+        private void addListenersForPreview() {
+            preview.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    super.mouseReleased(e);
+                    if (previewImage != null) {
+                        processPreviewImage();
+                    }
                 }
             });
         }
@@ -152,5 +169,17 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
 
     public int getMaxThresh() {
         return maxThreshold.getValue();
+    }
+
+    private void processPreviewImage() {
+        BufferedImage currentView = preview.getCurrentView();
+        Operations operations = new OperationsImpl();
+        operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(currentView), minThreshold.getValue(), maxThreshold.getValue());
+        BufferedImage newCurrentView = ImageHelper.convertMatToBufferedImage(operations.getOutputImage()) ;
+        updatePreview(newCurrentView);
+    }
+
+    private void updatePreview(BufferedImage newCurrentView) {
+        preview.setCurrentView(newCurrentView);
     }
 }

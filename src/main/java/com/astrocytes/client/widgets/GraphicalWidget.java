@@ -1,6 +1,7 @@
 package com.astrocytes.client.widgets;
 
 import com.astrocytes.client.ImageHelper;
+import com.astrocytes.client.resources.ClientConstants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,10 +23,10 @@ public class GraphicalWidget extends JPanel {
     private BufferedImage currentView;
 
     private Integer currentX, currentY;
-    private Integer widthWidget = 500;
-    private Integer heightWidget = 500;
-    private Integer widthImage = 500;
-    private Integer heightImage = 500;
+    private Integer widthWidget;
+    private Integer heightWidget;
+    private Integer widthImage;
+    private Integer heightImage;
 
     private Boolean zoomEnabled = true;
     private Double zoomScale;
@@ -48,8 +49,8 @@ public class GraphicalWidget extends JPanel {
     public GraphicalWidget(Integer width, Integer height) {
         currentX = 0;
         currentY = 0;
-        widthWidget = width == null ? widthWidget : width;
-        heightWidget = height == null ? heightWidget : height;
+        widthWidget = width == null ? ClientConstants.DEFAULT_GRAPHICAL_WIDGET_WIDTH : width;
+        heightWidget = height == null ? ClientConstants.DEFAULT_GRAPHICAL_WIDGET_HEIGHT : height;
         zoomScale = zoomLevels.get(3);
         setSize(new Dimension(widthWidget, heightWidget));
         setPreferredSize(new Dimension(widthWidget, heightWidget));
