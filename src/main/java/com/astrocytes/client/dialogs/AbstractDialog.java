@@ -13,7 +13,7 @@ import java.awt.event.KeyListener;
  * Created by Nikolay Komarov on 04.03.2017.
  */
 public class AbstractDialog extends JDialog {
-    private Boolean status = false; // ok or reset button was pressed
+    private Boolean status = false; // ok (true) or reset (false) button was pressed
 
     public AbstractDialog(JFrame owner, String title) {
         super(owner, title, true);
