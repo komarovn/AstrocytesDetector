@@ -3,6 +3,7 @@ package com.astrocytes.client;
 import com.astrocytes.client.dialogs.DialogCannyEdgeDetection;
 import com.astrocytes.client.dialogs.DialogDilateErode;
 import com.astrocytes.client.dialogs.DialogFindAstrocytes;
+import com.astrocytes.client.dialogs.NativeJFileChooser;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
 import com.astrocytes.server.OperationsImpl;
@@ -79,7 +80,7 @@ public class App {
         openFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                final JFileChooser openFileDialog = new JFileChooser();
+                final NativeJFileChooser openFileDialog = new NativeJFileChooser();
                 openFileDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 openFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("All Images", "jpg", "jpeg", "png", "bmp"));
                 openFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("JPEG Images", "jpg", "jpeg"));
@@ -109,7 +110,7 @@ public class App {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (image != null) {
-                    final JFileChooser saveFileDialog = new JFileChooser();
+                    final NativeJFileChooser saveFileDialog = new NativeJFileChooser();
                     saveFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("JPG Image", "jpg"));
                     saveFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("PNG Image", "png"));
                     saveFileDialog.setAcceptAllFileFilterUsed(false);
