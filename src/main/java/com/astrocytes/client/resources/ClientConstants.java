@@ -13,6 +13,9 @@ public abstract class ClientConstants {
     public static final int PREVIEW_WINDOW_WIDTH = 260;
     public static final int PREVIEW_WINDOW_HEIGHT = 260;
 
+    public static final String WINDOW_WIDTH = "windowWidth";
+    public static final String WINDOW_HEIGHT = "windowHeight";
+
     public static final String CANNY_MIN_THRESH = "cannyMinThresh";
     public static final String CANNY_MAX_THRESH = "cannyMaxThresh";
     public static final String RADIUS_DIL_ER = "radiusDilEr";

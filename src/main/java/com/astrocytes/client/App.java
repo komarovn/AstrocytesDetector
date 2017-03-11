@@ -62,6 +62,8 @@ public class App {
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
                 updateGrahicalWidget();
+                AppParameters.setParameter(ClientConstants.WINDOW_WIDTH, (int) frame.getSize().getWidth());
+                AppParameters.setParameter(ClientConstants.WINDOW_HEIGHT, (int) frame.getSize().getHeight());
             }
         });
     }
@@ -125,6 +127,7 @@ public class App {
                 }
                 else {
                     // TODO: show message about empty image
+                    WarningMessage warnPopup = new WarningMessage(frame, "There is no image to save");
                 }
             }
         });
@@ -221,7 +224,8 @@ public class App {
     }
 
     private void updateWindowSize() {
-        frame.setSize(new Dimension(ClientConstants.DEFAULT_WINDOW_WIDTH, ClientConstants.DEFAULT_WINDOW_HEIGHT));
+        frame.setSize(new Dimension((int) AppParameters.getParameter(ClientConstants.WINDOW_WIDTH),
+                (int) AppParameters.getParameter(ClientConstants.WINDOW_HEIGHT)));
         frame.repaint();
     }
 
