@@ -11,6 +11,8 @@ import com.astrocytes.server.OperationsImpl;
 import com.astrocytes.shared.AppParameters;
 import com.astrocytes.shared.Operations;
 import com.astrocytes.client.widgets.GraphicalWidget;
+import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import org.opencv.core.Mat;
 
@@ -46,7 +48,12 @@ public class App {
         frame.pack();
         frame.setVisible(true);
         frame.setSize(new Dimension(ClientConstants.DEFAULT_WINDOW_WIDTH, ClientConstants.DEFAULT_WINDOW_HEIGHT));
-        //frame.repaint();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                setResizeListener();
+            }
+        });
     }
 
     private void initComponents() {
@@ -67,8 +74,6 @@ public class App {
 
         AppParameters.setParameter(ClientConstants.WINDOW_WIDTH, ClientConstants.DEFAULT_WINDOW_WIDTH);
         AppParameters.setParameter(ClientConstants.WINDOW_HEIGHT, ClientConstants.DEFAULT_WINDOW_HEIGHT);
-
-        setResizeListener();
     }
 
     private void setResizeListener() {
