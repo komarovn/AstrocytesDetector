@@ -1,7 +1,6 @@
 package com.astrocytes.client.dialogs.javafx;
 
 import com.astrocytes.client.App;
-import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,7 +15,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
-import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -52,16 +50,8 @@ public class AppController implements Initializable {
     @FXML
     private MenuItem exit;
 
-    @FXML
-    private Pane graphWidgetPane;
-
-    @FXML
-    private SwingNode swingNode;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //mainPane.getTop().setPickOnBounds(false);
-        //setGraphicalWidget();
         createNewProject.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -85,19 +75,4 @@ public class AppController implements Initializable {
         this.mainApp = mainApp;
     }
 
-    private void setGraphicalWidget() {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                swingNode.setContent(mainApp.getGraphicalWidget());
-                swingNode.setPickOnBounds(false);
-                file.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        file.setDisable(true);
-                    }
-                });
-            }
-        });
-    }
 }

@@ -41,17 +41,15 @@ public class App {
         frame.setLayout(new BorderLayout());
         frame.add(mainPanel);
         mainPanel.setLayout(new GridBagLayout());
-        //setMenuBar();
-        drawComponents();
-        setResizeListener();
+        initComponents();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
         frame.setSize(new Dimension(ClientConstants.DEFAULT_WINDOW_WIDTH, ClientConstants.DEFAULT_WINDOW_HEIGHT));
-        frame.repaint();
+        //frame.repaint();
     }
 
-    private void drawComponents() {
+    private void initComponents() {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1;
@@ -66,11 +64,14 @@ public class App {
 
         AppController controller = (AppController) ImageHelper.initFX(menuFromFxml, getClass().getResource("/fxml/MenuBar.fxml"));
         controller.setMainApp(this);
+
+        AppParameters.setParameter(ClientConstants.WINDOW_WIDTH, ClientConstants.DEFAULT_WINDOW_WIDTH);
+        AppParameters.setParameter(ClientConstants.WINDOW_HEIGHT, ClientConstants.DEFAULT_WINDOW_HEIGHT);
+
+        setResizeListener();
     }
 
     private void setResizeListener() {
-        AppParameters.setParameter(ClientConstants.WINDOW_WIDTH, ClientConstants.DEFAULT_WINDOW_WIDTH);
-        AppParameters.setParameter(ClientConstants.WINDOW_HEIGHT, ClientConstants.DEFAULT_WINDOW_HEIGHT);
         mainPanel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
