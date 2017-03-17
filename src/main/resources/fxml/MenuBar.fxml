@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.input.KeyCodeCombination?>
+
+<!--<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="426.0" prefWidth="821.0" style="-fx-background-color: #224455;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.astrocytes.client.dialogs.javafx.AppController">
+   <center>
+      <Pane fx:id="graphWidgetPane" prefHeight="270.0" prefWidth="821.0" style="-fx-background-color: #F6A7B2;" BorderPane.alignment="CENTER">
+       <children>-->
+<!--</children>
+      </Pane>
+   </center>
+   <top>
+     <SwingNode fx:id="swingNode" BorderPane.alignment="CENTER" />
+   </top>
+</BorderPane>-->
+
+<MenuBar fx:id="menuBar" maxHeight="25" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.astrocytes.client.dialogs.javafx.AppController">
+  <menus>
+    <Menu fx:id="file" mnemonicParsing="false" text="File">
+      <items>
+        <MenuItem fx:id="createNewProject" mnemonicParsing="false" text="Create New Project...">
+               <accelerator>
+                  <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+               </accelerator>
+            </MenuItem>
+            <MenuItem fx:id="openProject" mnemonicParsing="false" text="Open Project..." />
+            <MenuItem fx:id="saveProjectAs" mnemonicParsing="false" text="Save Project As..." />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="exportImage" mnemonicParsing="false" text="Export Image" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="exit" mnemonicParsing="false" text="Exit" />
+      </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Operations">
+      <items>
+        <MenuItem mnemonicParsing="false" text="Delete" />
+      </items>
+    </Menu>
+  </menus>
+</MenuBar>

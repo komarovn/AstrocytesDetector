@@ -4,12 +4,14 @@ import com.astrocytes.client.dialogs.DialogCannyEdgeDetection;
 import com.astrocytes.client.dialogs.DialogDilateErode;
 import com.astrocytes.client.dialogs.DialogFindAstrocytes;
 import com.astrocytes.client.dialogs.NativeJFileChooser;
+import com.astrocytes.client.dialogs.javafx.AppController;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
 import com.astrocytes.server.OperationsImpl;
 import com.astrocytes.shared.AppParameters;
 import com.astrocytes.shared.Operations;
 import com.astrocytes.client.widgets.GraphicalWidget;
+import javafx.embed.swing.JFXPanel;
 import org.opencv.core.Mat;
 
 import javax.imageio.ImageIO;
@@ -38,8 +40,9 @@ public class App {
         mainPanel = new JPanel();
         frame.setLayout(new BorderLayout());
         frame.add(mainPanel);
-        setMenuBar(frame);
-        setMainPanel();
+        mainPanel.setLayout(new GridBagLayout());
+        //setMenuBar();
+        drawComponents();
         setResizeListener();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
@@ -48,16 +51,26 @@ public class App {
         frame.repaint();
     }
 
-    private void setMainPanel() {
-        mainPanel.setLayout(new GridBagLayout());
+    private void drawComponents() {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1;
         gridBagConstraints.weighty = 1;
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
+        JFXPanel menuFromFxml = new JFXPanel();
+        mainPanel.add(menuFromFxml, gridBagConstraints);
+        gridBagConstraints.anchor = GridBagConstraints.CENTER;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.gridx++;
         mainPanel.add(mainPanelBlock, gridBagConstraints);
+
+        AppController controller = (AppController) ImageHelper.initFX(menuFromFxml, getClass().getResource("/fxml/MenuBar.fxml"));
+        controller.setMainApp(this);
     }
 
     private void setResizeListener() {
+        AppParameters.setParameter(ClientConstants.WINDOW_WIDTH, ClientConstants.DEFAULT_WINDOW_WIDTH);
+        AppParameters.setParameter(ClientConstants.WINDOW_HEIGHT, ClientConstants.DEFAULT_WINDOW_HEIGHT);
         mainPanel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -69,8 +82,15 @@ public class App {
         });
     }
 
-    private void setMenuBar(final JFrame frame) {
-        JMenuBar menuBar = new JMenuBar();
+    private void setMenuBar() {
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1;
+        gridBagConstraints.weighty = 1;
+        gridBagConstraints.anchor = GridBagConstraints.NORTH;
+
+
+        /*JMenuBar menuBar = new JMenuBar();
 
         JMenu file = new JMenu(StringResources.FILE);
         JMenu operationsMenu = new JMenu(StringResources.OPERATIONS);
@@ -80,27 +100,7 @@ public class App {
         openFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                final NativeJFileChooser openFileDialog = new NativeJFileChooser();
-                openFileDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                openFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("All Images", "jpg", "jpeg", "png", "bmp"));
-                openFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("JPEG Images", "jpg", "jpeg"));
-                openFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("PNG Images", "png"));
-                openFileDialog.setAcceptAllFileFilterUsed(false);
-                int result = openFileDialog.showOpenDialog(frame);
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    File file = openFileDialog.getSelectedFile();
-                    try {
-                        BufferedImage bufferedImage = ImageIO.read(file);
-                        Mat sourceImage = ImageHelper.convertBufferedImageToMat(bufferedImage);
-                        operations.setSourceImage(sourceImage);
-                        image = bufferedImage;
-                        updateWindowSize();
-                        updateCurrentView();
-                        updateGrahicalWidget();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
+                executeCreateNewProject();
             }
         });
 
@@ -109,27 +109,7 @@ public class App {
         saveAs.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (image != null) {
-                    final NativeJFileChooser saveFileDialog = new NativeJFileChooser();
-                    saveFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("JPG Image", "jpg"));
-                    saveFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("PNG Image", "png"));
-                    saveFileDialog.setAcceptAllFileFilterUsed(false);
-                    int result = saveFileDialog.showSaveDialog(frame);
-                    if (result == JFileChooser.APPROVE_OPTION) {
-                        File fileToSave = saveFileDialog.getSelectedFile();
-                        BufferedImage bufferedImage = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
-                        try {
-                            String type = saveFileDialog.getTypeDescription(fileToSave);
-                            ImageIO.write(bufferedImage, "png", fileToSave);
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                }
-                else {
-                    // TODO: show message about empty image
-                    WarningMessage warnPopup = new WarningMessage(frame, "There is no image to save");
-                }
+                executeExportImage();
             }
         });
         JMenuItem exit = new JMenuItem(StringResources.EXIT);
@@ -137,7 +117,7 @@ public class App {
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.dispose();
+                executeExit();
             }
         });
 
@@ -208,9 +188,9 @@ public class App {
         operationsMenu.add(grayscale);
         operationsMenu.add(findAstrocytes);
         menuBar.add(file);
-        menuBar.add(operationsMenu);
+        menuBar.add(operationsMenu);*/
 
-        frame.setJMenuBar(menuBar);
+        //frame.setJMenuBar(menuBar);
     }
 
     private void updateGrahicalWidget() {
@@ -247,4 +227,67 @@ public class App {
         }
     }
 
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public MainPanelBlock getMainPanelBlock() {
+        return mainPanelBlock;
+    }
+
+    public GraphicalWidget getGraphicalWidget() {
+        return graphicalWidget;
+    }
+
+    public void executeCreateNewProject() {
+        final NativeJFileChooser openFileDialog = new NativeJFileChooser();
+        openFileDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        openFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("All Images", "jpg", "jpeg", "png", "bmp"));
+        openFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("JPEG Images", "jpg", "jpeg"));
+        openFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("PNG Images", "png"));
+        openFileDialog.setAcceptAllFileFilterUsed(false);
+        int result = openFileDialog.showOpenDialog(frame);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = openFileDialog.getSelectedFile();
+            try {
+                BufferedImage bufferedImage = ImageIO.read(file);
+                Mat sourceImage = ImageHelper.convertBufferedImageToMat(bufferedImage);
+                operations.setSourceImage(sourceImage);
+                image = bufferedImage;
+                updateWindowSize();
+                updateCurrentView();
+                updateGrahicalWidget();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    public void executeExportImage() {
+        if (image != null) {
+            final NativeJFileChooser saveFileDialog = new NativeJFileChooser();
+            saveFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("JPG Image", "jpg"));
+            saveFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("PNG Image", "png"));
+            saveFileDialog.setAcceptAllFileFilterUsed(false);
+            int result = saveFileDialog.showSaveDialog(frame);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = saveFileDialog.getSelectedFile();
+                BufferedImage bufferedImage = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
+                try {
+                    String type = saveFileDialog.getTypeDescription(fileToSave);
+                    ImageIO.write(bufferedImage, "png", fileToSave);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        else {
+            // TODO: show message about empty image
+            WarningMessage warnPopup = new WarningMessage(frame, "There is no image to save");
+        }
+    }
+
+    public void executeExit() {
+        frame.dispose();
+    }
 }

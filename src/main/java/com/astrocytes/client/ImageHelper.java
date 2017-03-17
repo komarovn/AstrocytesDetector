@@ -1,5 +1,10 @@
 package com.astrocytes.client;
 
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
@@ -7,6 +12,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * Created by Nikolay Komarov on 23.02.2017.
@@ -55,5 +62,23 @@ public abstract class ImageHelper {
         boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
         WritableRaster raster = in.copyData(null);
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+    }
+
+    public static Object initFX(final JFXPanel content, URL address) {
+        try {
+            FXMLLoader loader = new FXMLLoader(address);
+            final Parent root = loader.load();
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    Scene scene = new Scene(root);
+                    content.setScene(scene);
+                }
+            });
+            return loader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
