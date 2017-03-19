@@ -71,7 +71,7 @@ public class App {
         gridBagConstraints.gridx++;
         mainPanel.add(mainPanelBlock, gridBagConstraints);
 
-        controller = (AppController) ImageHelper.initFX(menuFromFxml, getClass().getResource("/fxml/MenuBar.fxml"));
+        controller = (AppController) SwingJavaFXHelper.initFX(menuFromFxml, getClass().getResource("/fxml/MenuBar.fxml"));
         controller.setMainApp(this);
         controller.setAvailability(true);
 

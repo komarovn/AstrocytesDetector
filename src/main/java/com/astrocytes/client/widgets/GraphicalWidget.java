@@ -66,7 +66,7 @@ public class GraphicalWidget extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                if (e.getButton() == MouseEvent.BUTTON1 /*&& image != null*/) {
+                if (e.getButton() == MouseEvent.BUTTON1 && image != null) {
                     mouseClicked(e);
                     setCursor(new Cursor(Cursor.MOVE_CURSOR));
                 }
