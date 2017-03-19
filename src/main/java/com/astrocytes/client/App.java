@@ -63,21 +63,10 @@ public class App {
     }
 
     private void initComponents() {
-        GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1;
-        gridBagConstraints.weighty = 1;
-        gridBagConstraints.anchor = GridBagConstraints.NORTH;
         JFXPanel menuFromFxml = new JFXPanel();
         mainPanel.add(menuFromFxml, BorderLayout.PAGE_START);
-        gridBagConstraints.anchor = GridBagConstraints.CENTER;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.gridx++;
         mainPanel.add(mainPanelBlock, BorderLayout.CENTER);
         JFXPanel statusBar = new JFXPanel();
-        gridBagConstraints.anchor = GridBagConstraints.SOUTH;
-        gridBagConstraints.gridy++;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         mainPanel.add(statusBar, BorderLayout.PAGE_END);
 
         controller = (AppController) SwingJavaFXHelper.initFX(menuFromFxml, getClass().getResource("/fxml/MenuBar.fxml"));
