@@ -103,7 +103,7 @@ public class DialogDilateErode extends AbstractDialog {
         proceedAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AppParameters.setParameter(ClientConstants.RADIUS_DIL_ER, getInstrumentRadius());
+                AppParameters.setParameter(ClientConstants.RADIUS_DIL_ER, String.valueOf(getInstrumentRadius()));
                 setStatus(true);
                 setVisible(false);
             }

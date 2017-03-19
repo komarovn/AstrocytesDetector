@@ -9,6 +9,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,7 @@ public class AppParameters {
      */
     private HashMap<String, Object> settings;
     private HashMap<String, Object> parameters;
+    private BufferedImage originalImage;
     private static AppParameters singleton;
 
     private AppParameters() {
@@ -55,6 +57,10 @@ public class AppParameters {
 
     public static Object getSetting(String key) {
         return singleton.settings.get(key);
+    }
+
+    public static void setOriginalImage() {
+
     }
 
     public static void destroyParameters() {

@@ -11,6 +11,8 @@ public interface Operations {
 
     public void setSourceImage(Mat sourceImage);
 
+    public Mat getSourceImage();
+
     public Mat getOutputImage();
 
     /**

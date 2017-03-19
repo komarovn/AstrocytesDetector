@@ -138,8 +138,8 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
         proceedAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AppParameters.setParameter(ClientConstants.CANNY_MIN_THRESH, getMinThresh());
-                AppParameters.setParameter(ClientConstants.CANNY_MAX_THRESH, getMaxThresh());
+                AppParameters.setParameter(ClientConstants.CANNY_MIN_THRESH, String.valueOf(getMinThresh()));
+                AppParameters.setParameter(ClientConstants.CANNY_MAX_THRESH, String.valueOf(getMaxThresh()));
                 setStatus(true);
                 setVisible(false);
             }

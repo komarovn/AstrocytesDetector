@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
 import javafx.stage.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -157,7 +158,8 @@ public class AppController implements Initializable {
         File projectDir = new File(selectedDirectory, "Project Name");
         projectDir.mkdir();
         AppParameters.setSetting(ClientConstants.PROJECT_DIR, projectDir);
-        ManageProject.saveProject(projectDir);
+        ManageProject manager = new ManageProject(mainApp);
+        manager.saveProject(projectDir);
     }
 
     private void loadProjectAction() {
@@ -165,7 +167,14 @@ public class AppController implements Initializable {
         saveProjectDialog.setTitle(StringResources.OPEN_PROJECT);
         File selectedDirectory = saveProjectDialog.showDialog(menuBar.getScene().getWindow());
         if (selectedDirectory != null) {
-            ManageProject.loadProject(selectedDirectory);
+            ManageProject manager = new ManageProject(mainApp);
+            manager.loadProject(selectedDirectory);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    mainApp.processLoadedProject();
+                }
+            });
         }
     }
 

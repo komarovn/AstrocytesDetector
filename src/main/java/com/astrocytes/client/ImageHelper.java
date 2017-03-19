@@ -1,12 +1,16 @@
 package com.astrocytes.client;
 
+import com.astrocytes.shared.Operations;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Nikolay Komarov on 23.02.2017.
@@ -55,6 +59,23 @@ public abstract class ImageHelper {
         boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
         WritableRaster raster = in.copyData(null);
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+    }
+
+    public static void saveImage(BufferedImage image, File file) {
+        try {
+            ImageIO.write(image, "jpg", file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static BufferedImage loadImage(File file) {
+        try {
+            return ImageIO.read(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

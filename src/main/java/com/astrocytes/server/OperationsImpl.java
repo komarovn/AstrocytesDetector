@@ -41,6 +41,11 @@ public class OperationsImpl implements Operations {
     }
 
     @Override
+    public Mat getSourceImage() {
+        return sourceImage;
+    }
+
+    @Override
     public Mat getOutputImage() {
         if (outputImage == null) {
             outputImage = new Mat();

@@ -49,7 +49,7 @@ public class App {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(new Dimension(ClientConstants.DEFAULT_WINDOW_WIDTH, ClientConstants.DEFAULT_WINDOW_HEIGHT));
+        frame.setSize(new Dimension(Integer.parseInt(ClientConstants.DEFAULT_WINDOW_WIDTH), Integer.parseInt(ClientConstants.DEFAULT_WINDOW_HEIGHT)));
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -222,6 +222,10 @@ public class App {
         return graphicalWidget;
     }
 
+    public Operations getOperations() {
+        return operations;
+    }
+
     public void executeCreateNewProject() {
         final NativeJFileChooser openFileDialog = new NativeJFileChooser();
         openFileDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -317,5 +321,13 @@ public class App {
 
     public void executeExit() {
         frame.dispose();
+    }
+
+    public void processLoadedProject() {
+        image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
+        controller.setAvailability(false);
+        updateWindowSize();
+        updateCurrentView();
+        updateGrahicalWidget();
     }
 }
