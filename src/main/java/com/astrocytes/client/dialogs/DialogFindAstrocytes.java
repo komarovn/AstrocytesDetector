@@ -2,17 +2,12 @@ package com.astrocytes.client.dialogs;
 
 import com.astrocytes.client.ImageHelper;
 import com.astrocytes.client.resources.StringResources;
-import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 /**
  * Created by Nikolay Komarov on 05.03.2017.
@@ -41,7 +36,7 @@ public class DialogFindAstrocytes extends AbstractDialog {
             JFXPanel content = new JFXPanel();
             add(content);
             content.setPreferredSize(new Dimension(500, 600));
-            ImageHelper.initFX(content, getClass().getResource("DialogFindAstrocytesContent.fxml"));
+            ImageHelper.initFX(content, getClass().getResource("/fxml/DialogFindAstrocytesContent.fxml"));
         }
     }
 

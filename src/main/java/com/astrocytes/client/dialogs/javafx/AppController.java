@@ -58,6 +58,7 @@ public class AppController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        /* --- File --- */
         createNewProject.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -84,6 +85,32 @@ public class AppController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 mainApp.executeExit();
+            }
+        });
+
+        /* --- Operations --- */
+        cannyEdDet.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                mainApp.executeEdgeDetection();
+            }
+        });
+        dilErode.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                mainApp.executeDilateErode();
+            }
+        });
+        grayscale.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                mainApp.executeGrayscale();
+            }
+        });
+        findAstrocytes.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                mainApp.executeFindAstrocytes();
             }
         });
     }

@@ -135,56 +135,28 @@ public class App {
         edgeDetection.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (image != null) {
-                    DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(frame, graphicalWidget.getImage());
-                    if (dialog.getStatus()) {
-                        operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(image),
-                                (Integer) AppParameters.getParameter(ClientConstants.CANNY_MIN_THRESH),
-                                (Integer) AppParameters.getParameter(ClientConstants.CANNY_MAX_THRESH));
-                        image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
-                        updateCurrentView();
-                    }
-                }
+                executeEdgeDetection();
             }
         });
         JMenuItem dilateAndErode = new JMenuItem(StringResources.DILATE_AND_ERODE);
         dilateAndErode.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (image != null) {
-                    DialogDilateErode dialog = new DialogDilateErode(frame, graphicalWidget.getImage());
-                    if (dialog.getStatus()) {
-                        operations.applyMathMorphology(ImageHelper.convertBufferedImageToMat(image),
-                                (Integer) AppParameters.getParameter(ClientConstants.RADIUS_DIL_ER));
-                        image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
-                        updateCurrentView();
-                    }
-                }
+                executeDilateErode();
             }
         });
         JMenuItem grayscale = new JMenuItem(StringResources.GRAYSCALE);
         grayscale.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (image != null) {
-                    Mat converted = operations.convertGrayscale(ImageHelper.convertBufferedImageToMat(image));
-                    image = ImageHelper.convertMatToBufferedImage(converted);
-                    updateCurrentView();
-                }
+                executeGrayscale();
             }
         });
         JMenuItem findAstrocytes = new JMenuItem(StringResources.FIND_ASTROCYTES);
         findAstrocytes.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (image != null) {
-                    DialogFindAstrocytes dialog = new DialogFindAstrocytes(frame);
-                    if (dialog.getStatus()) {
-                        operations.drawAstrocyteCenters(ImageHelper.convertBufferedImageToMat(image));
-                        image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
-                        updateCurrentView();
-                    }
-                }
+                executeFindAstrocytes();
             }
         });
 
@@ -294,6 +266,50 @@ public class App {
         else {
             // TODO: show message about empty image
             WarningMessage warnPopup = new WarningMessage(frame, "There is no image to save");
+        }
+    }
+
+    public void executeEdgeDetection() {
+        if (image != null) {
+            DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(frame, graphicalWidget.getImage());
+            if (dialog.getStatus()) {
+                operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(image),
+                        (Integer) AppParameters.getParameter(ClientConstants.CANNY_MIN_THRESH),
+                        (Integer) AppParameters.getParameter(ClientConstants.CANNY_MAX_THRESH));
+                image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
+                updateCurrentView();
+            }
+        }
+    }
+
+    public void executeDilateErode() {
+        if (image != null) {
+            DialogDilateErode dialog = new DialogDilateErode(frame, graphicalWidget.getImage());
+            if (dialog.getStatus()) {
+                operations.applyMathMorphology(ImageHelper.convertBufferedImageToMat(image),
+                        (Integer) AppParameters.getParameter(ClientConstants.RADIUS_DIL_ER));
+                image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
+                updateCurrentView();
+            }
+        }
+    }
+
+    public void executeGrayscale() {
+        if (image != null) {
+            Mat converted = operations.convertGrayscale(ImageHelper.convertBufferedImageToMat(image));
+            image = ImageHelper.convertMatToBufferedImage(converted);
+            updateCurrentView();
+        }
+    }
+
+    public void executeFindAstrocytes() {
+        if (image != null) {
+            DialogFindAstrocytes dialog = new DialogFindAstrocytes(frame);
+            if (dialog.getStatus()) {
+                operations.drawAstrocyteCenters(ImageHelper.convertBufferedImageToMat(image));
+                image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
+                updateCurrentView();
+            }
         }
     }
 
