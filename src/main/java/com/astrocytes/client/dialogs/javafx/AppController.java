@@ -92,4 +92,13 @@ public class AppController implements Initializable {
         this.mainApp = mainApp;
     }
 
+    public void setAvailability(boolean isEmpty) {
+        saveProjectAs.setDisable(isEmpty);
+        exportImage.setDisable(isEmpty);
+        cannyEdDet.setDisable(isEmpty);
+        dilErode.setDisable(isEmpty);
+        grayscale.setDisable(isEmpty);
+        findAstrocytes.setDisable(isEmpty);
+    }
+
 }

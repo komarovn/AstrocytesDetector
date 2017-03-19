@@ -30,6 +30,8 @@ import java.io.IOException;
  */
 public class App {
     private JFrame frame = new JFrame(StringResources.ASTROCYTES_DETECTOR);
+    /* JavaFX controller */
+    private AppController controller;
 
     private JPanel mainPanel;
     private GraphicalWidget graphicalWidget;
@@ -69,8 +71,9 @@ public class App {
         gridBagConstraints.gridx++;
         mainPanel.add(mainPanelBlock, gridBagConstraints);
 
-        AppController controller = (AppController) ImageHelper.initFX(menuFromFxml, getClass().getResource("/fxml/MenuBar.fxml"));
+        controller = (AppController) ImageHelper.initFX(menuFromFxml, getClass().getResource("/fxml/MenuBar.fxml"));
         controller.setMainApp(this);
+        controller.setAvailability(true);
 
         AppParameters.setParameter(ClientConstants.WINDOW_WIDTH, ClientConstants.DEFAULT_WINDOW_WIDTH);
         AppParameters.setParameter(ClientConstants.WINDOW_HEIGHT, ClientConstants.DEFAULT_WINDOW_HEIGHT);
@@ -96,7 +99,7 @@ public class App {
         gridBagConstraints.anchor = GridBagConstraints.NORTH;
 
 
-        /*JMenuBar menuBar = new JMenuBar();
+        JMenuBar menuBar = new JMenuBar();
 
         JMenu file = new JMenu(StringResources.FILE);
         JMenu operationsMenu = new JMenu(StringResources.OPERATIONS);
@@ -194,7 +197,7 @@ public class App {
         operationsMenu.add(grayscale);
         operationsMenu.add(findAstrocytes);
         menuBar.add(file);
-        menuBar.add(operationsMenu);*/
+        menuBar.add(operationsMenu);
 
         //frame.setJMenuBar(menuBar);
     }
@@ -263,6 +266,7 @@ public class App {
                 updateWindowSize();
                 updateCurrentView();
                 updateGrahicalWidget();
+                controller.setAvailability(false);
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
