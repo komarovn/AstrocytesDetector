@@ -2,6 +2,7 @@ package com.astrocytes.client.dialogs.javafx;
 
 import com.astrocytes.client.App;
 import com.astrocytes.client.data.AppParameters;
+import com.astrocytes.client.data.ManageProject;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
 import javafx.event.ActionEvent;
@@ -147,17 +148,10 @@ public class AppController implements Initializable {
     }
 
     public void saveProject(File selectedDirectory) {
-        try {
-            File projectDir = new File(selectedDirectory, "Project Name");
-            projectDir.mkdir();
-            AppParameters.setSetting(ClientConstants.PROJECT_DIR, projectDir);
-            File settings = new File(projectDir, "settings.xml");
-            settings.createNewFile();
-            File parameters = new File(projectDir, "parameters.xml");
-            parameters.mkdir();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        File projectDir = new File(selectedDirectory, "Project Name");
+        projectDir.mkdir();
+        AppParameters.setSetting(ClientConstants.PROJECT_DIR, projectDir);
+        ManageProject.saveProject(projectDir);
     }
 
 }
