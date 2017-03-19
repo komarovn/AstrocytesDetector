@@ -64,26 +64,34 @@ public class AppParameters {
         singleton.settings.clear();
     }
 
-    protected static void saveParameters(File file) {
+    public static void saveParameters(File file) {
+        saveXML(file, singleton.parameters, "project-params", "parameter");
+    }
+
+    public static void saveSettings(File file) {
+        saveXML(file, singleton.settings, "app-settings", "setting");
+    }
+
+    private static void saveXML(File file, HashMap<String, Object> data, String rootName, String paramName) {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
             Document document = docBuilder.newDocument();
 
-            Element rootElement = document.createElement("project-params");
+            Element rootElement = document.createElement(rootName);
             document.appendChild(rootElement);
 
-            if (!singleton.parameters.isEmpty()) {
-                for (Map.Entry<String, Object> parameter : singleton.parameters.entrySet()) {
+            if (!data.isEmpty()) {
+                for (Map.Entry<String, Object> parameter : data.entrySet()) {
                     String key = parameter.getKey();
                     Object value = parameter.getValue();
 
-                    Element parElement = document.createElement("parameter");
+                    Element parElement = document.createElement(paramName);
                     Attr attribute =document.createAttribute("name");
                     attribute.setValue(key);
                     parElement.setAttributeNode(attribute);
                     parElement.appendChild(document.createTextNode(value.toString()));
-                    document.appendChild(parElement);
+                    rootElement.appendChild(parElement);
                 }
             }
 

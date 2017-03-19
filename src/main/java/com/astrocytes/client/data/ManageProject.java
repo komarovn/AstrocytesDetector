@@ -15,6 +15,7 @@ public class ManageProject {
             File parameters = new File(projectDir, "parameters.xml");
             parameters.createNewFile();
             AppParameters.saveParameters(parameters);
+            AppParameters.saveSettings(settings);
         }
         catch (IOException e) {
             e.printStackTrace();
