@@ -4,6 +4,7 @@ import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -72,6 +73,14 @@ public class AppParameters {
         saveXML(file, singleton.settings, "app-settings", "setting");
     }
 
+    public static void loadParameters(File file) {
+        loadXML(file, singleton.parameters, "project-params", "parameter");
+    }
+
+    public static void loadSettings(File file) {
+        loadXML(file, singleton.settings, "app-settings", "setting");
+    }
+
     private static void saveXML(File file, HashMap<String, Object> data, String rootName, String paramName) {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -100,6 +109,23 @@ public class AppParameters {
             DOMSource source = new DOMSource(document);
             StreamResult result = new StreamResult(file);
             transformer.transform(source, result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void loadXML(File file, HashMap<String, Object> data, String rootName, String paramName) {
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
+            Document document = docBuilder.parse(file);
+            document.getDocumentElement().normalize();
+
+            NodeList root = document.getElementsByTagName(paramName);
+            for (int i = 0; i < root.getLength(); i++) {
+                Node node = root.item(i);
+                data.put(node.getAttributes().item(0).getNodeValue(), node.getTextContent());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

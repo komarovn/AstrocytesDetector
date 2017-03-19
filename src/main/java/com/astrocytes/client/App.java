@@ -188,8 +188,8 @@ public class App {
     }
 
     private void updateWindowSize() {
-        frame.setSize(new Dimension((int) AppParameters.getSetting(ClientConstants.WINDOW_WIDTH),
-                (int) AppParameters.getSetting(ClientConstants.WINDOW_HEIGHT)));
+        frame.setSize(new Dimension(Integer.parseInt((String) AppParameters.getSetting(ClientConstants.WINDOW_WIDTH)),
+                Integer.parseInt((String) AppParameters.getSetting(ClientConstants.WINDOW_HEIGHT))));
         frame.repaint();
     }
 
@@ -276,8 +276,8 @@ public class App {
             DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(frame, graphicalWidget.getImage());
             if (dialog.getStatus()) {
                 operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(image),
-                        (Integer) AppParameters.getParameter(ClientConstants.CANNY_MIN_THRESH),
-                        (Integer) AppParameters.getParameter(ClientConstants.CANNY_MAX_THRESH));
+                        Integer.parseInt((String) AppParameters.getParameter(ClientConstants.CANNY_MIN_THRESH)),
+                        Integer.parseInt((String) AppParameters.getParameter(ClientConstants.CANNY_MAX_THRESH)));
                 image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
                 updateCurrentView();
             }
@@ -289,7 +289,7 @@ public class App {
             DialogDilateErode dialog = new DialogDilateErode(frame, graphicalWidget.getImage());
             if (dialog.getStatus()) {
                 operations.applyMathMorphology(ImageHelper.convertBufferedImageToMat(image),
-                        (Integer) AppParameters.getParameter(ClientConstants.RADIUS_DIL_ER));
+                        Integer.parseInt((String) AppParameters.getParameter(ClientConstants.RADIUS_DIL_ER)));
                 image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
                 updateCurrentView();
             }

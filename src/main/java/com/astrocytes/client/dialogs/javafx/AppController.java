@@ -70,6 +70,12 @@ public class AppController implements Initializable {
                 });
             }
         });
+        openProject.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                loadProjectAction();
+            }
+        });
         saveProjectAs.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -147,11 +153,20 @@ public class AppController implements Initializable {
         }
     }
 
-    public void saveProject(File selectedDirectory) {
+    private void saveProject(File selectedDirectory) {
         File projectDir = new File(selectedDirectory, "Project Name");
         projectDir.mkdir();
         AppParameters.setSetting(ClientConstants.PROJECT_DIR, projectDir);
         ManageProject.saveProject(projectDir);
+    }
+
+    private void loadProjectAction() {
+        DirectoryChooser saveProjectDialog = new DirectoryChooser();
+        saveProjectDialog.setTitle(StringResources.OPEN_PROJECT);
+        File selectedDirectory = saveProjectDialog.showDialog(menuBar.getScene().getWindow());
+        if (selectedDirectory != null) {
+            ManageProject.loadProject(selectedDirectory);
+        }
     }
 
 }

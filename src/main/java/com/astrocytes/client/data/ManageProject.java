@@ -25,12 +25,10 @@ public class ManageProject {
     public static void loadProject(File projectDir) {
         AppParameters.destroyParameters();
         AppParameters.destroySettings();
-        /*try {
-
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        File settings = new File(projectDir, "settings.xml");
+        File parameters = new File(projectDir, "parameters.xml");
+        AppParameters.loadParameters(parameters);
+        AppParameters.loadSettings(settings);
     }
 
 }

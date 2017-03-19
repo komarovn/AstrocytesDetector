@@ -17,6 +17,8 @@ public abstract class StringResources {
 
     public static final String SAVE_PROJECT_AS = "Save Project As...";
 
+    public static final String OPEN_PROJECT = "Open Project";
+
     public static final String EXIT = "Exit";
 
     public static final String EDGE_DETECTION = "Edge Detection";
