@@ -30,12 +30,6 @@ public class AppController implements Initializable {
     private BorderPane mainPane;
 
     @FXML
-    private MenuBar menuBar;
-
-    @FXML
-    private Menu file;
-
-    @FXML
     private MenuItem createNewProject;
 
     @FXML
@@ -50,6 +44,18 @@ public class AppController implements Initializable {
     @FXML
     private MenuItem exit;
 
+    @FXML
+    private MenuItem cannyEdDet;
+
+    @FXML
+    private MenuItem dilErode;
+
+    @FXML
+    private MenuItem grayscale;
+
+    @FXML
+    private MenuItem findAstrocytes;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createNewProject.setOnAction(new EventHandler<ActionEvent>() {
@@ -59,6 +65,17 @@ public class AppController implements Initializable {
                     @Override
                     public void run() {
                         mainApp.executeCreateNewProject();
+                    }
+                });
+            }
+        });
+        exportImage.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                EventQueue.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        mainApp.executeExportImage();
                     }
                 });
             }

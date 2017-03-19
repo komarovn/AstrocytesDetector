@@ -34,7 +34,10 @@
     </Menu>
     <Menu mnemonicParsing="false" text="Operations">
       <items>
-        <MenuItem mnemonicParsing="false" text="Delete" />
+        <MenuItem fx:id="cannyEdDet" mnemonicParsing="false" text="Canny Edge Detection" />
+            <MenuItem fx:id="dilErode" mnemonicParsing="false" text="Dilate And Erode" />
+            <MenuItem fx:id="grayscale" mnemonicParsing="false" text="Grayscale" />
+            <MenuItem fx:id="findAstrocytes" mnemonicParsing="false" text="Find Astrocytes" />
       </items>
     </Menu>
   </menus>
