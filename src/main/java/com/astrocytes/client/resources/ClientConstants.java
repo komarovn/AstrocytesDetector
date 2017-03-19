@@ -11,8 +11,8 @@ public abstract class ClientConstants {
     public static final int DEFAULT_GRAPHICAL_WIDGET_WIDTH = 500;
     public static final int DEFAULT_GRAPHICAL_WIDGET_HEIGHT = 500;
 
-    public static final int PREVIEW_WINDOW_WIDTH = 260;
-    public static final int PREVIEW_WINDOW_HEIGHT = 260;
+    public static final String PREVIEW_WINDOW_WIDTH = "260";
+    public static final String PREVIEW_WINDOW_HEIGHT = "260";
 
     public static final String WINDOW_WIDTH = "windowWidth";
     public static final String WINDOW_HEIGHT = "windowHeight";

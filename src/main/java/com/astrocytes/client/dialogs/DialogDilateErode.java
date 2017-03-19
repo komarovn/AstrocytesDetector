@@ -53,7 +53,7 @@ public class DialogDilateErode extends AbstractDialog {
             radiusTextbox.setColumns(5);
             radiusSlider = new JSlider(1, 7, RADIUS_DEFAULT);
 
-            preview = new PreviewGraphicalWidget(ClientConstants.PREVIEW_WINDOW_WIDTH, ClientConstants.PREVIEW_WINDOW_HEIGHT) {
+            preview = new PreviewGraphicalWidget(Integer.parseInt(ClientConstants.PREVIEW_WINDOW_WIDTH), Integer.parseInt(ClientConstants.PREVIEW_WINDOW_HEIGHT)) {
                 @Override
                 public void processPreviewImage() {
                     processPreview();

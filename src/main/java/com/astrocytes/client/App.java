@@ -6,6 +6,7 @@ import com.astrocytes.client.dialogs.DialogDilateErode;
 import com.astrocytes.client.dialogs.DialogFindAstrocytes;
 import com.astrocytes.client.dialogs.NativeJFileChooser;
 import com.astrocytes.client.dialogs.javafx.AppController;
+import com.astrocytes.client.dialogs.javafx.StatusBarController;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
 import com.astrocytes.server.OperationsImpl;
@@ -32,6 +33,7 @@ public class App {
     private JFrame frame = new JFrame(StringResources.ASTROCYTES_DETECTOR);
     /* JavaFX controller */
     private AppController controller;
+    private StatusBarController statusBarController;
 
     private JPanel mainPanel;
     private GraphicalWidget graphicalWidget;
@@ -44,7 +46,7 @@ public class App {
         mainPanel = new JPanel();
         frame.setLayout(new BorderLayout());
         frame.add(mainPanel);
-        mainPanel.setLayout(new GridBagLayout());
+        mainPanel.setLayout(new BorderLayout());
         initComponents();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
@@ -67,15 +69,23 @@ public class App {
         gridBagConstraints.weighty = 1;
         gridBagConstraints.anchor = GridBagConstraints.NORTH;
         JFXPanel menuFromFxml = new JFXPanel();
-        mainPanel.add(menuFromFxml, gridBagConstraints);
+        mainPanel.add(menuFromFxml, BorderLayout.PAGE_START);
         gridBagConstraints.anchor = GridBagConstraints.CENTER;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.gridx++;
-        mainPanel.add(mainPanelBlock, gridBagConstraints);
+        mainPanel.add(mainPanelBlock, BorderLayout.CENTER);
+        JFXPanel statusBar = new JFXPanel();
+        gridBagConstraints.anchor = GridBagConstraints.SOUTH;
+        gridBagConstraints.gridy++;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        mainPanel.add(statusBar, BorderLayout.PAGE_END);
 
         controller = (AppController) SwingJavaFXHelper.initFX(menuFromFxml, getClass().getResource("/fxml/MenuBar.fxml"));
         controller.setMainApp(this);
         controller.setAvailability(true);
+
+        statusBarController = (StatusBarController) SwingJavaFXHelper.initFX(statusBar, getClass().getResource("/fxml/StatusBar.fxml"));
+        statusBarController.setMainApp(this);
 
         AppParameters.setSetting(ClientConstants.WINDOW_WIDTH, ClientConstants.DEFAULT_WINDOW_WIDTH);
         AppParameters.setSetting(ClientConstants.WINDOW_HEIGHT, ClientConstants.DEFAULT_WINDOW_HEIGHT);
@@ -87,8 +97,8 @@ public class App {
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
                 updateGrahicalWidget();
-                AppParameters.setSetting(ClientConstants.WINDOW_WIDTH, (int) frame.getSize().getWidth());
-                AppParameters.setSetting(ClientConstants.WINDOW_HEIGHT, (int) frame.getSize().getHeight());
+                AppParameters.setSetting(ClientConstants.WINDOW_WIDTH, String.valueOf((int) frame.getSize().getWidth()));
+                AppParameters.setSetting(ClientConstants.WINDOW_HEIGHT, String.valueOf((int) frame.getSize().getHeight()));
             }
         });
     }

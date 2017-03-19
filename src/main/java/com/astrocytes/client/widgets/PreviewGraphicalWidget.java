@@ -20,8 +20,8 @@ public abstract class PreviewGraphicalWidget extends GraphicalWidget {
 
     public PreviewGraphicalWidget(Integer width, Integer height) {
         super(width, height);
-        widthWidget = width == null ? ClientConstants.PREVIEW_WINDOW_WIDTH : width;
-        heightWidget = height == null ? ClientConstants.PREVIEW_WINDOW_HEIGHT : height;
+        widthWidget = width == null ? Integer.parseInt(ClientConstants.PREVIEW_WINDOW_WIDTH) : width;
+        heightWidget = height == null ? Integer.parseInt(ClientConstants.PREVIEW_WINDOW_HEIGHT) : height;
         updateWidget(width, height);
         setZoomEnabled(false);
         setBorder(BorderFactory.createLineBorder(Color.darkGray));
