@@ -1,5 +1,6 @@
 package com.astrocytes.client;
 
+import com.astrocytes.client.data.AppParameters;
 import com.astrocytes.client.dialogs.DialogCannyEdgeDetection;
 import com.astrocytes.client.dialogs.DialogDilateErode;
 import com.astrocytes.client.dialogs.DialogFindAstrocytes;
@@ -8,12 +9,11 @@ import com.astrocytes.client.dialogs.javafx.AppController;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
 import com.astrocytes.server.OperationsImpl;
-import com.astrocytes.shared.AppParameters;
 import com.astrocytes.shared.Operations;
 import com.astrocytes.client.widgets.GraphicalWidget;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.stage.Stage;
 import org.opencv.core.Mat;
 
 import javax.imageio.ImageIO;
@@ -53,6 +53,8 @@ public class App {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                Stage ownerStage = new Stage();
+                controller.setStage(ownerStage);
                 setResizeListener();
             }
         });
@@ -75,8 +77,8 @@ public class App {
         controller.setMainApp(this);
         controller.setAvailability(true);
 
-        AppParameters.setParameter(ClientConstants.WINDOW_WIDTH, ClientConstants.DEFAULT_WINDOW_WIDTH);
-        AppParameters.setParameter(ClientConstants.WINDOW_HEIGHT, ClientConstants.DEFAULT_WINDOW_HEIGHT);
+        AppParameters.setSetting(ClientConstants.WINDOW_WIDTH, ClientConstants.DEFAULT_WINDOW_WIDTH);
+        AppParameters.setSetting(ClientConstants.WINDOW_HEIGHT, ClientConstants.DEFAULT_WINDOW_HEIGHT);
     }
 
     private void setResizeListener() {
@@ -85,8 +87,8 @@ public class App {
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
                 updateGrahicalWidget();
-                AppParameters.setParameter(ClientConstants.WINDOW_WIDTH, (int) frame.getSize().getWidth());
-                AppParameters.setParameter(ClientConstants.WINDOW_HEIGHT, (int) frame.getSize().getHeight());
+                AppParameters.setSetting(ClientConstants.WINDOW_WIDTH, (int) frame.getSize().getWidth());
+                AppParameters.setSetting(ClientConstants.WINDOW_HEIGHT, (int) frame.getSize().getHeight());
             }
         });
     }
@@ -186,8 +188,8 @@ public class App {
     }
 
     private void updateWindowSize() {
-        frame.setSize(new Dimension((int) AppParameters.getParameter(ClientConstants.WINDOW_WIDTH),
-                (int) AppParameters.getParameter(ClientConstants.WINDOW_HEIGHT)));
+        frame.setSize(new Dimension((int) AppParameters.getSetting(ClientConstants.WINDOW_WIDTH),
+                (int) AppParameters.getSetting(ClientConstants.WINDOW_HEIGHT)));
         frame.repaint();
     }
 

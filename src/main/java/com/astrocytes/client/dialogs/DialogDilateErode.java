@@ -3,10 +3,9 @@ package com.astrocytes.client.dialogs;
 import com.astrocytes.client.ImageHelper;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
-import com.astrocytes.client.widgets.GraphicalWidget;
 import com.astrocytes.client.widgets.PreviewGraphicalWidget;
 import com.astrocytes.server.OperationsImpl;
-import com.astrocytes.shared.AppParameters;
+import com.astrocytes.client.data.AppParameters;
 import com.astrocytes.shared.Operations;
 
 import javax.swing.*;
@@ -15,8 +14,6 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.text.NumberFormat;
 

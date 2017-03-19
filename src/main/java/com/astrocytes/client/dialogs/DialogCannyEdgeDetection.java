@@ -1,10 +1,9 @@
 package com.astrocytes.client.dialogs;
 
 import com.astrocytes.client.ImageHelper;
-import com.astrocytes.client.widgets.GraphicalWidget;
 import com.astrocytes.client.widgets.PreviewGraphicalWidget;
 import com.astrocytes.server.OperationsImpl;
-import com.astrocytes.shared.AppParameters;
+import com.astrocytes.client.data.AppParameters;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
 import com.astrocytes.shared.Operations;
