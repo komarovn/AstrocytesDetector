@@ -6,7 +6,7 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.input.KeyCodeCombination?>
 
-<MenuBar fx:id="menuBar" maxHeight="25" minHeight="25" prefHeight="25" prefWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.astrocytes.client.dialogs.javafx.AppController">
+<MenuBar fx:id="menuBar" maxHeight="25" minHeight="25" prefHeight="25" prefWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.astrocytes.client.dialogs.javafx.MenuController">
   <menus>
     <Menu fx:id="file" mnemonicParsing="false" text="File">
       <items>

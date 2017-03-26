@@ -8,7 +8,10 @@ import com.astrocytes.client.resources.StringResources;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
 import javafx.stage.*;
@@ -16,16 +19,16 @@ import javafx.stage.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
  * Created by Nikolay Komarov on 16.03.2017.
  */
-public class AppController implements Initializable {
+public class MenuController implements Initializable {
 
     private App mainApp;
-    private Stage ownerStage;
 
     @FXML
     private javafx.scene.control.MenuBar menuBar;
@@ -63,12 +66,7 @@ public class AppController implements Initializable {
         createNewProject.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                EventQueue.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        mainApp.executeCreateNewProject();
-                    }
-                });
+                createNewProjectAction();
             }
         });
         openProject.setOnAction(new EventHandler<ActionEvent>() {
@@ -132,10 +130,6 @@ public class AppController implements Initializable {
         this.mainApp = mainApp;
     }
 
-    public void setStage(Stage ownerStage) {
-        this.ownerStage = ownerStage;
-    }
-
     public void setAvailability(boolean isEmpty) {
         saveProjectAs.setDisable(isEmpty);
         exportImage.setDisable(isEmpty);
@@ -143,6 +137,23 @@ public class AppController implements Initializable {
         dilErode.setDisable(isEmpty);
         grayscale.setDisable(isEmpty);
         findAstrocytes.setDisable(isEmpty);
+    }
+
+    private void createNewProjectAction() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/CreateNewProject.fxml"));
+            Parent root = fxmlLoader.load();
+            CreateNewProjectController controller = fxmlLoader.getController();
+            controller.setMainApp(mainApp);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.DECORATED);
+            stage.setTitle(StringResources.CREATE_NEW_PROJECT);
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void saveProjectAsAction() {
@@ -155,7 +166,7 @@ public class AppController implements Initializable {
     }
 
     private void saveProject(File selectedDirectory) {
-        File projectDir = new File(selectedDirectory, "Project Name");
+        File projectDir = new File(selectedDirectory, (String) AppParameters.getSetting(ClientConstants.PROJECT_NAME));
         projectDir.mkdir();
         AppParameters.setSetting(ClientConstants.PROJECT_DIR, projectDir);
         ManageProject manager = new ManageProject(mainApp);

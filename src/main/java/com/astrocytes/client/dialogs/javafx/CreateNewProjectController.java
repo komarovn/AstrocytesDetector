@@ -1,5 +1,10 @@
 package com.astrocytes.client.dialogs.javafx;
 
+import com.astrocytes.client.App;
+import com.astrocytes.client.data.AppParameters;
+import com.astrocytes.client.resources.ClientConstants;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -7,7 +12,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.awt.*;
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -15,6 +25,8 @@ import java.util.ResourceBundle;
  * Created by Nikolay Komarov on 26.03.2017.
  */
 public class CreateNewProjectController implements Initializable {
+
+    private App mainApp;
 
     @FXML
     private TextField projectName;
@@ -37,42 +49,80 @@ public class CreateNewProjectController implements Initializable {
         cancelButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                clodeAction();
             }
         });
         createProjectButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                AppParameters.setSetting(ClientConstants.PROJECT_NAME, projectName.getText());
+                EventQueue.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        mainApp.executeCreateNewProject(new File(imagePath.getText()));
+                    }
+                });
+                clodeAction();
             }
         });
         openImageButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                openImageAction();
+            }
+        });
+        projectName.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                checkMandatoryFields();
+            }
+        });
+        imagePath.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                checkMandatoryFields();
+            }
+        });
+        imagePath.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                checkMandatoryFields();
+            }
+        });
+        imagePath.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (imagePath.getText().isEmpty()) {
+                    openImageAction();
+                }
+            }
+        });
+    }
 
-            }
-        });
-        projectName.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (!projectName.getText().isEmpty()) {
-                    createProjectButton.setDisable(false);
-                }
-                else {
-                    createProjectButton.setDisable(true);
-                }
-            }
-        });
-        imagePath.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (!imagePath.getText().isEmpty()) {
-                    createProjectButton.setDisable(false);
-                }
-                else {
-                    createProjectButton.setDisable(true);
-                }
-            }
-        });
+    public void setMainApp(App mainApp) {
+        this.mainApp = mainApp;
+    }
+
+    private void openImageAction() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Load Image");
+        File image = fileChooser.showOpenDialog(cancelButton.getScene().getWindow());
+        if (image != null) {
+            imagePath.setText(image.getAbsolutePath());
+        }
+    }
+
+    private void clodeAction() {
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
+    }
+
+    private void checkMandatoryFields() {
+        if (!imagePath.getText().isEmpty() && !projectName.getText().isEmpty()) {
+            createProjectButton.setDisable(false);
+        }
+        else {
+            createProjectButton.setDisable(true);
+        }
     }
 }

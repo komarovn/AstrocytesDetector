@@ -18,6 +18,7 @@ public abstract class ClientConstants {
     public static final String WINDOW_HEIGHT = "windowHeight";
 
     public static final String PROJECT_DIR = "projectDir";
+    public static final String PROJECT_NAME = "projectName";
 
     /* Parameters */
     public static final String CANNY_MIN_THRESH = "cannyMinThresh";

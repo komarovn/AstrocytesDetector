@@ -5,12 +5,10 @@ import com.astrocytes.client.dialogs.DialogCannyEdgeDetection;
 import com.astrocytes.client.dialogs.DialogDilateErode;
 import com.astrocytes.client.dialogs.DialogFindAstrocytes;
 import com.astrocytes.client.dialogs.NativeJFileChooser;
-import com.astrocytes.client.dialogs.javafx.AppController;
+import com.astrocytes.client.dialogs.javafx.MenuController;
 import com.astrocytes.client.dialogs.javafx.StatusBarController;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
-import com.astrocytes.server.OperationsImpl;
-import com.astrocytes.shared.Operations;
 import com.astrocytes.client.widgets.GraphicalWidget;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -35,7 +33,7 @@ public class App {
     private MainPanelBlock mainPanelBlock = new MainPanelBlock();
 
     /* JavaFX controllers */
-    private AppController controller;
+    private MenuController controller;
     private StatusBarController statusBarController;
 
     private OperationsExecuter operationsExecuter = new OperationsExecuter();
@@ -54,8 +52,6 @@ public class App {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                Stage ownerStage = new Stage();
-                controller.setStage(ownerStage);
                 setResizeListener();
             }
         });
@@ -68,7 +64,7 @@ public class App {
         JFXPanel statusBar = new JFXPanel();
         mainPanel.add(statusBar, BorderLayout.PAGE_END);
 
-        controller = (AppController) SwingJavaFXHelper.initFX(menuFromFxml, getClass().getResource("/fxml/MenuBar.fxml"));
+        controller = (MenuController) SwingJavaFXHelper.initFX(menuFromFxml, getClass().getResource("/fxml/MenuBar.fxml"));
         controller.setMainApp(this);
         controller.setAvailability(true);
 
@@ -167,6 +163,22 @@ public class App {
                 BufferedImage bufferedImage = ImageIO.read(file);
                 operationsExecuter.setOriginalImage(bufferedImage);
                 image = bufferedImage;
+                updateWindowSize();
+                updateCurrentView();
+                updateGrahicalWidget();
+                controller.setAvailability(false);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    public void executeCreateNewProject(File imagePath) {
+        if (imagePath != null) {
+            try {
+                BufferedImage bufferedImage = ImageIO.read(imagePath);
+                operationsExecuter.setOriginalImage(bufferedImage);
+                this.image = bufferedImage;
                 updateWindowSize();
                 updateCurrentView();
                 updateGrahicalWidget();
