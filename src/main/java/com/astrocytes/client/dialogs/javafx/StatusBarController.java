@@ -3,6 +3,7 @@ package com.astrocytes.client.dialogs.javafx;
 import com.astrocytes.client.App;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
 import java.net.URL;
@@ -18,13 +19,20 @@ public class StatusBarController implements Initializable {
     @FXML
     private Pane statusBar;
 
+    @FXML
+    private Label scaleLabel;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        setScaleValue(100);
     }
 
     public void setMainApp(App mainApp) {
         this.mainApp = mainApp;
+    }
+
+    public void setScaleValue(int scale) {
+        scaleLabel.setText(String.valueOf(scale) + "%");
     }
 
 }

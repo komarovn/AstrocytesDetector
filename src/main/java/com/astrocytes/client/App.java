@@ -31,13 +31,13 @@ import java.io.IOException;
  */
 public class App {
     private JFrame frame = new JFrame(StringResources.ASTROCYTES_DETECTOR);
-    /* JavaFX controller */
-    private AppController controller;
-    private StatusBarController statusBarController;
-
     private JPanel mainPanel;
     private GraphicalWidget graphicalWidget;
     private MainPanelBlock mainPanelBlock = new MainPanelBlock();
+
+    /* JavaFX controllers */
+    private AppController controller;
+    private StatusBarController statusBarController;
 
     private Operations operations = new OperationsImpl();
     private BufferedImage image;
@@ -179,6 +179,18 @@ public class App {
         int h = mainPanelBlock.getHeight();
         int w = mainPanelBlock.getWidth();
         graphicalWidget.updateWidget(w, h);
+        graphicalWidget.addMouseWheelListener(new MouseAdapter() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                super.mouseWheelMoved(e);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        statusBarController.setScaleValue((int) (graphicalWidget.getZoomScale() * 100));
+                    }
+                });
+            }
+        });
     }
 
     private void updateCurrentView() {

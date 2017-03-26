@@ -276,4 +276,7 @@ public class GraphicalWidget extends JPanel {
         zoomEnabled = isEnabled;
     }
 
+    public Double getZoomScale() {
+        return zoomScale;
+    }
 }
