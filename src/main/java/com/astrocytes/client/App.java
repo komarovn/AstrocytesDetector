@@ -92,89 +92,6 @@ public class App {
         });
     }
 
-    private void setMenuBar() {
-        GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1;
-        gridBagConstraints.weighty = 1;
-        gridBagConstraints.anchor = GridBagConstraints.NORTH;
-
-
-        JMenuBar menuBar = new JMenuBar();
-
-        JMenu file = new JMenu(StringResources.FILE);
-        JMenu operationsMenu = new JMenu(StringResources.OPERATIONS);
-
-        JMenuItem openFile = new JMenuItem(StringResources.OPEN_FILE);
-        openFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Event.CTRL_MASK));
-        openFile.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executeCreateNewProject();
-            }
-        });
-
-        JMenuItem saveAs = new JMenuItem(StringResources.SAVE_AS);
-        saveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK));
-        saveAs.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executeExportImage();
-            }
-        });
-        JMenuItem exit = new JMenuItem(StringResources.EXIT);
-        exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, Event.CTRL_MASK));
-        exit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executeExit();
-            }
-        });
-
-        JMenuItem edgeDetection = new JMenuItem(StringResources.EDGE_DETECTION);
-        edgeDetection.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.SHIFT_MASK));
-        edgeDetection.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executeEdgeDetection();
-            }
-        });
-        JMenuItem dilateAndErode = new JMenuItem(StringResources.DILATE_AND_ERODE);
-        dilateAndErode.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executeDilateErode();
-            }
-        });
-        JMenuItem grayscale = new JMenuItem(StringResources.GRAYSCALE);
-        grayscale.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executeGrayscale();
-            }
-        });
-        JMenuItem findAstrocytes = new JMenuItem(StringResources.FIND_ASTROCYTES);
-        findAstrocytes.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executeFindAstrocytes();
-            }
-        });
-
-        file.add(openFile);
-        file.add(saveAs);
-        file.addSeparator();
-        file.add(exit);
-        operationsMenu.add(edgeDetection);
-        operationsMenu.add(dilateAndErode);
-        operationsMenu.add(grayscale);
-        operationsMenu.add(findAstrocytes);
-        menuBar.add(file);
-        menuBar.add(operationsMenu);
-
-        //frame.setJMenuBar(menuBar);
-    }
-
     private void updateGrahicalWidget() {
         int h = mainPanelBlock.getHeight();
         int w = mainPanelBlock.getWidth();
@@ -273,7 +190,6 @@ public class App {
                 File fileToSave = saveFileDialog.getSelectedFile();
                 BufferedImage bufferedImage = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
                 try {
-                    String type = saveFileDialog.getTypeDescription(fileToSave);
                     ImageIO.write(bufferedImage, "png", fileToSave);
                 } catch (IOException e1) {
                     e1.printStackTrace();
