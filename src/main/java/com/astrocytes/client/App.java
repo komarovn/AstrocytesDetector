@@ -15,7 +15,6 @@ import com.astrocytes.client.widgets.GraphicalWidget;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.stage.Stage;
-import org.opencv.core.Mat;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -39,7 +38,7 @@ public class App {
     private AppController controller;
     private StatusBarController statusBarController;
 
-    private Operations operations = new OperationsImpl();
+    private OperationsExecuter operationsExecuter = new OperationsExecuter();
     private BufferedImage image;
 
     public App() {
@@ -150,8 +149,8 @@ public class App {
         return graphicalWidget;
     }
 
-    public Operations getOperations() {
-        return operations;
+    public OperationsExecuter getOperationsExecuter() {
+        return operationsExecuter;
     }
 
     public void executeCreateNewProject() {
@@ -166,8 +165,7 @@ public class App {
             File file = openFileDialog.getSelectedFile();
             try {
                 BufferedImage bufferedImage = ImageIO.read(file);
-                Mat sourceImage = ImageHelper.convertBufferedImageToMat(bufferedImage);
-                operations.setSourceImage(sourceImage);
+                operationsExecuter.setOriginalImage(bufferedImage);
                 image = bufferedImage;
                 updateWindowSize();
                 updateCurrentView();
@@ -188,7 +186,7 @@ public class App {
             int result = saveFileDialog.showSaveDialog(frame);
             if (result == JFileChooser.APPROVE_OPTION) {
                 File fileToSave = saveFileDialog.getSelectedFile();
-                BufferedImage bufferedImage = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
+                BufferedImage bufferedImage = operationsExecuter.getCurrentImage();
                 try {
                     ImageIO.write(bufferedImage, "png", fileToSave);
                 } catch (IOException e1) {
@@ -206,10 +204,7 @@ public class App {
         if (image != null) {
             DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(frame, graphicalWidget.getImage());
             if (dialog.getStatus()) {
-                operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(image),
-                        Integer.parseInt((String) AppParameters.getParameter(ClientConstants.CANNY_MIN_THRESH)),
-                        Integer.parseInt((String) AppParameters.getParameter(ClientConstants.CANNY_MAX_THRESH)));
-                image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
+                image = operationsExecuter.applyCannyEdgeDetection(image);
                 updateCurrentView();
             }
         }
@@ -219,9 +214,7 @@ public class App {
         if (image != null) {
             DialogDilateErode dialog = new DialogDilateErode(frame, graphicalWidget.getImage());
             if (dialog.getStatus()) {
-                operations.applyMathMorphology(ImageHelper.convertBufferedImageToMat(image),
-                        Integer.parseInt((String) AppParameters.getParameter(ClientConstants.RADIUS_DIL_ER)));
-                image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
+                image = operationsExecuter.applyDilateAndErode(image);
                 updateCurrentView();
             }
         }
@@ -229,8 +222,7 @@ public class App {
 
     public void executeGrayscale() {
         if (image != null) {
-            Mat converted = operations.convertGrayscale(ImageHelper.convertBufferedImageToMat(image));
-            image = ImageHelper.convertMatToBufferedImage(converted);
+            image = operationsExecuter.applyGrayScale(image);
             updateCurrentView();
         }
     }
@@ -239,8 +231,7 @@ public class App {
         if (image != null) {
             DialogFindAstrocytes dialog = new DialogFindAstrocytes(frame);
             if (dialog.getStatus()) {
-                operations.drawAstrocyteCenters(ImageHelper.convertBufferedImageToMat(image));
-                image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
+                image = operationsExecuter.applyFindAstocytes(image);
                 updateCurrentView();
             }
         }
@@ -251,7 +242,10 @@ public class App {
     }
 
     public void processLoadedProject() {
-        image = ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
+        image = operationsExecuter.getCurrentImage();
+        image = operationsExecuter.applyCannyEdgeDetection(image);
+        image = operationsExecuter.applyDilateAndErode(image);
+        image = operationsExecuter.applyFindAstocytes(image);
         controller.setAvailability(false);
         updateWindowSize();
         updateCurrentView();

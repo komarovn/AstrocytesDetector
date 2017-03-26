@@ -27,7 +27,7 @@ public class ManageProject {
             AppParameters.saveSettings(settings);
             File image = new File(projectDir, ClientConstants.FILE_IMAGE);
             image.createNewFile();
-            ImageHelper.saveImage(ImageHelper.convertMatToBufferedImage(mainApp.getOperations().getSourceImage()), image);
+            ImageHelper.saveImage(ImageHelper.convertMatToBufferedImage(mainApp.getOperationsExecuter().getOperations().getSourceImage()), image);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -42,7 +42,7 @@ public class ManageProject {
         AppParameters.loadParameters(parameters);
         AppParameters.loadSettings(settings);
         File image = new File(projectDir, ClientConstants.FILE_IMAGE);
-        mainApp.getOperations().setSourceImage(ImageHelper.convertBufferedImageToMat(ImageHelper.loadImage(image)));
+        mainApp.getOperationsExecuter().getOperations().setSourceImage(ImageHelper.convertBufferedImageToMat(ImageHelper.loadImage(image)));
     }
 
 }

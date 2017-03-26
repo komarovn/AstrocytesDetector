@@ -63,7 +63,7 @@ public abstract class ImageHelper {
 
     public static void saveImage(BufferedImage image, File file) {
         try {
-            ImageIO.write(image, "jpg", file);
+            ImageIO.write(image, "png", file);
         } catch (IOException e) {
             e.printStackTrace();
         }
