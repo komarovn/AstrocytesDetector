@@ -16,6 +16,6 @@
       <Button fx:id="cancelButton" layoutX="458.0" layoutY="127.0" mnemonicParsing="false" text="Cancel" />
       <Label layoutX="63.0" layoutY="87.0" text="Scale:" />
       <TextField fx:id="scale" layoutX="105.0" layoutY="83.0" prefHeight="25.0" prefWidth="74.0" />
-      <Label layoutX="187.0" layoutY="87.0" text="μm per pixel" />
+      <Label layoutX="187.0" layoutY="87.0" text="pixels per μm" />
    </children>
 </Pane>

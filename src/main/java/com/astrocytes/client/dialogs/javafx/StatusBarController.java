@@ -1,6 +1,8 @@
 package com.astrocytes.client.dialogs.javafx;
 
 import com.astrocytes.client.App;
+import com.astrocytes.client.data.AppParameters;
+import com.astrocytes.client.resources.ClientConstants;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,6 +28,12 @@ public class StatusBarController implements Initializable {
     @FXML
     private Label scaleLabel;
 
+    @FXML
+    private Pane scaleBar;
+
+    @FXML
+    private Label scaleBarLabel;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setScaleValue(100);
@@ -39,6 +47,7 @@ public class StatusBarController implements Initializable {
                             @Override
                             public void run() {
                                 setScaleValue((int) (mainApp.getGraphicalWidget().getZoomScale() * 100));
+                                setScaleBarValue();
                             }
                         });
                     }
@@ -51,8 +60,14 @@ public class StatusBarController implements Initializable {
         this.mainApp = mainApp;
     }
 
-    public void setScaleValue(int scale) {
+    private void setScaleValue(int scale) {
         scaleLabel.setText(String.valueOf(scale) + "%");
+    }
+
+    private void setScaleBarValue() {
+        int scaleCoeff = Integer.parseInt(((String) AppParameters.getParameter(ClientConstants.SCALE))) * 2;
+        scaleBar.setPrefWidth((int) (mainApp.getGraphicalWidget().getZoomScale() * scaleCoeff));
+        scaleBarLabel.setText(mainApp.getGraphicalWidget().getZoomScale() * scaleCoeff + " μm");
     }
 
 }
