@@ -1,5 +1,6 @@
 package com.astrocytes.client.dialogs;
 
+import com.astrocytes.client.App;
 import com.astrocytes.client.ImageHelper;
 import com.astrocytes.client.widgets.PreviewGraphicalWidget;
 import com.astrocytes.server.OperationsImpl;
@@ -28,8 +29,8 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
     private JSlider maxThreshold;
     private PreviewGraphicalWidget preview;
 
-    public DialogCannyEdgeDetection(JFrame owner, BufferedImage image) {
-        super(owner, StringResources.CANNY_EDGE_DETECTION);
+    public DialogCannyEdgeDetection(App owner, BufferedImage image) {
+        super(owner.getFrame(), StringResources.CANNY_EDGE_DETECTION);
         preview.setImage(image);
         preview.processPreviewImage();
         setVisible(true);

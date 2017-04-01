@@ -22,11 +22,11 @@ public class GraphicalWidget extends JPanel {
     private BufferedImage image;
     protected BufferedImage currentView;
 
-    private Integer currentX, currentY;
+    protected Integer currentX, currentY;
     private Integer widthWidget;
     private Integer heightWidget;
-    private Integer widthImage;
-    private Integer heightImage;
+    protected Integer widthImage;
+    protected Integer heightImage;
 
     private Boolean zoomEnabled = true;
     private Double zoomScale;

@@ -1,5 +1,6 @@
 package com.astrocytes.client.dialogs;
 
+import com.astrocytes.client.App;
 import com.astrocytes.client.ImageHelper;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
@@ -25,8 +26,8 @@ public class DialogDilateErode extends AbstractDialog {
     private JSlider radiusSlider;
     private PreviewGraphicalWidget preview;
 
-    public DialogDilateErode(JFrame owner, BufferedImage image) {
-        super(owner, StringResources.DILATE_AND_ERODE);
+    public DialogDilateErode(App owner, BufferedImage image) {
+        super(owner.getFrame(), StringResources.DILATE_AND_ERODE);
         preview.setImage(image);
         preview.processPreviewImage();
         setVisible(true);

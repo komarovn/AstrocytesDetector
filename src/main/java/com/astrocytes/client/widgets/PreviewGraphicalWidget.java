@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
  */
 public abstract class PreviewGraphicalWidget extends GraphicalWidget {
 
+    private BufferedImage originalImage;
     private Integer widthWidget;
     private Integer heightWidget;
 
@@ -26,6 +27,11 @@ public abstract class PreviewGraphicalWidget extends GraphicalWidget {
         setZoomEnabled(false);
         setBorder(BorderFactory.createLineBorder(Color.darkGray));
         addListenerForPreview();
+    }
+
+    public PreviewGraphicalWidget(Integer width, Integer height, BufferedImage originalImage) {
+        this(width, height);
+        this.originalImage = originalImage;
     }
 
     private void addListenerForPreview() {
@@ -49,6 +55,19 @@ public abstract class PreviewGraphicalWidget extends GraphicalWidget {
 
     public MouseAdapter getMouseAdapter() {
         return mouseAdapter;
+    }
+
+    public void setOriginalImage(BufferedImage originalImage) {
+        this.originalImage = originalImage;
+    }
+
+    public BufferedImage getOriginalImageView() {
+        BufferedImage originalImageView = originalImage.getSubimage(currentX, currentY, widthImage, heightImage);
+        BufferedImage originalImageViewCropped = new BufferedImage(originalImageView.getColorModel(),
+                originalImageView.getRaster().createCompatibleWritableRaster(originalImageView.getWidth(), originalImageView.getHeight()),
+                originalImageView.isAlphaPremultiplied(), null);
+        originalImageView.copyData(originalImageViewCropped.getRaster());
+        return originalImageViewCropped;
     }
 
 }

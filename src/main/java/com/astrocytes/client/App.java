@@ -214,7 +214,7 @@ public class App {
 
     public void executeEdgeDetection() {
         if (image != null) {
-            DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(frame, graphicalWidget.getImage());
+            DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(this, graphicalWidget.getImage());
             if (dialog.getStatus()) {
                 image = operationsExecuter.applyCannyEdgeDetection(image);
                 updateCurrentView();
@@ -224,7 +224,7 @@ public class App {
 
     public void executeDilateErode() {
         if (image != null) {
-            DialogDilateErode dialog = new DialogDilateErode(frame, graphicalWidget.getImage());
+            DialogDilateErode dialog = new DialogDilateErode(this, graphicalWidget.getImage());
             if (dialog.getStatus()) {
                 image = operationsExecuter.applyDilateAndErode(image);
                 updateCurrentView();
@@ -241,7 +241,7 @@ public class App {
 
     public void executeFindAstrocytes() {
         if (image != null) {
-            DialogFindAstrocytes dialog = new DialogFindAstrocytes(frame);
+            DialogFindAstrocytes dialog = new DialogFindAstrocytes(this, graphicalWidget.getImage());
             if (dialog.getStatus()) {
                 image = operationsExecuter.applyFindAstocytes(image);
                 updateCurrentView();
