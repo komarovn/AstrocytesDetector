@@ -1,6 +1,5 @@
 package com.astrocytes.client;
 
-import com.astrocytes.shared.Operations;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 

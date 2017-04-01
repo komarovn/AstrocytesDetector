@@ -21,6 +21,7 @@ public abstract class ClientConstants {
     public static final String PROJECT_NAME = "projectName";
 
     /* Parameters */
+    public static final String SCALE = "scale";
     public static final String CANNY_MIN_THRESH = "cannyMinThresh";
     public static final String CANNY_MAX_THRESH = "cannyMaxThresh";
     public static final String RADIUS_DIL_ER = "radiusDilEr";

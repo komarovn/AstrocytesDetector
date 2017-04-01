@@ -12,7 +12,6 @@ import com.astrocytes.client.resources.StringResources;
 import com.astrocytes.client.widgets.GraphicalWidget;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
-import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -33,7 +32,7 @@ public class App {
     private MainPanelBlock mainPanelBlock = new MainPanelBlock();
 
     /* JavaFX controllers */
-    private MenuController controller;
+    private MenuController menuController;
     private StatusBarController statusBarController;
 
     private OperationsExecuter operationsExecuter = new OperationsExecuter();
@@ -52,7 +51,7 @@ public class App {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                setResizeListener();
+                addResizeListener();
             }
         });
     }
@@ -64,9 +63,9 @@ public class App {
         JFXPanel statusBar = new JFXPanel();
         mainPanel.add(statusBar, BorderLayout.PAGE_END);
 
-        controller = (MenuController) SwingJavaFXHelper.initFX(menuFromFxml, getClass().getResource("/fxml/MenuBar.fxml"));
-        controller.setMainApp(this);
-        controller.setAvailability(true);
+        menuController = (MenuController) SwingJavaFXHelper.initFX(menuFromFxml, getClass().getResource("/fxml/MenuBar.fxml"));
+        menuController.setMainApp(this);
+        menuController.setAvailability(true);
 
         statusBarController = (StatusBarController) SwingJavaFXHelper.initFX(statusBar, getClass().getResource("/fxml/StatusBar.fxml"));
         statusBarController.setMainApp(this);
@@ -75,7 +74,7 @@ public class App {
         AppParameters.setSetting(ClientConstants.WINDOW_HEIGHT, ClientConstants.DEFAULT_WINDOW_HEIGHT);
     }
 
-    private void setResizeListener() {
+    private void addResizeListener() {
         mainPanel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -91,18 +90,6 @@ public class App {
         int h = mainPanelBlock.getHeight();
         int w = mainPanelBlock.getWidth();
         graphicalWidget.updateWidget(w, h);
-        graphicalWidget.addMouseWheelListener(new MouseAdapter() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                super.mouseWheelMoved(e);
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        statusBarController.setScaleValue((int) (graphicalWidget.getZoomScale() * 100));
-                    }
-                });
-            }
-        });
     }
 
     private void updateCurrentView() {
@@ -166,7 +153,7 @@ public class App {
                 updateWindowSize();
                 updateCurrentView();
                 updateGrahicalWidget();
-                controller.setAvailability(false);
+                menuController.setAvailability(false);
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -182,7 +169,7 @@ public class App {
                 updateWindowSize();
                 updateCurrentView();
                 updateGrahicalWidget();
-                controller.setAvailability(false);
+                menuController.setAvailability(false);
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -258,7 +245,7 @@ public class App {
         image = operationsExecuter.applyCannyEdgeDetection(image);
         image = operationsExecuter.applyDilateAndErode(image);
         image = operationsExecuter.applyFindAstocytes(image);
-        controller.setAvailability(false);
+        menuController.setAvailability(false);
         updateWindowSize();
         updateCurrentView();
         updateGrahicalWidget();

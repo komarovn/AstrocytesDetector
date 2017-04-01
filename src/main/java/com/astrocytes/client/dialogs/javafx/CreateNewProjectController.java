@@ -35,6 +35,9 @@ public class CreateNewProjectController implements Initializable {
     private TextField imagePath;
 
     @FXML
+    private TextField scale;
+
+    @FXML
     private Button openImageButton;
 
     @FXML
@@ -49,20 +52,21 @@ public class CreateNewProjectController implements Initializable {
         cancelButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                clodeAction();
+                closeAction();
             }
         });
         createProjectButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 AppParameters.setSetting(ClientConstants.PROJECT_NAME, projectName.getText());
+                AppParameters.setParameter(ClientConstants.SCALE, scale.getText());
                 EventQueue.invokeLater(new Runnable() {
                     @Override
                     public void run() {
                         mainApp.executeCreateNewProject(new File(imagePath.getText()));
                     }
                 });
-                clodeAction();
+                closeAction();
             }
         });
         openImageButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -97,6 +101,13 @@ public class CreateNewProjectController implements Initializable {
                 }
             }
         });
+        scale.setText("10");
+        scale.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                checkMandatoryFields();
+            }
+        });
     }
 
     public void setMainApp(App mainApp) {
@@ -112,13 +123,15 @@ public class CreateNewProjectController implements Initializable {
         }
     }
 
-    private void clodeAction() {
+    private void closeAction() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
     private void checkMandatoryFields() {
-        if (!imagePath.getText().isEmpty() && !projectName.getText().isEmpty()) {
+        if (!imagePath.getText().isEmpty() &&
+                !projectName.getText().isEmpty() &&
+                !scale.getText().isEmpty()) {
             createProjectButton.setDisable(false);
         }
         else {

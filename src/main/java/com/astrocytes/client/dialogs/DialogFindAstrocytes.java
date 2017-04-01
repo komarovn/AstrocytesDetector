@@ -1,3 +1,11 @@
+/*
+ * Astrocytes Detector
+ *
+ * Designed by Komarov Nikolay.
+ *
+ * Copyright (c) Lobachevsky University, 2017.
+ * All rights reserved.
+ */
 package com.astrocytes.client.dialogs;
 
 import com.astrocytes.client.App;
