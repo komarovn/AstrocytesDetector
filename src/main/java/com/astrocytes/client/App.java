@@ -53,7 +53,7 @@ public class App {
     private StatusBarController statusBarController;
 
     private OperationsExecuter operationsExecuter = new OperationsExecuter();
-    private BufferedImage image;
+    protected BufferedImage image;
 
     public App() {
         mainPanel = new JPanel();
@@ -109,7 +109,7 @@ public class App {
         graphicalWidget.updateWidget(w, h);
     }
 
-    private void updateCurrentView() {
+    protected void updateCurrentView() {
         graphicalWidget.setImage(image);
         graphicalWidget.updateWidget();
     }
