@@ -49,7 +49,7 @@ public class App {
     private MainPanelBlock mainPanelBlock = new MainPanelBlock();
 
     /* JavaFX controllers */
-    private MenuController menuController;
+    protected MenuController menuController;
     private StatusBarController statusBarController;
 
     private OperationsExecuter operationsExecuter = new OperationsExecuter();

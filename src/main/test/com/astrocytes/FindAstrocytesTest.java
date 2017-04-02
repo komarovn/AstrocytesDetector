@@ -24,8 +24,6 @@ import com.astrocytes.client.App;
 import com.astrocytes.client.OperationsExecuter;
 import com.astrocytes.client.data.AppParameters;
 import com.astrocytes.client.resources.ClientConstants;
-import com.astrocytes.client.resources.StringResources;
-import com.astrocytes.client.widgets.GraphicalWidget;
 import org.opencv.core.Core;
 
 import javax.imageio.ImageIO;
@@ -44,9 +42,10 @@ public class FindAstrocytesTest {
             BufferedImage bufferedImage = ImageIO.read(new File("D:\\Studying\\233x200.jpg"));
             operationsExecuter.setOriginalImage(bufferedImage);
             testImage = bufferedImage;
-            AppParameters.setParameter(ClientConstants.CANNY_MIN_THRESH, "40");
-            AppParameters.setParameter(ClientConstants.CANNY_MAX_THRESH, "60");
+            AppParameters.setParameter(ClientConstants.CANNY_MIN_THRESH, "26");
+            AppParameters.setParameter(ClientConstants.CANNY_MAX_THRESH, "58");
             AppParameters.setParameter(ClientConstants.RADIUS_DIL_ER, "2");
+            AppParameters.setParameter(ClientConstants.SCALE, "50");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,6 +86,7 @@ public class FindAstrocytesTest {
             super();
             image = testImage;
             updateCurrentView();
+            menuController.setAvailability(false);
         }
     }
 
