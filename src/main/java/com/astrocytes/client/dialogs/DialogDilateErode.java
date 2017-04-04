@@ -24,7 +24,7 @@ import com.astrocytes.client.App;
 import com.astrocytes.client.ImageHelper;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
-import com.astrocytes.client.widgets.PreviewGraphicalWidget;
+import com.astrocytes.client.widgets.PreviewImageEditor;
 import com.astrocytes.server.OperationsImpl;
 import com.astrocytes.client.data.AppParameters;
 import com.astrocytes.shared.Operations;
@@ -41,7 +41,7 @@ import java.text.NumberFormat;
 public class DialogDilateErode extends AbstractDialog {
     private final int RADIUS_DEFAULT = 2;
     private JSlider radiusSlider;
-    private PreviewGraphicalWidget preview;
+    private PreviewImageEditor preview;
 
     public DialogDilateErode(App owner, BufferedImage image) {
         super(owner.getFrame(), StringResources.DILATE_AND_ERODE);
@@ -71,7 +71,7 @@ public class DialogDilateErode extends AbstractDialog {
             radiusTextbox.setColumns(5);
             radiusSlider = new JSlider(1, 7, RADIUS_DEFAULT);
 
-            preview = new PreviewGraphicalWidget(Integer.parseInt(ClientConstants.PREVIEW_WINDOW_WIDTH), Integer.parseInt(ClientConstants.PREVIEW_WINDOW_HEIGHT)) {
+            preview = new PreviewImageEditor(Integer.parseInt(ClientConstants.PREVIEW_WINDOW_WIDTH), Integer.parseInt(ClientConstants.PREVIEW_WINDOW_HEIGHT)) {
                 @Override
                 public void processPreviewImage() {
                     processPreview();

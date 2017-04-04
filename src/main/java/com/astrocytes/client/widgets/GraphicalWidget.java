@@ -45,6 +45,7 @@ public class GraphicalWidget extends JPanel {
     protected Integer widthImage;
     protected Integer heightImage;
 
+    private Boolean panEnabled = true;
     private Boolean zoomEnabled = true;
     private Double zoomScale;
     private java.util.List<Double> zoomLevels = new ArrayList<>(Arrays.asList(new Double[]{0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0}));
@@ -83,7 +84,7 @@ public class GraphicalWidget extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                if (e.getButton() == MouseEvent.BUTTON1 && image != null) {
+                if (e.getButton() == MouseEvent.BUTTON1 && image != null && panEnabled) {
                     mouseClicked(e);
                     setCursor(new Cursor(Cursor.MOVE_CURSOR));
                 }
@@ -92,7 +93,7 @@ public class GraphicalWidget extends JPanel {
             @Override
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
-                if (image != null) {
+                if (image != null && panEnabled) {
                     int deltaX = startPointX - e.getX();
                     int deltaY = startPointY - e.getY();
                     updateCurrentView(deltaX, deltaY);
@@ -104,7 +105,7 @@ public class GraphicalWidget extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if (image != null) {
+                if (image != null && panEnabled) {
                     startPointX = e.getX();
                     startPointY = e.getY();
                 }
@@ -114,7 +115,7 @@ public class GraphicalWidget extends JPanel {
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
                 setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                if (image != null) {
+                if (image != null && panEnabled) {
                     endPointX = e.getX();
                     endPointY = e.getY();
                     Integer deltaX = startPointX - endPointX;
@@ -295,5 +296,15 @@ public class GraphicalWidget extends JPanel {
 
     public Double getZoomScale() {
         return zoomScale;
+    }
+
+    public void lockZoomAndPan() {
+        zoomEnabled = false;
+        panEnabled = false;
+    }
+
+    public void unlockZoomAndPan() {
+        zoomEnabled = true;
+        panEnabled = true;
     }
 }

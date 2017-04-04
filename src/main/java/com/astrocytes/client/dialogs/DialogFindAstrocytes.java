@@ -22,13 +22,11 @@ package com.astrocytes.client.dialogs;
 
 import com.astrocytes.client.App;
 import com.astrocytes.client.ImageHelper;
-import com.astrocytes.client.SwingJavaFXHelper;
-import com.astrocytes.client.resources.ClientConstants;
+import com.astrocytes.client.InstrumentState;
 import com.astrocytes.client.resources.StringResources;
-import com.astrocytes.client.widgets.PreviewGraphicalWidget;
+import com.astrocytes.client.widgets.PreviewImageEditor;
 import com.astrocytes.server.OperationsImpl;
 import com.astrocytes.shared.Operations;
-import javafx.embed.swing.JFXPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,7 +36,9 @@ import java.awt.image.BufferedImage;
 
 public class DialogFindAstrocytes extends AbstractDialog {
     private App owner;
-    private PreviewGraphicalWidget preview;
+    private PreviewImageEditor preview;
+    private InstrumentState state;
+    private Rectangle boundingRectangle;
 
     public DialogFindAstrocytes(App owner, BufferedImage image) {
         super(owner.getFrame(), StringResources.FIND_ASTROCYTES);
@@ -46,6 +46,7 @@ public class DialogFindAstrocytes extends AbstractDialog {
         preview.setImage(image);
         preview.setOriginalImage(ImageHelper.convertMatToBufferedImage(owner.getOperationsExecuter().getOperations().getSourceImage()));
         preview.processPreviewImage();
+        state = InstrumentState.ZOOM_AND_PAN;
         setVisible(true);
     }
 
@@ -55,6 +56,8 @@ public class DialogFindAstrocytes extends AbstractDialog {
     }
 
     private class FindAstrocytesBlock extends JPanel {
+        private JButton drawRectangle;
+        private JButton pan;
 
         public FindAstrocytesBlock() {
             setLayout(new GridBagLayout());
@@ -62,7 +65,7 @@ public class DialogFindAstrocytes extends AbstractDialog {
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 0;
 
-            preview = new PreviewGraphicalWidget(Integer.parseInt(ClientConstants.PREVIEW_WINDOW_WIDTH), Integer.parseInt(ClientConstants.PREVIEW_WINDOW_HEIGHT)) {
+            preview = new PreviewImageEditor(380, 310) {
                 @Override
                 public void processPreviewImage() {
                     processPreview();
@@ -71,14 +74,40 @@ public class DialogFindAstrocytes extends AbstractDialog {
 
             gridBagConstraints.anchor = GridBagConstraints.WEST;
             gridBagConstraints.insets.bottom = 6;
+            gridBagConstraints.gridwidth = 2;
             add(preview, gridBagConstraints);
 
             gridBagConstraints.gridy++;
+            gridBagConstraints.gridwidth = 1;
+            drawRectangle = new JButton(StringResources.DRAW_RECTANGLE);
+            add(drawRectangle, gridBagConstraints);
+            pan = new JButton(StringResources.PAN);
+            gridBagConstraints.gridx++;
+            add(pan, gridBagConstraints);
 
-            JFXPanel content = new JFXPanel();
-            add(content, gridBagConstraints);
-            content.setPreferredSize(new Dimension(500, 600));
-            SwingJavaFXHelper.initFX(content, getClass().getResource("/fxml/DialogFindAstrocytesContent.fxml"));
+            attachActions();
+
+            //JFXPanel content = new JFXPanel();
+            //add(content, gridBagConstraints);
+            //content.setPreferredSize(new Dimension(500, 600));
+            //SwingJavaFXHelper.initFX(content, getClass().getResource("/fxml/DialogFindAstrocytesContent.fxml"));
+        }
+
+        private void attachActions() {
+            drawRectangle.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    state = InstrumentState.RECTANGLE;
+                    preview.setState(state);
+                }
+            });
+            pan.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    state = InstrumentState.ZOOM_AND_PAN;
+                    preview.setState(state);
+                }
+            });
         }
     }
 

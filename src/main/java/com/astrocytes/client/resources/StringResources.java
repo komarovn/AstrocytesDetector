@@ -65,5 +65,7 @@ public abstract class StringResources {
     public static final String RADIUS_DILATE_ERODE = "Radius of instrument: ";
 
     /* --- Find astrocytes --- */
+    public static final String DRAW_RECTANGLE = "Draw Rectangle";
+    public static final String PAN = "Pan";
 
 }

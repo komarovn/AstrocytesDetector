@@ -261,7 +261,7 @@ public class App {
         image = operationsExecuter.getCurrentImage();
         image = operationsExecuter.applyCannyEdgeDetection(image);
         image = operationsExecuter.applyDilateAndErode(image);
-        image = operationsExecuter.applyFindAstocytes(image);
+        //image = operationsExecuter.applyFindAstocytes(image);
         menuController.setAvailability(false);
         updateWindowSize();
         updateCurrentView();

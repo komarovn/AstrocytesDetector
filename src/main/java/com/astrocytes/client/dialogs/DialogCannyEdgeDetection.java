@@ -22,7 +22,7 @@ package com.astrocytes.client.dialogs;
 
 import com.astrocytes.client.App;
 import com.astrocytes.client.ImageHelper;
-import com.astrocytes.client.widgets.PreviewGraphicalWidget;
+import com.astrocytes.client.widgets.PreviewImageEditor;
 import com.astrocytes.server.OperationsImpl;
 import com.astrocytes.client.data.AppParameters;
 import com.astrocytes.client.resources.ClientConstants;
@@ -44,7 +44,7 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
     private JFormattedTextField maxTextBox;
     private JSlider minThreshold;
     private JSlider maxThreshold;
-    private PreviewGraphicalWidget preview;
+    private PreviewImageEditor preview;
 
     public DialogCannyEdgeDetection(App owner, BufferedImage image) {
         super(owner.getFrame(), StringResources.CANNY_EDGE_DETECTION);
@@ -82,7 +82,7 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
             minThresholdLabel = new JLabel(StringResources.MINIMUM_THRESHOLD);
             maxThresholdLabel =new JLabel(StringResources.MAXIMUM_THRESHOLD);
 
-            preview = new PreviewGraphicalWidget(Integer.parseInt(ClientConstants.PREVIEW_WINDOW_WIDTH), Integer.parseInt(ClientConstants.PREVIEW_WINDOW_HEIGHT)) {
+            preview = new PreviewImageEditor(Integer.parseInt(ClientConstants.PREVIEW_WINDOW_WIDTH), Integer.parseInt(ClientConstants.PREVIEW_WINDOW_HEIGHT)) {
                 @Override
                 public void processPreviewImage() {
                     processPreview();

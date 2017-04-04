@@ -28,7 +28,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-public abstract class PreviewGraphicalWidget extends GraphicalWidget {
+public abstract class PreviewImageEditor extends ImageEditor {
 
     private BufferedImage originalImage;
     private Integer widthWidget;
@@ -36,7 +36,7 @@ public abstract class PreviewGraphicalWidget extends GraphicalWidget {
 
     private MouseAdapter mouseAdapter;
 
-    public PreviewGraphicalWidget(Integer width, Integer height) {
+    public PreviewImageEditor(Integer width, Integer height) {
         super(width, height);
         widthWidget = width == null ? Integer.parseInt(ClientConstants.PREVIEW_WINDOW_WIDTH) : width;
         heightWidget = height == null ? Integer.parseInt(ClientConstants.PREVIEW_WINDOW_HEIGHT) : height;
@@ -46,7 +46,7 @@ public abstract class PreviewGraphicalWidget extends GraphicalWidget {
         addListenerForPreview();
     }
 
-    public PreviewGraphicalWidget(Integer width, Integer height, BufferedImage originalImage) {
+    public PreviewImageEditor(Integer width, Integer height, BufferedImage originalImage) {
         this(width, height);
         this.originalImage = originalImage;
     }
