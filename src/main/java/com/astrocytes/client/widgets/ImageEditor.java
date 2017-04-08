@@ -64,7 +64,7 @@ public class ImageEditor extends GraphicalWidget {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (state.equals(InstrumentState.RECTANGLE)) {
+        if (rectangle.isFull()) {
             paintRectangle(g);
         }
     }
@@ -96,7 +96,9 @@ public class ImageEditor extends GraphicalWidget {
                 isDrawing = false;
             }
             if (state.equals(InstrumentState.ZOOM_AND_PAN)) {
-
+                if (rectangle.isFull()) {
+                    rectangle.move(-deltaX, -deltaY);
+                }
             }
         }
 
@@ -109,7 +111,9 @@ public class ImageEditor extends GraphicalWidget {
                 paintRectangle(getGraphics());
             }
             if (state.equals(InstrumentState.ZOOM_AND_PAN)) {
-
+                if (rectangle.isFull()) {
+                    rectangle.move(-deltaX, -deltaY);
+                }
             }
         }
     }

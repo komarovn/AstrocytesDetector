@@ -93,4 +93,16 @@ public class SimpleRectangle {
         yEnd = y;
     }
 
+    public boolean isFull() {
+        return xStart != null && yStart != null && xEnd != null && yEnd != null;
+    }
+
+    public void move(int deltaX, int deltaY) {
+        if (isFull()) {
+            xStart += deltaX;
+            xEnd += deltaX;
+            yStart += deltaY;
+            yEnd += deltaY;
+        }
+    }
 }

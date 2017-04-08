@@ -210,6 +210,7 @@ public class GraphicalWidget extends JPanel {
     protected class GraphicalWidgetListener extends MouseAdapter {
         private Integer startPointX, startPointY;
         private Integer endPointX, endPointY;
+        protected int deltaX, deltaY;
         private Boolean isZoomIn;
 
         @Override
@@ -227,8 +228,8 @@ public class GraphicalWidget extends JPanel {
             super.mouseDragged(e);
             int buttonKey = MouseEvent.BUTTON1_DOWN_MASK;
             if ((e.getModifiersEx() & buttonKey) == buttonKey && image != null && panEnabled) {
-                int deltaX = startPointX - e.getX();
-                int deltaY = startPointY - e.getY();
+                deltaX = startPointX - e.getX();
+                deltaY = startPointY - e.getY();
                 updateCurrentView(deltaX, deltaY);
                 startPointX = e.getX();
                 startPointY = e.getY();
@@ -242,8 +243,8 @@ public class GraphicalWidget extends JPanel {
             if (e.getButton() == MouseEvent.BUTTON1 && image != null && panEnabled) {
                 endPointX = e.getX();
                 endPointY = e.getY();
-                Integer deltaX = startPointX - endPointX;
-                Integer deltaY = startPointY - endPointY;
+                deltaX = startPointX - endPointX;
+                deltaY = startPointY - endPointY;
                 updateCurrentView(deltaX, deltaY);
             }
         }
@@ -288,8 +289,8 @@ public class GraphicalWidget extends JPanel {
                 centerXAfter = centerXBefore / 2;
                 centerYAfter = centerYBefore / 2;
             }
-            int deltaX = (centerXAfter - widthImage / 2) - currentX;
-            int deltaY = (centerYAfter - heightImage / 2) - currentY;
+            int deltaX1 = (centerXAfter - widthImage / 2) - currentX;
+            int deltaY1 = (centerYAfter - heightImage / 2) - currentY;
 
             if (widthWidget >= zoomedImage.getWidth()) {
                 widthImage = zoomedImage.getWidth();
@@ -304,7 +305,7 @@ public class GraphicalWidget extends JPanel {
                 heightImage = heightWidget;
             }
             currentView = ImageHelper.cloneBufferedImage(zoomedImage);
-            updateCurrentView(deltaX, deltaY);
+            updateCurrentView(deltaX1, deltaY1);
         }
     }
 
