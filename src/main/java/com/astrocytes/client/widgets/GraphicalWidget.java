@@ -129,7 +129,7 @@ public class GraphicalWidget extends JPanel {
      *         no image to display.
      */
     public BufferedImage getCurrentView() {
-        updateCurrentView(0, 0);
+        updateCurrentViewWithoutRepaint(0, 0);
         BufferedImage currentViewCropped = new BufferedImage(currentView.getColorModel(),
                 currentView.getRaster().createCompatibleWritableRaster(currentView.getWidth(), currentView.getHeight()),
                 currentView.isAlphaPremultiplied(), null);
@@ -169,6 +169,12 @@ public class GraphicalWidget extends JPanel {
     }
 
     private void updateCurrentView(int deltaX, int deltaY) {
+        updateCurrentViewWithoutRepaint(deltaX, deltaY);
+        //updateWidget();
+        repaint();
+    }
+
+    private void updateCurrentViewWithoutRepaint(int deltaX, int deltaY) {
         currentX += deltaX;
         currentY += deltaY;
         currentX = currentX >= 0 ? currentX : 0;
@@ -176,8 +182,6 @@ public class GraphicalWidget extends JPanel {
         currentX = zoomedImage.getWidth() - currentX > widthImage ? currentX : zoomedImage.getWidth() - widthImage;
         currentY = zoomedImage.getHeight() - currentY > heightImage ? currentY : zoomedImage.getHeight() - heightImage;
         currentView = zoomedImage.getSubimage(currentX, currentY, widthImage, heightImage);
-        //updateWidget();
-        repaint();
     }
 
     /**
@@ -221,7 +225,8 @@ public class GraphicalWidget extends JPanel {
         @Override
         public void mouseDragged(MouseEvent e) {
             super.mouseDragged(e);
-            if (image != null && panEnabled) {
+            int buttonKey = MouseEvent.BUTTON1_DOWN_MASK;
+            if ((e.getModifiersEx() & buttonKey) == buttonKey && image != null && panEnabled) {
                 int deltaX = startPointX - e.getX();
                 int deltaY = startPointY - e.getY();
                 updateCurrentView(deltaX, deltaY);
@@ -234,7 +239,7 @@ public class GraphicalWidget extends JPanel {
         public void mouseReleased(MouseEvent e) {
             super.mouseReleased(e);
             setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            if (image != null && panEnabled) {
+            if (e.getButton() == MouseEvent.BUTTON1 && image != null && panEnabled) {
                 endPointX = e.getX();
                 endPointY = e.getY();
                 Integer deltaX = startPointX - endPointX;

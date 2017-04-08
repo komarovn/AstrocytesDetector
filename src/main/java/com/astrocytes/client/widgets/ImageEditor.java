@@ -54,8 +54,8 @@ public class ImageEditor extends GraphicalWidget {
         this.state = state;
     }
 
-    private void paintRectangle() {
-        Graphics2D graphics = (Graphics2D) getGraphics();
+    private void paintRectangle(Graphics g) {
+        Graphics2D graphics = (Graphics2D) g;
         graphics.setPaint(Color.BLUE);
         graphics.setStroke(new BasicStroke(1));
         graphics.draw(new Rectangle2D.Float(rectangle.getLeftX(), rectangle.getTopY(), rectangle.getWidth(), rectangle.getHeight()));
@@ -65,7 +65,7 @@ public class ImageEditor extends GraphicalWidget {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (state.equals(InstrumentState.RECTANGLE)) {
-            paintRectangle();
+            paintRectangle(g);
         }
     }
 
@@ -74,14 +74,15 @@ public class ImageEditor extends GraphicalWidget {
 
         @Override
         public void mousePressed(MouseEvent e) {
-            super.mousePressed(e);
             if (state.equals(InstrumentState.RECTANGLE)) {
+                super.mousePressed(e);
                 lockZoomAndPan();
                 rectangle.setStartPoint(e.getX(), e.getY());
                 isDrawing = true;
             }
             if (state.equals(InstrumentState.ZOOM_AND_PAN)) {
                 unlockZoomAndPan();
+                super.mousePressed(e);
             }
         }
 
@@ -91,7 +92,7 @@ public class ImageEditor extends GraphicalWidget {
             if (state.equals(InstrumentState.RECTANGLE)) {
                 rectangle.setEndPoint(e.getX(), e.getY());
                 repaint();
-                paintRectangle();
+                paintRectangle(getGraphics());
                 isDrawing = false;
             }
             if (state.equals(InstrumentState.ZOOM_AND_PAN)) {
@@ -105,7 +106,7 @@ public class ImageEditor extends GraphicalWidget {
             if (state.equals(InstrumentState.RECTANGLE) && isDrawing) {
                 rectangle.setEndPoint(e.getX(), e.getY());
                 repaint();
-                paintRectangle();
+                paintRectangle(getGraphics());
             }
             if (state.equals(InstrumentState.ZOOM_AND_PAN)) {
 
