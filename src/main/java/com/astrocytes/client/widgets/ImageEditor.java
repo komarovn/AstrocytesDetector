@@ -24,7 +24,6 @@ import com.astrocytes.client.InstrumentState;
 import com.astrocytes.client.widgets.primitives.SimpleRectangle;
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 
@@ -40,51 +39,11 @@ public class ImageEditor extends GraphicalWidget {
     }
 
     private void addInstrumentListemers() {
-        MouseAdapter mouseAdapter = new MouseAdapter() {
-            private boolean isDrawing = false;
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                if (state.equals(InstrumentState.RECTANGLE)) {
-                    lockZoomAndPan();
-                    rectangle.setStartPoint(e.getX(), e.getY());
-                    isDrawing = true;
-                }
-                if (state.equals(InstrumentState.ZOOM_AND_PAN)) {
-                    unlockZoomAndPan();
-                }
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                super.mouseReleased(e);
-                if (state.equals(InstrumentState.RECTANGLE)) {
-                    rectangle.setEndPoint(e.getX(), e.getY());
-                    repaint();
-                    paintRectangle();
-                    isDrawing = false;
-                }
-                if (state.equals(InstrumentState.ZOOM_AND_PAN)) {
-
-                }
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                super.mouseMoved(e);
-                if (state.equals(InstrumentState.RECTANGLE) && isDrawing) {
-                    rectangle.setEndPoint(e.getX(), e.getY());
-                    repaint();
-                    paintRectangle();
-                }
-                if (state.equals(InstrumentState.ZOOM_AND_PAN)) {
-
-                }
-            }
-        };
-        addMouseListener(mouseAdapter);
-        addMouseMotionListener(mouseAdapter);
+        removeMouseListener(getMouseListeners()[0]);
+        removeMouseMotionListener(getMouseMotionListeners()[0]);
+        ImageEditorListener listener = new ImageEditorListener();
+        addMouseListener(listener);
+        addMouseMotionListener(listener);
     }
 
     public InstrumentState getState() {
@@ -97,8 +56,61 @@ public class ImageEditor extends GraphicalWidget {
 
     private void paintRectangle() {
         Graphics2D graphics = (Graphics2D) getGraphics();
-        graphics.setPaint(Color.BLACK);
+        graphics.setPaint(Color.BLUE);
         graphics.setStroke(new BasicStroke(1));
         graphics.draw(new Rectangle2D.Float(rectangle.getLeftX(), rectangle.getTopY(), rectangle.getWidth(), rectangle.getHeight()));
     }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (state.equals(InstrumentState.RECTANGLE)) {
+            paintRectangle();
+        }
+    }
+
+    protected class ImageEditorListener extends GraphicalWidgetListener {
+        private boolean isDrawing = false;
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            super.mousePressed(e);
+            if (state.equals(InstrumentState.RECTANGLE)) {
+                lockZoomAndPan();
+                rectangle.setStartPoint(e.getX(), e.getY());
+                isDrawing = true;
+            }
+            if (state.equals(InstrumentState.ZOOM_AND_PAN)) {
+                unlockZoomAndPan();
+            }
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            super.mouseReleased(e);
+            if (state.equals(InstrumentState.RECTANGLE)) {
+                rectangle.setEndPoint(e.getX(), e.getY());
+                repaint();
+                paintRectangle();
+                isDrawing = false;
+            }
+            if (state.equals(InstrumentState.ZOOM_AND_PAN)) {
+
+            }
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            super.mouseDragged(e);
+            if (state.equals(InstrumentState.RECTANGLE) && isDrawing) {
+                rectangle.setEndPoint(e.getX(), e.getY());
+                repaint();
+                paintRectangle();
+            }
+            if (state.equals(InstrumentState.ZOOM_AND_PAN)) {
+
+            }
+        }
+    }
+
 }

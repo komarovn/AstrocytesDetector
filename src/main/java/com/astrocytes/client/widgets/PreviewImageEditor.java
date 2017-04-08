@@ -52,16 +52,11 @@ public abstract class PreviewImageEditor extends ImageEditor {
     }
 
     private void addListenerForPreview() {
-        mouseAdapter = new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                super.mouseReleased(e);
-                if (currentView != null) {
-                    processPreviewImage();
-                }
-            }
-        };
+        removeMouseListener(getMouseListeners()[0]);
+        removeMouseMotionListener(getMouseMotionListeners()[0]);
+        mouseAdapter = new PreviewImageEditorListener();
         addMouseListener(mouseAdapter);
+        addMouseMotionListener(mouseAdapter);
     }
 
     public abstract void processPreviewImage();
@@ -85,6 +80,16 @@ public abstract class PreviewImageEditor extends ImageEditor {
                 originalImageView.isAlphaPremultiplied(), null);
         originalImageView.copyData(originalImageViewCropped.getRaster());
         return originalImageViewCropped;
+    }
+
+    private class PreviewImageEditorListener extends ImageEditorListener {
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            super.mouseReleased(e);
+            if (currentView != null) {
+                processPreviewImage();
+            }
+        }
     }
 
 }

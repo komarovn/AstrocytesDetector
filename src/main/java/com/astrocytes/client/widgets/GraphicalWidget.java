@@ -76,116 +76,10 @@ public class GraphicalWidget extends JPanel {
     }
 
     private void addListeners() {
-        MouseAdapter mouseAdapter = new MouseAdapter() {
-            Integer startPointX, startPointY;
-            Integer endPointX, endPointY;
-            Boolean isZoomIn;
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                if (e.getButton() == MouseEvent.BUTTON1 && image != null && panEnabled) {
-                    mouseClicked(e);
-                    setCursor(new Cursor(Cursor.MOVE_CURSOR));
-                }
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                super.mouseDragged(e);
-                if (image != null && panEnabled) {
-                    int deltaX = startPointX - e.getX();
-                    int deltaY = startPointY - e.getY();
-                    updateCurrentView(deltaX, deltaY);
-                    startPointX = e.getX();
-                    startPointY = e.getY();
-                }
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                if (image != null && panEnabled) {
-                    startPointX = e.getX();
-                    startPointY = e.getY();
-                }
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                super.mouseReleased(e);
-                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                if (image != null && panEnabled) {
-                    endPointX = e.getX();
-                    endPointY = e.getY();
-                    Integer deltaX = startPointX - endPointX;
-                    Integer deltaY = startPointY - endPointY;
-                    updateCurrentView(deltaX, deltaY);
-                }
-            }
-
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                super.mouseWheelMoved(e);
-                if (zoomEnabled && image != null) {
-                    int notches = e.getWheelRotation();
-                    if (notches > 0) {
-                        int currentIndex = zoomLevels.indexOf(zoomScale);
-                        if (currentIndex != 0) {
-                            zoomScale = zoomLevels.get(currentIndex - 1);
-                            isZoomIn = false;
-                            changeZoomedImage();
-                        }
-                    }
-                    if (notches < 0) {
-                        int currentIndex = zoomLevels.indexOf(zoomScale);
-                        if (currentIndex != zoomLevels.size() - 1) {
-                            zoomScale = zoomLevels.get(currentIndex + 1);
-                            isZoomIn = true;
-                            changeZoomedImage();
-                        }
-                    }
-                }
-            }
-
-            private void changeZoomedImage() {
-                AffineTransform affineTransform = new AffineTransform();
-                affineTransform.scale(zoomScale, zoomScale);
-                AffineTransformOp affineTransformOp = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_BILINEAR);
-                int w = (int) (image.getWidth() * zoomScale);
-                int h = (int) (image.getHeight() * zoomScale);
-                int centerXBefore = currentX + widthImage / 2;
-                int centerYBefore = currentY + heightImage / 2;
-                zoomedImage = new BufferedImage(w, h, image.getType());
-                zoomedImage = affineTransformOp.filter(ImageHelper.cloneBufferedImage(image), zoomedImage);
-                int centerXAfter = centerXBefore * 2;
-                int centerYAfter = centerYBefore * 2;
-                if (!isZoomIn) {
-                    centerXAfter = centerXBefore / 2;
-                    centerYAfter = centerYBefore / 2;
-                }
-                int deltaX = (centerXAfter - widthImage / 2) - currentX;
-                int deltaY = (centerYAfter - heightImage / 2) - currentY;
-
-                if (widthWidget >= zoomedImage.getWidth()) {
-                    widthImage = zoomedImage.getWidth();
-                }
-                else {
-                    widthImage = widthWidget;
-                }
-                if (heightWidget >= zoomedImage.getHeight()) {
-                    heightImage = zoomedImage.getHeight();
-                }
-                else {
-                    heightImage = heightWidget;
-                }
-                currentView = ImageHelper.cloneBufferedImage(zoomedImage);
-                updateCurrentView(deltaX, deltaY);
-            }
-        };
-        addMouseListener(mouseAdapter);
-        addMouseMotionListener(mouseAdapter);
-        addMouseWheelListener(mouseAdapter);
+        GraphicalWidgetListener listener = new GraphicalWidgetListener();
+        addMouseListener(listener);
+        addMouseMotionListener(listener);
+        addMouseWheelListener(listener);
     }
 
     @Override
@@ -282,7 +176,8 @@ public class GraphicalWidget extends JPanel {
         currentX = zoomedImage.getWidth() - currentX > widthImage ? currentX : zoomedImage.getWidth() - widthImage;
         currentY = zoomedImage.getHeight() - currentY > heightImage ? currentY : zoomedImage.getHeight() - heightImage;
         currentView = zoomedImage.getSubimage(currentX, currentY, widthImage, heightImage);
-        updateWidget();
+        //updateWidget();
+        repaint();
     }
 
     /**
@@ -307,4 +202,105 @@ public class GraphicalWidget extends JPanel {
         zoomEnabled = true;
         panEnabled = true;
     }
+
+    protected class GraphicalWidgetListener extends MouseAdapter {
+        private Integer startPointX, startPointY;
+        private Integer endPointX, endPointY;
+        private Boolean isZoomIn;
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            super.mousePressed(e);
+            if (e.getButton() == MouseEvent.BUTTON1 && image != null && panEnabled) {
+                startPointX = e.getX();
+                startPointY = e.getY();
+                setCursor(new Cursor(Cursor.MOVE_CURSOR));
+            }
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            super.mouseDragged(e);
+            if (image != null && panEnabled) {
+                int deltaX = startPointX - e.getX();
+                int deltaY = startPointY - e.getY();
+                updateCurrentView(deltaX, deltaY);
+                startPointX = e.getX();
+                startPointY = e.getY();
+            }
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            super.mouseReleased(e);
+            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            if (image != null && panEnabled) {
+                endPointX = e.getX();
+                endPointY = e.getY();
+                Integer deltaX = startPointX - endPointX;
+                Integer deltaY = startPointY - endPointY;
+                updateCurrentView(deltaX, deltaY);
+            }
+        }
+
+        @Override
+        public void mouseWheelMoved(MouseWheelEvent e) {
+            super.mouseWheelMoved(e);
+            if (zoomEnabled && image != null) {
+                int notches = e.getWheelRotation();
+                if (notches > 0) {
+                    int currentIndex = zoomLevels.indexOf(zoomScale);
+                    if (currentIndex != 0) {
+                        zoomScale = zoomLevels.get(currentIndex - 1);
+                        isZoomIn = false;
+                        changeZoomedImage();
+                    }
+                }
+                if (notches < 0) {
+                    int currentIndex = zoomLevels.indexOf(zoomScale);
+                    if (currentIndex != zoomLevels.size() - 1) {
+                        zoomScale = zoomLevels.get(currentIndex + 1);
+                        isZoomIn = true;
+                        changeZoomedImage();
+                    }
+                }
+            }
+        }
+
+        private void changeZoomedImage() {
+            AffineTransform affineTransform = new AffineTransform();
+            affineTransform.scale(zoomScale, zoomScale);
+            AffineTransformOp affineTransformOp = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_BILINEAR);
+            int w = (int) (image.getWidth() * zoomScale);
+            int h = (int) (image.getHeight() * zoomScale);
+            int centerXBefore = currentX + widthImage / 2;
+            int centerYBefore = currentY + heightImage / 2;
+            zoomedImage = new BufferedImage(w, h, image.getType());
+            zoomedImage = affineTransformOp.filter(ImageHelper.cloneBufferedImage(image), zoomedImage);
+            int centerXAfter = centerXBefore * 2;
+            int centerYAfter = centerYBefore * 2;
+            if (!isZoomIn) {
+                centerXAfter = centerXBefore / 2;
+                centerYAfter = centerYBefore / 2;
+            }
+            int deltaX = (centerXAfter - widthImage / 2) - currentX;
+            int deltaY = (centerYAfter - heightImage / 2) - currentY;
+
+            if (widthWidget >= zoomedImage.getWidth()) {
+                widthImage = zoomedImage.getWidth();
+            }
+            else {
+                widthImage = widthWidget;
+            }
+            if (heightWidget >= zoomedImage.getHeight()) {
+                heightImage = zoomedImage.getHeight();
+            }
+            else {
+                heightImage = heightWidget;
+            }
+            currentView = ImageHelper.cloneBufferedImage(zoomedImage);
+            updateCurrentView(deltaX, deltaY);
+        }
+    }
+
 }
