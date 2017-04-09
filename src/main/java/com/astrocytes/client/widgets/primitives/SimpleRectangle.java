@@ -94,7 +94,7 @@ public class SimpleRectangle {
     }
 
     public boolean isFull() {
-        return xStart != null && yStart != null && xEnd != null && yEnd != null;
+        return xStart != null && yStart != null && xEnd != null && yEnd != null && getHeight() > 0 && getWidth() > 0;
     }
 
     public void move(int deltaX, int deltaY) {

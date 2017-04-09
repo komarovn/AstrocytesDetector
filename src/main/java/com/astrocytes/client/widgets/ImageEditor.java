@@ -54,6 +54,10 @@ public class ImageEditor extends GraphicalWidget {
         this.state = state;
     }
 
+    public SimpleRectangle getRectangle() {
+        return rectangle;
+    }
+
     private void paintRectangle(Graphics g) {
         Graphics2D graphics = (Graphics2D) g;
         graphics.setPaint(Color.BLUE);

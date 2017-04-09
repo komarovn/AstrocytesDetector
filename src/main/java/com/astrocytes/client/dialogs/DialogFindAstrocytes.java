@@ -25,6 +25,7 @@ import com.astrocytes.client.ImageHelper;
 import com.astrocytes.client.InstrumentState;
 import com.astrocytes.client.resources.StringResources;
 import com.astrocytes.client.widgets.PreviewImageEditor;
+import com.astrocytes.client.widgets.primitives.SimpleRectangle;
 import com.astrocytes.server.OperationsImpl;
 import com.astrocytes.shared.Operations;
 
@@ -38,7 +39,7 @@ public class DialogFindAstrocytes extends AbstractDialog {
     private App owner;
     private PreviewImageEditor preview;
     private InstrumentState state;
-    private Rectangle boundingRectangle;
+    private SimpleRectangle boundingRectangle;
 
     public DialogFindAstrocytes(App owner, BufferedImage image) {
         super(owner.getFrame(), StringResources.FIND_ASTROCYTES);
@@ -124,10 +125,16 @@ public class DialogFindAstrocytes extends AbstractDialog {
 
     private void processPreview() {
         BufferedImage currentView = preview.getCurrentView();
+        boundingRectangle = preview.getRectangle();
         Operations operations = new OperationsImpl();
         operations.setSourceImage(ImageHelper.convertBufferedImageToMat(preview.getOriginalImageView()));
-        operations.drawAstrocyteCenters(ImageHelper.convertBufferedImageToMat(currentView));
-        BufferedImage newCurrentView = ImageHelper.convertMatToBufferedImage(operations.getOutputImage()) ;
-        preview.updatePreview(newCurrentView);
+        if (boundingRectangle.isFull()) {
+            operations.drawAstrocyteCenters(ImageHelper.convertBufferedImageToMat(currentView));
+            BufferedImage newCurrentView = ImageHelper.convertMatToBufferedImage(operations.getOutputImage()) ;
+            preview.updatePreview(newCurrentView);
+        }
+        else {
+            preview.updatePreview(preview.getOriginalImageView());
+        }
     }
 }
