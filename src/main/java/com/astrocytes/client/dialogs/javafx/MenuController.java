@@ -77,6 +77,9 @@ public class MenuController implements Initializable {
     @FXML
     private MenuItem findAstrocytes;
 
+    @FXML
+    private MenuItem layersStatistics;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         /* --- File --- */
@@ -154,6 +157,7 @@ public class MenuController implements Initializable {
         dilErode.setDisable(isEmpty);
         grayscale.setDisable(isEmpty);
         findAstrocytes.setDisable(isEmpty);
+        layersStatistics.setDisable(true);
     }
 
     private void createNewProjectAction() {

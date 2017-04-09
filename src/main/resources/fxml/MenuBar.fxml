@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
  * Copyright (c) Lobachevsky University, 2017. All rights reserved.
  *
@@ -60,5 +61,10 @@
             <MenuItem fx:id="findAstrocytes" mnemonicParsing="false" text="Find Astrocytes" />
       </items>
     </Menu>
+      <Menu mnemonicParsing="false" text="Statistics">
+        <items>
+          <MenuItem fx:id="layersStatistics" mnemonicParsing="false" text="Export Layers Statistics" />
+        </items>
+      </Menu>
   </menus>
 </MenuBar>
