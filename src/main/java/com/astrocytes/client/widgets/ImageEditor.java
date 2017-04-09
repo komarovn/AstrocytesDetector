@@ -55,7 +55,12 @@ public class ImageEditor extends GraphicalWidget {
     }
 
     public SimpleRectangle getRectangle() {
-        return rectangle;
+        SimpleRectangle absoluteRectangle = new SimpleRectangle();
+        if (rectangle.isFull()) {
+            absoluteRectangle.setStartPoint(rectangle.getLeftX() + currentX, rectangle.getTopY() + currentY);
+            absoluteRectangle.setEndPoint(rectangle.getRightX() + currentX, rectangle.getBottomY() + currentY);
+        }
+        return absoluteRectangle;
     }
 
     private void paintRectangle(Graphics g) {

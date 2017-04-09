@@ -52,7 +52,9 @@ public interface Operations {
      * @param source - source white-black image after Canny edge detection
      * @return color image with contours
      */
-    public Mat drawAstrocyteCenters(Mat source);
+    public void drawAstrocyteCenters(Mat source);
+
+    public Mat findAstrocytes(Mat source, Integer widthRectangle, Integer heightRectangle, Integer centerX, Integer centerY);
 
     public void drawLayerDelimiters(Mat source);
 

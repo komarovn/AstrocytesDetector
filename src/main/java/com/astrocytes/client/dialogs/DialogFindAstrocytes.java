@@ -129,7 +129,11 @@ public class DialogFindAstrocytes extends AbstractDialog {
         Operations operations = new OperationsImpl();
         operations.setSourceImage(ImageHelper.convertBufferedImageToMat(preview.getOriginalImageView()));
         if (boundingRectangle.isFull()) {
-            operations.drawAstrocyteCenters(ImageHelper.convertBufferedImageToMat(currentView));
+            operations.findAstrocytes(ImageHelper.convertBufferedImageToMat(currentView),
+                    boundingRectangle.getWidth(),
+                    boundingRectangle.getHeight(),
+                    boundingRectangle.getCenterX(),
+                    boundingRectangle.getCenterY());
             BufferedImage newCurrentView = ImageHelper.convertMatToBufferedImage(operations.getOutputImage()) ;
             preview.updatePreview(newCurrentView);
         }

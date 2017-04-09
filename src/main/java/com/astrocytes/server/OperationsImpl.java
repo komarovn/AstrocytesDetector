@@ -28,6 +28,7 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.PI;
 import static org.opencv.imgproc.Imgproc.*;
 
 public class OperationsImpl implements Operations {
@@ -94,17 +95,25 @@ public class OperationsImpl implements Operations {
     }
 
     @Override
-    public Mat drawAstrocyteCenters(Mat source) {
-        findAstrocytes(source, 30, 20.0, 100);
+    public Mat findAstrocytes(Mat source, Integer widthRectangle, Integer heightRectangle, Integer centerX, Integer centerY) {
+        detectAstrocytes(source,
+                (widthRectangle + heightRectangle) / 2,
+                widthRectangle * heightRectangle * PI,
+                calculateIntensity(sourceImage, centerX, centerY));
+        drawAstrocyteCenters(source);
+        return getOutputImage();
+    }
+
+    @Override
+    public void drawAstrocyteCenters(Mat source) {
         if (astrocytesCenters == null) {
-            return getOutputImage();
+            return;
         }
         Mat dest = sourceImage.clone();
         for (Point center : astrocytesCenters) {
             Imgproc.circle(dest, center, 3, new Scalar(108, 240, 3));
         }
         dest.copyTo(getOutputImage());
-        return getOutputImage();
     }
 
     /**
@@ -121,7 +130,7 @@ public class OperationsImpl implements Operations {
      * @param averageArea     - average area of astrocyte
      * @param intensity       - the value of intensity of the astrocyte center's color
      */
-    private void findAstrocytes(Mat source, Integer averageRectSize, Double averageArea, int intensity) {
+    private void detectAstrocytes(Mat source, Integer averageRectSize, Double averageArea, int intensity) {
         if (source.channels() == 3) {
             return;
         }
