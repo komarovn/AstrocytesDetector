@@ -21,6 +21,7 @@
 package com.astrocytes.client.widgets;
 
 import com.astrocytes.client.resources.ClientConstants;
+import com.astrocytes.client.widgets.primitives.SimpleRectangle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -80,6 +81,10 @@ public abstract class PreviewImageEditor extends ImageEditor {
                 originalImageView.isAlphaPremultiplied(), null);
         originalImageView.copyData(originalImageViewCropped.getRaster());
         return originalImageViewCropped;
+    }
+
+    public SimpleRectangle getRectangle() {
+        return rectangle;
     }
 
     private class PreviewImageEditorListener extends ImageEditorListener {

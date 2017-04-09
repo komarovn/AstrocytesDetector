@@ -30,7 +30,7 @@ import java.awt.geom.Rectangle2D;
 public class ImageEditor extends GraphicalWidget {
 
     private InstrumentState state;
-    private SimpleRectangle rectangle = new SimpleRectangle();
+    protected SimpleRectangle rectangle = new SimpleRectangle();
 
     public ImageEditor(Integer width, Integer height) {
         super(width, height);

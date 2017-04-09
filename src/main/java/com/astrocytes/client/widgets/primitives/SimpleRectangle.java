@@ -76,11 +76,11 @@ public class SimpleRectangle {
     }
 
     public Integer getCenterX() {
-        return (getRightX() - getLeftX()) / 2;
+        return getLeftX() + getWidth() / 2;
     }
 
     public Integer getCenterY() {
-        return (getBottomY() - getTopY()) / 2;
+        return getTopY() + getHeight() / 2;
     }
 
     public void setStartPoint(Integer x, Integer y) {
