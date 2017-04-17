@@ -182,6 +182,9 @@ public class OperationsImpl implements Operations {
 
     private int calculateIntensity(Mat image, int x, int y) {
         double[] pixel = image.get(y, x);
+        if (pixel == null) {
+            return 0;
+        }
         if (pixel.length == 1) {
             return (int) pixel[0];
         }
