@@ -26,6 +26,6 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="600.0" style="-fx-background-color: #bcbcbc;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.astrocytes.client.dialogs.javafx.ToolbarController">
    <children>
-      <Button mnemonicParsing="false" prefHeight="14.0" prefWidth="53.0" style="-fx-border-radius: 0, 0; -fx-border-color: transparent; -fx-background-color: #dadada; -fx-border-width: 1, 1;" text="Cursor" />
+      <Button fx:id="cursorButton" mnemonicParsing="false" prefHeight="14.0" prefWidth="28.0" style="-fx-border-radius: 0, 0; -fx-border-color: transparent; -fx-background-color: #dadada; -fx-border-width: 1, 1;" />
    </children>
 </AnchorPane>

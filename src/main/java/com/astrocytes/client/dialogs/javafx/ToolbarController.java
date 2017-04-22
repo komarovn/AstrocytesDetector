@@ -20,17 +20,37 @@
  */
 package com.astrocytes.client.dialogs.javafx;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ToolbarController extends AbstractController {
 
-
+    @FXML
+    private Button cursorButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        Image cursorImage = new Image(getClass().getResourceAsStream("/img/pointer.png"));
+        cursorButton.setGraphic(new ImageView(cursorImage));
+        cursorButton.setPadding(Insets.EMPTY);
+        addListeners();
     }
 
+    private void addListeners() {
+        cursorButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                cursorButton.setStyle("-fx-background-color: whitesmoke");
+            }
+        });
+    }
 
 }
