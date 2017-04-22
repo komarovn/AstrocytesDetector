@@ -33,7 +33,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
-import javafx.scene.layout.Pane;
 import javafx.stage.*;
 
 import javax.swing.*;

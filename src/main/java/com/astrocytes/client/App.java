@@ -33,14 +33,12 @@ import com.astrocytes.client.widgets.GraphicalWidget;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 public class App {
     private JFrame frame = new JFrame(StringResources.ASTROCYTES_DETECTOR);
@@ -141,10 +139,6 @@ public class App {
         return frame;
     }
 
-    public MainPanelBlock getMainPanelBlock() {
-        return mainPanelBlock;
-    }
-
     public GraphicalWidget getGraphicalWidget() {
         return graphicalWidget;
     }
@@ -153,6 +147,7 @@ public class App {
         return operationsExecuter;
     }
 
+    @Deprecated
     public void executeCreateNewProject() {
         final NativeJFileChooser openFileDialog = new NativeJFileChooser();
         openFileDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -163,33 +158,25 @@ public class App {
         int result = openFileDialog.showOpenDialog(frame);
         if (result == JFileChooser.APPROVE_OPTION) {
             File file = openFileDialog.getSelectedFile();
-            try {
-                BufferedImage bufferedImage = ImageIO.read(file);
-                operationsExecuter.setOriginalImage(bufferedImage);
-                image = bufferedImage;
-                updateWindowSize();
-                updateCurrentView();
-                updateGrahicalWidget();
-                menuController.setAvailability(false);
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            BufferedImage bufferedImage = ImageHelper.loadImage(file);
+            operationsExecuter.setOriginalImage(bufferedImage);
+            image = bufferedImage;
+            updateWindowSize();
+            updateCurrentView();
+            updateGrahicalWidget();
+            menuController.setAvailability(false);
         }
     }
 
     public void executeCreateNewProject(File imagePath) {
         if (imagePath != null) {
-            try {
-                BufferedImage bufferedImage = ImageIO.read(imagePath);
-                operationsExecuter.setOriginalImage(bufferedImage);
-                this.image = bufferedImage;
-                updateWindowSize();
-                updateCurrentView();
-                updateGrahicalWidget();
-                menuController.setAvailability(false);
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            BufferedImage bufferedImage = ImageHelper.loadImage(imagePath);
+            this.image = bufferedImage;
+            operationsExecuter.setOriginalImage(bufferedImage);
+            updateWindowSize();
+            updateCurrentView();
+            updateGrahicalWidget();
+            menuController.setAvailability(false);
         }
     }
 
@@ -203,11 +190,7 @@ public class App {
             if (result == JFileChooser.APPROVE_OPTION) {
                 File fileToSave = saveFileDialog.getSelectedFile();
                 BufferedImage bufferedImage = operationsExecuter.getCurrentImage();
-                try {
-                    ImageIO.write(bufferedImage, "png", fileToSave);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                ImageHelper.saveImage(bufferedImage, fileToSave);
             }
         }
         else {

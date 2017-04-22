@@ -33,12 +33,12 @@ import java.io.IOException;
 
 public abstract class ImageHelper {
 
-    public static BufferedImage convertMatToBufferedImage(Mat in)
-    {
+    public static BufferedImage convertMatToBufferedImage(Mat in) {
         BufferedImage out;
         byte[] data = new byte[in.cols() * in.rows() * (int) in.elemSize()];
         in.get(0, 0, data);
         int type = BufferedImage.TYPE_3BYTE_BGR;
+
         switch (in.channels()) {
             case 1:
                 type = BufferedImage.TYPE_BYTE_GRAY;
@@ -54,19 +54,24 @@ public abstract class ImageHelper {
                 }
                 break;
         }
+
         out = new BufferedImage(in.cols(), in.rows(), type);
         out.getRaster().setDataElements(0, 0, in.cols(), in.rows(), data);
+
         return out;
     }
 
     public static Mat convertBufferedImageToMat(BufferedImage in) {
         byte[] pixels = ((DataBufferByte) in.getRaster().getDataBuffer()).getData();
         int type = CvType.CV_8UC3;
+
         if (in.getType() == BufferedImage.TYPE_BYTE_GRAY) {
             type = CvType.CV_8UC1;
         }
+
         Mat out = new Mat(in.getHeight(), in.getWidth(), type);
         out.put(0, 0, pixels);
+
         return out;
     }
 
