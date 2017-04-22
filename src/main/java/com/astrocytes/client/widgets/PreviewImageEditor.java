@@ -77,7 +77,8 @@ public abstract class PreviewImageEditor extends ImageEditor {
     public BufferedImage getOriginalImageView() {
         BufferedImage originalImageView = originalImage.getSubimage(currentX, currentY, widthImage, heightImage);
         BufferedImage originalImageViewCropped = new BufferedImage(originalImageView.getColorModel(),
-                originalImageView.getRaster().createCompatibleWritableRaster(originalImageView.getWidth(), originalImageView.getHeight()),
+                originalImageView.getRaster().createCompatibleWritableRaster(originalImageView.getWidth(),
+                        originalImageView.getHeight()),
                 originalImageView.isAlphaPremultiplied(), null);
         originalImageView.copyData(originalImageViewCropped.getRaster());
         return originalImageViewCropped;
@@ -95,6 +96,14 @@ public abstract class PreviewImageEditor extends ImageEditor {
                 processPreviewImage();
             }
         }
+    }
+
+    public Integer getOffsetX() {
+        return currentX;
+    }
+
+    public Integer getOffsetY() {
+        return currentY;
     }
 
 }

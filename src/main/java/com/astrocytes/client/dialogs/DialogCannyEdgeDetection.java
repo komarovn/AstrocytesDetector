@@ -82,7 +82,8 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
             minThresholdLabel = new JLabel(StringResources.MINIMUM_THRESHOLD);
             maxThresholdLabel =new JLabel(StringResources.MAXIMUM_THRESHOLD);
 
-            preview = new PreviewImageEditor(Integer.parseInt(ClientConstants.PREVIEW_WINDOW_WIDTH), Integer.parseInt(ClientConstants.PREVIEW_WINDOW_HEIGHT)) {
+            preview = new PreviewImageEditor(Integer.parseInt(ClientConstants.PREVIEW_WINDOW_WIDTH),
+                    Integer.parseInt(ClientConstants.PREVIEW_WINDOW_HEIGHT)) {
                 @Override
                 public void processPreviewImage() {
                     processPreview();
@@ -158,7 +159,7 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
             public void actionPerformed(ActionEvent e) {
                 AppParameters.setParameter(ClientConstants.CANNY_MIN_THRESH, String.valueOf(getMinThresh()));
                 AppParameters.setParameter(ClientConstants.CANNY_MAX_THRESH, String.valueOf(getMaxThresh()));
-                setStatus(true);
+                setApplied(true);
                 setVisible(false);
             }
         };
@@ -175,7 +176,8 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
     private void processPreview() {
         BufferedImage currentView = preview.getCurrentView();
         Operations operations = new OperationsImpl();
-        operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(currentView), minThreshold.getValue(), maxThreshold.getValue());
+        operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(currentView),
+                minThreshold.getValue(), maxThreshold.getValue());
         BufferedImage newCurrentView = ImageHelper.convertMatToBufferedImage(operations.getOutputImage()) ;
         preview.updatePreview(newCurrentView);
     }

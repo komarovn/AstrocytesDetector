@@ -23,6 +23,8 @@ package com.astrocytes.client.dialogs;
 import com.astrocytes.client.App;
 import com.astrocytes.client.ImageHelper;
 import com.astrocytes.client.InstrumentState;
+import com.astrocytes.client.data.AppParameters;
+import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
 import com.astrocytes.client.widgets.PreviewImageEditor;
 import com.astrocytes.client.widgets.primitives.SimpleRectangle;
@@ -45,7 +47,8 @@ public class DialogFindAstrocytes extends AbstractDialog {
         super(owner.getFrame(), StringResources.FIND_ASTROCYTES);
         this.owner = owner;
         preview.setImage(image);
-        preview.setOriginalImage(ImageHelper.convertMatToBufferedImage(owner.getOperationsExecuter().getOperations().getSourceImage()));
+        preview.setOriginalImage(ImageHelper.convertMatToBufferedImage(
+                owner.getOperationsExecuter().getOperations().getSourceImage()));
         preview.processPreviewImage();
         state = InstrumentState.ZOOM_AND_PAN;
         setVisible(true);
@@ -117,8 +120,18 @@ public class DialogFindAstrocytes extends AbstractDialog {
         proceedAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setStatus(true);
-                setVisible(false);
+                if (boundingRectangle.isFull()) {
+                    AppParameters.setParameter(ClientConstants.BOUNDING_RECTANGLE_WIDTH,
+                            String.valueOf(boundingRectangle.getWidth()));
+                    AppParameters.setParameter(ClientConstants.BOUNDING_RECTANGLE_HEIGHT,
+                            String.valueOf(boundingRectangle.getHeight()));
+                    AppParameters.setParameter(ClientConstants.BOUNDING_RECTANGLE_CENTER_X,
+                            String.valueOf(boundingRectangle.getCenterX()  + preview.getOffsetX()));
+                    AppParameters.setParameter(ClientConstants.BOUNDING_RECTANGLE_CENTER_Y,
+                            String.valueOf(boundingRectangle.getCenterY() + preview.getOffsetY()));
+                    setApplied(true);
+                    setVisible(false);
+                }
             }
         };
     }

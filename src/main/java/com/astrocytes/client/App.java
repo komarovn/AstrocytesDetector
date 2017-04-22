@@ -219,7 +219,7 @@ public class App {
     public void executeEdgeDetection() {
         if (image != null) {
             DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(this, graphicalWidget.getImage());
-            if (dialog.getStatus()) {
+            if (dialog.isApplied()) {
                 image = operationsExecuter.applyCannyEdgeDetection(image);
                 updateCurrentView();
             }
@@ -229,7 +229,7 @@ public class App {
     public void executeDilateErode() {
         if (image != null) {
             DialogDilateErode dialog = new DialogDilateErode(this, graphicalWidget.getImage());
-            if (dialog.getStatus()) {
+            if (dialog.isApplied()) {
                 image = operationsExecuter.applyDilateAndErode(image);
                 updateCurrentView();
             }
@@ -246,7 +246,7 @@ public class App {
     public void executeFindAstrocytes() {
         if (image != null) {
             DialogFindAstrocytes dialog = new DialogFindAstrocytes(this, graphicalWidget.getImage());
-            if (dialog.getStatus()) {
+            if (dialog.isApplied()) {
                 image = operationsExecuter.applyFindAstocytes(image);
                 updateCurrentView();
             }

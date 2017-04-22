@@ -30,7 +30,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class AbstractDialog extends JDialog {
-    private Boolean status = false; // ok (true) or reset (false) button was pressed
+    private Boolean applied = false; // ok (true) or reset (false) button was pressed
 
     public AbstractDialog(JFrame owner, String title) {
         super(owner, title, true);
@@ -105,7 +105,7 @@ public class AbstractDialog extends JDialog {
     private ActionListener closeDialog = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            status = false;
+            applied = false;
             setVisible(false);
         }
     };
@@ -116,17 +116,17 @@ public class AbstractDialog extends JDialog {
         proceedAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                status = true;
+                applied = true;
             }
         };
     }
 
-    protected void setStatus(Boolean status) {
-        this.status = status;
+    protected void setApplied(Boolean applied) {
+        this.applied = applied;
     }
 
-    public Boolean getStatus() {
-        return status;
+    public Boolean isApplied() {
+        return applied;
     }
 
     protected static void addListeners(final JSlider slider, final JFormattedTextField textField) {

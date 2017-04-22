@@ -67,7 +67,8 @@ public class ImageEditor extends GraphicalWidget {
         Graphics2D graphics = (Graphics2D) g;
         graphics.setPaint(Color.BLUE);
         graphics.setStroke(new BasicStroke(1));
-        graphics.draw(new Rectangle2D.Float(rectangle.getLeftX(), rectangle.getTopY(), rectangle.getWidth(), rectangle.getHeight()));
+        graphics.draw(new Rectangle2D.Float(rectangle.getLeftX(), rectangle.getTopY(),
+                rectangle.getWidth(), rectangle.getHeight()));
     }
 
     @Override

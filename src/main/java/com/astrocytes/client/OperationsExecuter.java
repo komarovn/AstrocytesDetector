@@ -55,7 +55,12 @@ public class OperationsExecuter {
     }
 
     public BufferedImage applyFindAstocytes(BufferedImage in) {
-        operations.drawAstrocyteCenters(ImageHelper.convertBufferedImageToMat(in));
+        //operations.drawAstrocyteCenters(ImageHelper.convertBufferedImageToMat(in));
+        operations.findAstrocytes(ImageHelper.convertBufferedImageToMat(in),
+                Integer.parseInt((String) AppParameters.getParameter(ClientConstants.BOUNDING_RECTANGLE_WIDTH)),
+                Integer.parseInt((String) AppParameters.getParameter(ClientConstants.BOUNDING_RECTANGLE_HEIGHT)),
+                Integer.parseInt((String) AppParameters.getParameter(ClientConstants.BOUNDING_RECTANGLE_CENTER_X)),
+                Integer.parseInt((String) AppParameters.getParameter(ClientConstants.BOUNDING_RECTANGLE_CENTER_Y)));
         return ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
     }
 

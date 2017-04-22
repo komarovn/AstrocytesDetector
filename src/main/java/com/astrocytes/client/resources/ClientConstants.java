@@ -43,6 +43,11 @@ public abstract class ClientConstants {
     public static final String CANNY_MAX_THRESH = "cannyMaxThresh";
     public static final String RADIUS_DIL_ER = "radiusDilEr";
 
+    public static final String BOUNDING_RECTANGLE_HEIGHT = "boundingRectangleHeight";
+    public static final String BOUNDING_RECTANGLE_WIDTH = "boundingRectangleWidth";
+    public static final String BOUNDING_RECTANGLE_CENTER_X = "boundingRectangleCenterX";
+    public static final String BOUNDING_RECTANGLE_CENTER_Y = "boundingRectangleCenterY";
+
     /* File names */
     public static final String FILE_SETTINGS = "settings.xml";
     public static final String FILE_PARAMETERS = "parameters.xml";
