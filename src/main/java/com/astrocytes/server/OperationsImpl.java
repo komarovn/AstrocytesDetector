@@ -101,6 +101,7 @@ public class OperationsImpl implements Operations {
                 widthRectangle * heightRectangle * PI,
                 calculateIntensity(sourceImage, centerX, centerY));
         drawAstrocyteCenters(source);
+        //Imgproc.circle(getOutputImage(), new Point(centerX, centerY), 3, new Scalar(3, 108, 240));
         return getOutputImage();
     }
 

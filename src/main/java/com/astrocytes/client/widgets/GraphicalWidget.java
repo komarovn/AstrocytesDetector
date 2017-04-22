@@ -103,11 +103,13 @@ public class GraphicalWidget extends JPanel {
             } else {
                 widthImage = widthWidget;
             }
+
             if (heightWidget >= image.getHeight()) {
                 heightImage = image.getHeight();
             } else {
                 heightImage = heightWidget;
             }
+
             resetZoomScale();
             zoomedImage = ImageHelper.cloneBufferedImage(this.image);
             updateCurrentView(0, 0);
@@ -157,13 +159,14 @@ public class GraphicalWidget extends JPanel {
         setSize(new Dimension(width, height));
         widthWidget = width;
         heightWidget = height;
+
         if (image != null) {
             setImage(image);
-        }
-        else {
+        } else {
             widthImage = width;
             heightImage = height;
         }
+
         updateWidget();
         setPreferredSize(new Dimension(widthWidget, heightWidget));
         repaint();
@@ -171,7 +174,6 @@ public class GraphicalWidget extends JPanel {
 
     private void updateCurrentView(int deltaX, int deltaY) {
         updateCurrentViewWithoutRepaint(deltaX, deltaY);
-        //updateWidget();
         repaint();
     }
 
@@ -217,6 +219,7 @@ public class GraphicalWidget extends JPanel {
         @Override
         public void mousePressed(MouseEvent e) {
             super.mousePressed(e);
+
             if (e.getButton() == MouseEvent.BUTTON1 && image != null && panEnabled) {
                 startPointX = e.getX();
                 startPointY = e.getY();
@@ -228,6 +231,7 @@ public class GraphicalWidget extends JPanel {
         public void mouseDragged(MouseEvent e) {
             super.mouseDragged(e);
             int buttonKey = MouseEvent.BUTTON1_DOWN_MASK;
+
             if ((e.getModifiersEx() & buttonKey) == buttonKey && image != null && panEnabled) {
                 deltaX = startPointX - e.getX();
                 deltaY = startPointY - e.getY();
@@ -241,6 +245,7 @@ public class GraphicalWidget extends JPanel {
         public void mouseReleased(MouseEvent e) {
             super.mouseReleased(e);
             setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+
             if (e.getButton() == MouseEvent.BUTTON1 && image != null && panEnabled) {
                 endPointX = e.getX();
                 endPointY = e.getY();
@@ -255,6 +260,7 @@ public class GraphicalWidget extends JPanel {
             super.mouseWheelMoved(e);
             if (zoomEnabled && image != null) {
                 int notches = e.getWheelRotation();
+
                 if (notches > 0) {
                     int currentIndex = zoomLevels.indexOf(zoomScale);
                     if (currentIndex != 0) {
@@ -263,6 +269,7 @@ public class GraphicalWidget extends JPanel {
                         changeZoomedImage();
                     }
                 }
+
                 if (notches < 0) {
                     int currentIndex = zoomLevels.indexOf(zoomScale);
                     if (currentIndex != zoomLevels.size() - 1) {
@@ -284,12 +291,14 @@ public class GraphicalWidget extends JPanel {
             int centerYBefore = currentY + heightImage / 2;
             zoomedImage = new BufferedImage(w, h, image.getType());
             zoomedImage = affineTransformOp.filter(ImageHelper.cloneBufferedImage(image), zoomedImage);
+
             int centerXAfter = centerXBefore * 2;
             int centerYAfter = centerYBefore * 2;
             if (!isZoomIn) {
                 centerXAfter = centerXBefore / 2;
                 centerYAfter = centerYBefore / 2;
             }
+
             int deltaX1 = (centerXAfter - widthImage / 2) - currentX;
             int deltaY1 = (centerYAfter - heightImage / 2) - currentY;
 
@@ -299,12 +308,14 @@ public class GraphicalWidget extends JPanel {
             else {
                 widthImage = widthWidget;
             }
+
             if (heightWidget >= zoomedImage.getHeight()) {
                 heightImage = zoomedImage.getHeight();
             }
             else {
                 heightImage = heightWidget;
             }
+
             currentView = ImageHelper.cloneBufferedImage(zoomedImage);
             updateCurrentView(deltaX1, deltaY1);
         }
