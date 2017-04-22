@@ -27,6 +27,7 @@ import com.astrocytes.client.dialogs.DialogFindAstrocytes;
 import com.astrocytes.client.dialogs.NativeJFileChooser;
 import com.astrocytes.client.dialogs.javafx.MenuController;
 import com.astrocytes.client.dialogs.javafx.StatusBarController;
+import com.astrocytes.client.dialogs.javafx.ToolbarController;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
 import com.astrocytes.client.widgets.GraphicalWidget;
@@ -48,6 +49,7 @@ public class App {
 
     /* JavaFX controllers */
     protected MenuController menuController;
+    private ToolbarController toolbarController;
     private StatusBarController statusBarController;
 
     private OperationsExecuter operationsExecuter = new OperationsExecuter();
@@ -72,15 +74,25 @@ public class App {
     }
 
     private void initComponents() {
+        JPanel upperPanel = new JPanel();
+        upperPanel.setLayout(new BoxLayout(upperPanel, BoxLayout.PAGE_AXIS));
         JFXPanel menuFromFxml = new JFXPanel();
-        mainPanel.add(menuFromFxml, BorderLayout.PAGE_START);
+        upperPanel.add(menuFromFxml);
+        JFXPanel toolbar = new JFXPanel();
+        upperPanel.add(toolbar);
+        mainPanel.add(upperPanel, BorderLayout.PAGE_START);
+
         mainPanel.add(mainPanelBlock, BorderLayout.CENTER);
+
         JFXPanel statusBar = new JFXPanel();
         mainPanel.add(statusBar, BorderLayout.PAGE_END);
 
         menuController = (MenuController) SwingJavaFXHelper.initFX(menuFromFxml, getClass().getResource("/fxml/MenuBar.fxml"));
         menuController.setMainApp(this);
         menuController.setAvailability(true);
+
+        toolbarController = (ToolbarController) SwingJavaFXHelper.initFX(toolbar, getClass().getResource("/fxml/Toolbar.fxml"));
+        toolbarController.setMainApp(this);
 
         statusBarController = (StatusBarController) SwingJavaFXHelper.initFX(statusBar, getClass().getResource("/fxml/StatusBar.fxml"));
         statusBarController.setMainApp(this);

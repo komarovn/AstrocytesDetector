@@ -20,12 +20,10 @@
  */
 package com.astrocytes.client.dialogs.javafx;
 
-import com.astrocytes.client.App;
 import com.astrocytes.client.data.AppParameters;
 import com.astrocytes.client.resources.ClientConstants;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
@@ -35,9 +33,7 @@ import java.awt.event.MouseWheelEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class StatusBarController implements Initializable {
-
-    private App mainApp;
+public class StatusBarController extends AbstractController {
 
     @FXML
     private Pane statusBar;
@@ -71,10 +67,6 @@ public class StatusBarController implements Initializable {
                 });
             }
         });
-    }
-
-    public void setMainApp(App mainApp) {
-        this.mainApp = mainApp;
     }
 
     private void setScaleValue(int scale) {

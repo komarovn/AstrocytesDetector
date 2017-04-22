@@ -20,7 +20,6 @@
  */
 package com.astrocytes.client.dialogs.javafx;
 
-import com.astrocytes.client.App;
 import com.astrocytes.client.data.AppParameters;
 import com.astrocytes.client.resources.ClientConstants;
 import javafx.beans.value.ChangeListener;
@@ -28,7 +27,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
@@ -41,9 +39,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CreateNewProjectController implements Initializable {
-
-    private App mainApp;
+public class CreateNewProjectController extends AbstractController {
 
     @FXML
     private TextField projectName;
@@ -125,10 +121,6 @@ public class CreateNewProjectController implements Initializable {
                 checkMandatoryFields();
             }
         });
-    }
-
-    public void setMainApp(App mainApp) {
-        this.mainApp = mainApp;
     }
 
     private void openImageAction() {

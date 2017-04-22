@@ -20,7 +20,6 @@
  */
 package com.astrocytes.client.dialogs.javafx;
 
-import com.astrocytes.client.App;
 import com.astrocytes.client.data.AppParameters;
 import com.astrocytes.client.data.ManageProject;
 import com.astrocytes.client.resources.ClientConstants;
@@ -29,7 +28,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
@@ -42,9 +40,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MenuController implements Initializable {
-
-    private App mainApp;
+public class MenuController extends AbstractController {
 
     @FXML
     private javafx.scene.control.MenuBar menuBar;
@@ -143,10 +139,6 @@ public class MenuController implements Initializable {
                 mainApp.executeFindAstrocytes();
             }
         });
-    }
-
-    public void setMainApp(App mainApp) {
-        this.mainApp = mainApp;
     }
 
     public void setAvailability(boolean isEmpty) {
