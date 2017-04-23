@@ -24,23 +24,35 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ToolbarController extends AbstractController {
+    private final String BUTTON_ACTIVE = "-fx-background-color: whitesmoke";
+    private final String BUTTON_NORMAL = "-fx-background-color: #dadada";
+    private List<ToggleButton> toolbarButtons = new ArrayList<>();
 
     @FXML
-    private Button cursorButton;
+    private ToggleButton cursorButton;
+    @FXML
+    private ToggleButton zoomAndPanButton;
+    @FXML
+    private ToggleButton horizontalLineButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Image cursorImage = new Image(getClass().getResourceAsStream("/img/pointer.png"));
-        cursorButton.setGraphic(new ImageView(cursorImage));
-        cursorButton.setPadding(Insets.EMPTY);
+        toolbarButtons.add(cursorButton);
+        toolbarButtons.add(zoomAndPanButton);
+        toolbarButtons.add(horizontalLineButton);
+        setImageOnButton(cursorButton, "pointer");
+        setImageOnButton(zoomAndPanButton, "zoom-and-pan");
+        setImageOnButton(horizontalLineButton, "h-line");
         addListeners();
     }
 
@@ -48,9 +60,34 @@ public class ToolbarController extends AbstractController {
         cursorButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                cursorButton.setStyle("-fx-background-color: whitesmoke");
+                selectButton(cursorButton);
             }
         });
+        zoomAndPanButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                selectButton(zoomAndPanButton);
+            }
+        });
+        horizontalLineButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                selectButton(horizontalLineButton);
+            }
+        });
+    }
+
+    private void selectButton(ToggleButton selectedButton) {
+        for (ToggleButton button : toolbarButtons) {
+            button.setSelected(false);
+        }
+        selectedButton.setSelected(true);
+    }
+
+    private void setImageOnButton(ToggleButton button, String imgName) {
+        Image image = new Image(getClass().getResourceAsStream("/img/"+ imgName + ".png"));
+        button.setGraphic(new ImageView(image));
+        button.setPadding(Insets.EMPTY);
     }
 
 }
