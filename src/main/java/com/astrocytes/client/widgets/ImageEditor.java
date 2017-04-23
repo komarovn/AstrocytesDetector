@@ -32,6 +32,10 @@ public class ImageEditor extends GraphicalWidget {
     private InstrumentState state;
     protected SimpleRectangle rectangle = new SimpleRectangle();
 
+    public ImageEditor() {
+        this(null, null);
+    }
+
     public ImageEditor(Integer width, Integer height) {
         super(width, height);
         state = InstrumentState.ZOOM_AND_PAN;
@@ -52,6 +56,7 @@ public class ImageEditor extends GraphicalWidget {
 
     public void setState(InstrumentState state) {
         this.state = state;
+        updateWidget();
     }
 
     public SimpleRectangle getRectangle() {
@@ -84,46 +89,67 @@ public class ImageEditor extends GraphicalWidget {
 
         @Override
         public void mousePressed(MouseEvent e) {
-            if (state.equals(InstrumentState.RECTANGLE)) {
-                super.mousePressed(e);
-                lockZoomAndPan();
-                rectangle.setStartPoint(e.getX(), e.getY());
-                isDrawing = true;
-            }
-            if (state.equals(InstrumentState.ZOOM_AND_PAN)) {
-                unlockZoomAndPan();
-                super.mousePressed(e);
+            switch (state) {
+                case POINTER:
+                    lockZoomAndPan();
+                    break;
+                case ZOOM_AND_PAN:
+                    unlockZoomAndPan();
+                    super.mousePressed(e);
+                    break;
+                case RECTANGLE:
+                    super.mousePressed(e);
+                    lockZoomAndPan();
+                    rectangle.setStartPoint(e.getX(), e.getY());
+                    isDrawing = true;
+                    break;
+                case LINE_HORIZONTAL:
+                    break;
             }
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
             super.mouseReleased(e);
-            if (state.equals(InstrumentState.RECTANGLE)) {
-                rectangle.setEndPoint(e.getX(), e.getY());
-                repaint();
-                paintRectangle(getGraphics());
-                isDrawing = false;
-            }
-            if (state.equals(InstrumentState.ZOOM_AND_PAN)) {
-                if (rectangle.isFull()) {
-                    rectangle.move(-deltaX, -deltaY);
-                }
+            switch (state) {
+                case POINTER:
+                    break;
+                case ZOOM_AND_PAN:
+                    if (rectangle.isFull()) {
+                        rectangle.move(-deltaX, -deltaY);
+                    }
+                    break;
+                case RECTANGLE:
+                    rectangle.setEndPoint(e.getX(), e.getY());
+                    repaint();
+                    paintRectangle(getGraphics());
+                    isDrawing = false;
+                    break;
+                case LINE_HORIZONTAL:
+                    break;
             }
         }
 
         @Override
         public void mouseDragged(MouseEvent e) {
             super.mouseDragged(e);
-            if (state.equals(InstrumentState.RECTANGLE) && isDrawing) {
-                rectangle.setEndPoint(e.getX(), e.getY());
-                repaint();
-                paintRectangle(getGraphics());
-            }
-            if (state.equals(InstrumentState.ZOOM_AND_PAN)) {
-                if (rectangle.isFull()) {
-                    rectangle.move(-deltaX, -deltaY);
-                }
+            switch (state) {
+                case POINTER:
+                    break;
+                case ZOOM_AND_PAN:
+                    if (rectangle.isFull()) {
+                        rectangle.move(-deltaX, -deltaY);
+                    }
+                    break;
+                case RECTANGLE:
+                    if (isDrawing) {
+                        rectangle.setEndPoint(e.getX(), e.getY());
+                        repaint();
+                        paintRectangle(getGraphics());
+                    }
+                    break;
+                case LINE_HORIZONTAL:
+                    break;
             }
         }
     }

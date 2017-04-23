@@ -21,10 +21,14 @@
 
 .toolbar-pane {
     -fx-background-color: #dbdbdb;
+    -fx-border-color: #6a9898;
+    -fx-border-width: 0 0 1 0;
 }
 
 .toolbar-button {
     -fx-background-color: #dadada;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
 }
 
 .toolbar-button:hover {
@@ -32,5 +36,5 @@
 }
 
 .toolbar-button:selected {
-    -fx-background-color: whitesmoke;
+    -fx-background-color: #f5f5f5;
 }

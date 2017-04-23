@@ -20,6 +20,7 @@
  */
 package com.astrocytes.client.dialogs.javafx;
 
+import com.astrocytes.client.InstrumentState;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -34,7 +35,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class ToolbarController extends AbstractController {
+    @Deprecated
     private final String BUTTON_ACTIVE = "-fx-background-color: whitesmoke";
+    @Deprecated
     private final String BUTTON_NORMAL = "-fx-background-color: #dadada";
     private List<ToggleButton> toolbarButtons = new ArrayList<>();
 
@@ -61,18 +64,21 @@ public class ToolbarController extends AbstractController {
             @Override
             public void handle(ActionEvent event) {
                 selectButton(cursorButton);
+                mainApp.getGraphicalWidget().setState(InstrumentState.POINTER);
             }
         });
         zoomAndPanButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 selectButton(zoomAndPanButton);
+                mainApp.getGraphicalWidget().setState(InstrumentState.ZOOM_AND_PAN);
             }
         });
         horizontalLineButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 selectButton(horizontalLineButton);
+                mainApp.getGraphicalWidget().setState(InstrumentState.LINE_HORIZONTAL);
             }
         });
     }

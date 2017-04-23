@@ -31,6 +31,7 @@ import com.astrocytes.client.dialogs.javafx.ToolbarController;
 import com.astrocytes.client.resources.ClientConstants;
 import com.astrocytes.client.resources.StringResources;
 import com.astrocytes.client.widgets.GraphicalWidget;
+import com.astrocytes.client.widgets.ImageEditor;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
@@ -44,7 +45,7 @@ import java.io.File;
 public class App {
     private JFrame frame = new JFrame(StringResources.ASTROCYTES_DETECTOR);
     private JPanel mainPanel;
-    private GraphicalWidget graphicalWidget;
+    private ImageEditor graphicalWidget;
     private MainPanelBlock mainPanelBlock = new MainPanelBlock();
 
     /* JavaFX controllers */
@@ -142,7 +143,7 @@ public class App {
             gridBagConstraints.anchor = GridBagConstraints.WEST;
             gridBagConstraints.fill = GridBagConstraints.BOTH;
 
-            graphicalWidget = new GraphicalWidget();
+            graphicalWidget = new ImageEditor();
             add(graphicalWidget, gridBagConstraints);
         }
     }
@@ -151,7 +152,7 @@ public class App {
         return frame;
     }
 
-    public GraphicalWidget getGraphicalWidget() {
+    public ImageEditor getGraphicalWidget() {
         return graphicalWidget;
     }
 
