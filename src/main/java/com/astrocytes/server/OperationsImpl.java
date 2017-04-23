@@ -98,7 +98,7 @@ public class OperationsImpl implements Operations {
     public Mat findAstrocytes(Mat source, Integer widthRectangle, Integer heightRectangle, Integer centerX, Integer centerY) {
         detectAstrocytes(source,
                 (widthRectangle + heightRectangle) / 2,
-                widthRectangle * heightRectangle * PI,
+                widthRectangle * heightRectangle * PI / 4,
                 calculateIntensity(sourceImage, centerX, centerY));
         drawAstrocyteCenters(source);
         //Imgproc.circle(getOutputImage(), new Point(centerX, centerY), 3, new Scalar(3, 108, 240));
@@ -148,13 +148,10 @@ public class OperationsImpl implements Operations {
             Double contourArea = contourArea(contour);
             Double contourPerimeter = arcLength(new MatOfPoint2f(contour.toArray()), true);
             /* Step 2 */
-            if (averageArea - 10 <= contourArea /*&& contourArea <= averageArea + 10*/) {
-                int xCoordOfAstrocyteCenter = (int) boundingRectangle.tl().x + boundingRectangle.width / 2;
-                int yCoordOfAstrocyteCenter = (int) boundingRectangle.tl().y + boundingRectangle.height / 2;
-                astrocytesCenters.add(new Point(xCoordOfAstrocyteCenter, yCoordOfAstrocyteCenter));
+            if (averageArea - 160 <= contourArea /*&& contourArea <= averageArea + 10*/) {
                 /* Step 3 */
-                if (((averageRectSize - 5 <= boundingRectangle.width) && (boundingRectangle.width <= averageRectSize + 5) ||
-                        (averageRectSize - 5 <= boundingRectangle.height) && (boundingRectangle.height <= averageRectSize + 5)) &&
+                if (((averageRectSize - 15 <= boundingRectangle.width) && (boundingRectangle.width <= averageRectSize + 15) ||
+                        (averageRectSize - 15 <= boundingRectangle.height) && (boundingRectangle.height <= averageRectSize + 15)) &&
                         (boundingRectangle.width / (float) boundingRectangle.height < 1.8f) && (boundingRectangle.height / (float) boundingRectangle.width < 1.8f)) {
                     /* Step 4 */
                     if (contourArea / (contourPerimeter * contourPerimeter) > 0.05 && contourArea / (contourPerimeter * contourPerimeter) < 0.30) {
@@ -170,10 +167,10 @@ public class OperationsImpl implements Operations {
                         }
                         averageIntensityWithinContour /= quantityOfPixelsWithinContour;
                         /* Step 5 */
-                        if (intensity - 30 <= averageIntensityWithinContour && averageIntensityWithinContour <= intensity + 30) {
-                            //int xCoordOfAstrocyteCenter = (int) boundingRectangle.tl().x + boundingRectangle.width / 2;
-                            //int yCoordOfAstrocyteCenter = (int) boundingRectangle.tl().y + boundingRectangle.height / 2;
-                            //astrocytesCenters.add(new Point(xCoordOfAstrocyteCenter, yCoordOfAstrocyteCenter));
+                        if (averageIntensityWithinContour <= intensity + 20) {
+                            int xCoordOfAstrocyteCenter = (int) boundingRectangle.tl().x + boundingRectangle.width / 2;
+                            int yCoordOfAstrocyteCenter = (int) boundingRectangle.tl().y + boundingRectangle.height / 2;
+                            astrocytesCenters.add(new Point(xCoordOfAstrocyteCenter, yCoordOfAstrocyteCenter));
                         }
                     }
                 }
