@@ -213,7 +213,8 @@ public class GraphicalWidget extends JPanel {
         private Integer startPointX, startPointY;
         private Integer endPointX, endPointY;
         protected int deltaX, deltaY;
-        private Boolean isZoomIn;
+        protected Boolean isZoomIn;
+        protected Integer currentXOld, currentYOld;
 
         @Override
         public void mousePressed(MouseEvent e) {
@@ -316,6 +317,8 @@ public class GraphicalWidget extends JPanel {
             }
 
             currentView = ImageHelper.cloneBufferedImage(zoomedImage);
+            currentXOld = currentX.intValue();
+            currentYOld = currentY.intValue();
             updateCurrentView(deltaX1, deltaY1);
         }
     }

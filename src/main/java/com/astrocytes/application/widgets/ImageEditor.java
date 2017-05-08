@@ -51,9 +51,11 @@ public class ImageEditor extends GraphicalWidget {
     private void addInstrumentListemers() {
         removeMouseListener(getMouseListeners()[0]);
         removeMouseMotionListener(getMouseMotionListeners()[0]);
+        removeMouseWheelListener(getMouseWheelListeners()[0]);
         ImageEditorListener listener = new ImageEditorListener();
         addMouseListener(listener);
         addMouseMotionListener(listener);
+        addMouseWheelListener(listener);
     }
 
     public InstrumentState getState() {
@@ -219,8 +221,8 @@ public class ImageEditor extends GraphicalWidget {
         }
 
         private void moveObjects() {
-            int dX = currentX > 0 && currentView.getWidth() + currentX < getImage().getWidth() ? -deltaX : 0;
-            int dY = currentY > 0 && currentView.getHeight() + currentY < getImage().getHeight() ? -deltaY : 0;
+            int dX = currentX > 0 && currentView.getWidth() + currentX < getImage().getWidth() * zoomScale ? -deltaX : 0;
+            int dY = currentY > 0 && currentView.getHeight() + currentY < getImage().getHeight() * zoomScale ? -deltaY : 0;
             if (rectangle.isFull()) {
                 rectangle.move(dX, dY);
             }
@@ -234,7 +236,9 @@ public class ImageEditor extends GraphicalWidget {
         private void zoomObjects() {
             for (SimpleLine line : horizontalLines) {
                 if (line.isFull()) {
-
+                    int yNew = (int) (isZoomIn ? 2 : 0.5 * (line.getyEnd() + currentYOld)) - currentY;
+                    line.setyEnd(yNew);
+                    line.setyStart(yNew);
                 }
             }
         }

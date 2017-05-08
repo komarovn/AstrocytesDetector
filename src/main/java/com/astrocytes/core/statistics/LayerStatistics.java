@@ -44,7 +44,7 @@ public class LayerStatistics {
         for (Point center : astrocyteCenters) {
             int numberOfLayer = 0;
             for (SimpleLine layer : layers) {
-                if (layer.getyEnd() > center.getX()) {
+                if (layer.getyEnd() > center.getY()) {
                     break;
                 }
                 numberOfLayer++;
