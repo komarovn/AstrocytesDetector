@@ -221,7 +221,7 @@ public class MenuController extends AbstractController {
         File file = exportDialog.showSaveDialog(menuBar.getScene().getWindow());
         if (file != null) {
             LayerStatistics layerStatistics = new LayerStatistics();
-            layerStatistics.saveLayerStatisticsToXls(mainApp.getOperationsExecuter().getOperations(),
+            layerStatistics.saveLayerStatisticsToXls(mainApp.getOperationsExecuter().getOperations().getAstrocytesCenters(),
                     mainApp.getGraphicalWidget().getHorizontalLines(), file);
         }
     }

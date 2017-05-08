@@ -43,13 +43,17 @@ public class OperationsImpl implements Operations {
         if (minThreshold == null) {
             minThreshold = 0;
         }
+
         if (maxThreshold == null) {
             maxThreshold = 255;
         }
+
         Mat dest = convertGrayscale(image);
         Mat copy = new Mat(dest.rows(), dest.cols(), dest.type());
+
         GaussianBlur(dest, copy, new Size(9, 9), 1.4, 1.4);
         Canny(copy, dest, minThreshold, maxThreshold, 3, true);
+
         dest.copyTo(getOutputImage());
     }
 
@@ -77,7 +81,9 @@ public class OperationsImpl implements Operations {
         Mat dest = new Mat();
         int instrumentSize = radius * 2 + 1;
         Mat kernel = getStructuringElement(Imgproc.CV_SHAPE_ELLIPSE, new Size(instrumentSize, instrumentSize), new Point(radius, radius));
+
         Imgproc.morphologyEx(source, dest, MORPH_CLOSE, kernel, new Point(-1, -1), 1);
+
         dest.copyTo(getOutputImage());
         return dest;
     }
@@ -89,7 +95,9 @@ public class OperationsImpl implements Operations {
             return source;
         }
         Mat dest = new Mat(source.rows(), source.cols(), CvType.CV_8UC1);
+
         cvtColor(source, dest, COLOR_BGR2GRAY);
+
         dest.copyTo(getOutputImage());
         return dest;
     }
@@ -180,17 +188,35 @@ public class OperationsImpl implements Operations {
 
     private int calculateIntensity(Mat image, int x, int y) {
         double[] pixel = image.get(y, x);
+
         if (pixel == null) {
             return 0;
         }
+
         if (pixel.length == 1) {
             return (int) pixel[0];
         }
+
         return  (int) (0.11 * pixel[2] + 0.53 * pixel[1] + 0.36 * pixel[0]);
     }
 
     @Override
     public void drawLayerDelimiters(Mat source) {
 
+    }
+
+    @Override
+    public List<com.astrocytes.core.primitives.Point> getAstrocytesCenters() {
+        if (astrocytesCenters == null) {
+            return new ArrayList<com.astrocytes.core.primitives.Point>();
+        }
+        List<com.astrocytes.core.primitives.Point> result = new ArrayList<com.astrocytes.core.primitives.Point>();
+
+        for (Point center : astrocytesCenters) {
+            com.astrocytes.core.primitives.Point point = new com.astrocytes.core.primitives.Point((int) center.x, (int) center.y);
+            result.add(point);
+        }
+
+        return result;
     }
 }

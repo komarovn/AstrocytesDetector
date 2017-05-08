@@ -18,49 +18,35 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes.shared;
+package com.astrocytes.core.primitives;
 
-import com.astrocytes.core.primitives.Point;
-import org.opencv.core.Mat;
+public class Point {
+    private Integer xCoord;
+    private Integer yCoord;
 
-import java.util.List;
+    public Point(Integer xCoord, Integer yCoord) {
+        this.xCoord = xCoord;
+        this.yCoord = yCoord;
+    }
 
-public interface Operations {
+    public Integer getX() {
+        return xCoord;
+    }
 
-    public void applyCannyEdgeDetection(Mat image, Integer minThreshold, Integer maxThreshold);
+    public void setX(Integer xCoord) {
+        this.xCoord = xCoord;
+    }
 
-    public void setSourceImage(Mat sourceImage);
+    public Integer getY() {
+        return yCoord;
+    }
 
-    public Mat getSourceImage();
+    public void setY(Integer yCoord) {
+        this.yCoord = yCoord;
+    }
 
-    public Mat getOutputImage();
-
-    /**
-     * Making dilation and erosion with contours after Canny method applying.
-     *
-     * @param source - black and white image
-     * @param radius - radius of structuring element; must be > 0
-     */
-    public Mat applyMathMorphology(Mat source, Integer radius);
-
-    /**
-     * Converting color image into gray image.
-     *
-     * @param source - source color image
-     * @return grayscale image
-     */
-    public Mat convertGrayscale(Mat source);
-
-    /**
-     * @param source - source white-black image after Canny edge detection
-     * @return color image with contours
-     */
-    public void drawAstrocyteCenters(Mat source);
-
-    public Mat findAstrocytes(Mat source, Integer widthRectangle, Integer heightRectangle, Integer centerX, Integer centerY);
-
-    public void drawLayerDelimiters(Mat source);
-
-    public List<Point> getAstrocytesCenters();
-
+    public void setPoint(Integer x, Integer y) {
+        setX(x);
+        setY(y);
+    }
 }
