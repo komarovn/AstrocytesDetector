@@ -219,12 +219,14 @@ public class ImageEditor extends GraphicalWidget {
         }
 
         private void moveObjects() {
+            int dX = currentX > 0 && currentView.getWidth() + currentX < getImage().getWidth() ? -deltaX : 0;
+            int dY = currentY > 0 && currentView.getHeight() + currentY < getImage().getHeight() ? -deltaY : 0;
             if (rectangle.isFull()) {
-                rectangle.move(-deltaX, -deltaY);
+                rectangle.move(dX, dY);
             }
             for (SimpleLine line : horizontalLines) {
                 if (line.isFull()) {
-                    line.move(0, -deltaY);
+                    line.move(0, dY);
                 }
             }
         }
