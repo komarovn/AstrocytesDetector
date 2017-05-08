@@ -20,11 +20,74 @@
  */
 package com.astrocytes.client.widgets.primitives;
 
-public class SimpleLine {
+public class SimpleLine extends AbstractPrimitive {
 
     private Integer xStart, yStart;
     private Integer xEnd, yEnd;
 
     public SimpleLine() { }
 
+    public SimpleLine(Integer xStart, Integer yStart, Integer xEnd, Integer yEnd) {
+        this.xStart = xStart;
+        this.yStart = yStart;
+        this.xEnd = xEnd;
+        this.yEnd = yEnd;
+    }
+
+    @Override
+    public boolean isFull() {
+        return xStart != null && yStart != null && xEnd != null && yEnd != null;
+    }
+
+    public void setStartPoint(Integer x, Integer y) {
+        setxStart(x);
+        setyStart(y);
+    }
+
+    public void setEndPoint(Integer x, Integer y) {
+        setxEnd(x);
+        setyEnd(y);
+    }
+
+    public Integer getxStart() {
+        return xStart;
+    }
+
+    public void setxStart(Integer xStart) {
+        this.xStart = xStart;
+    }
+
+    public Integer getyStart() {
+        return yStart;
+    }
+
+    public void setyStart(Integer yStart) {
+        this.yStart = yStart;
+    }
+
+    public Integer getxEnd() {
+        return xEnd;
+    }
+
+    public void setxEnd(Integer xEnd) {
+        this.xEnd = xEnd;
+    }
+
+    public Integer getyEnd() {
+        return yEnd;
+    }
+
+    public void setyEnd(Integer yEnd) {
+        this.yEnd = yEnd;
+    }
+
+    @Override
+    public void move(int deltaX, int deltaY) {
+        if (isFull()) {
+            xStart += deltaX;
+            xEnd += deltaX;
+            yStart += deltaY;
+            yEnd += deltaY;
+        }
+    }
 }

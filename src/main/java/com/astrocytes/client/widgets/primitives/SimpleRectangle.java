@@ -20,7 +20,7 @@
  */
 package com.astrocytes.client.widgets.primitives;
 
-public class SimpleRectangle {
+public class SimpleRectangle extends AbstractPrimitive {
 
     private Integer xStart, yStart;
     private Integer xEnd, yEnd;
@@ -93,10 +93,12 @@ public class SimpleRectangle {
         yEnd = y;
     }
 
+    @Override
     public boolean isFull() {
         return xStart != null && yStart != null && xEnd != null && yEnd != null && getHeight() > 0 && getWidth() > 0;
     }
 
+    @Override
     public void move(int deltaX, int deltaY) {
         if (isFull()) {
             xStart += deltaX;

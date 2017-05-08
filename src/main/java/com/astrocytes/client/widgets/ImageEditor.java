@@ -21,16 +21,20 @@
 package com.astrocytes.client.widgets;
 
 import com.astrocytes.client.InstrumentState;
+import com.astrocytes.client.widgets.primitives.SimpleLine;
 import com.astrocytes.client.widgets.primitives.SimpleRectangle;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.util.*;
 
 public class ImageEditor extends GraphicalWidget {
 
     private InstrumentState state;
     protected SimpleRectangle rectangle = new SimpleRectangle();
+    protected java.util.List<SimpleLine> horizontalLines = new ArrayList<SimpleLine>();
 
     public ImageEditor() {
         this(null, null);
@@ -76,80 +80,123 @@ public class ImageEditor extends GraphicalWidget {
                 rectangle.getWidth(), rectangle.getHeight()));
     }
 
+    private void paintHorizontalLines(Graphics g) {
+        Graphics2D graphics = (Graphics2D) g;
+        graphics.setPaint(Color.MAGENTA);
+        graphics.setStroke(new BasicStroke(2));
+        for (SimpleLine line : horizontalLines) {
+            if (line.isFull()) {
+                line.setxEnd(getImage().getWidth() < currentView.getWidth() ? Math.max(getImage().getWidth(), getWidth()) : currentView.getWidth());
+                graphics.draw(new Line2D.Float(line.getxStart(), line.getyStart(), line.getxEnd(), line.getyEnd()));
+            }
+        }
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (rectangle.isFull()) {
             paintRectangle(g);
         }
+        paintHorizontalLines(g);
     }
 
     protected class ImageEditorListener extends GraphicalWidgetListener {
         private boolean isDrawing = false;
+        private SimpleLine creationLine;
 
         @Override
         public void mousePressed(MouseEvent e) {
-            switch (state) {
-                case POINTER:
-                    lockZoomAndPan();
-                    break;
-                case ZOOM_AND_PAN:
-                    unlockZoomAndPan();
-                    super.mousePressed(e);
-                    break;
-                case RECTANGLE:
-                    super.mousePressed(e);
-                    lockZoomAndPan();
-                    rectangle.setStartPoint(e.getX(), e.getY());
-                    isDrawing = true;
-                    break;
-                case LINE_HORIZONTAL:
-                    break;
+            if (currentView != null) {
+                switch (state) {
+                    case POINTER:
+                        lockZoomAndPan();
+                        break;
+                    case ZOOM_AND_PAN:
+                        unlockZoomAndPan();
+                        super.mousePressed(e);
+                        break;
+                    case RECTANGLE:
+                        super.mousePressed(e);
+                        lockZoomAndPan();
+                        rectangle.setStartPoint(e.getX(), e.getY());
+                        isDrawing = true;
+                        break;
+                    case LINE_HORIZONTAL:
+                        super.mousePressed(e);
+                        lockZoomAndPan();
+                        creationLine = new SimpleLine();
+                        creationLine.setStartPoint(0, e.getY());
+                        isDrawing = true;
+                        break;
+                }
             }
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
             super.mouseReleased(e);
-            switch (state) {
-                case POINTER:
-                    break;
-                case ZOOM_AND_PAN:
-                    if (rectangle.isFull()) {
-                        rectangle.move(-deltaX, -deltaY);
-                    }
-                    break;
-                case RECTANGLE:
-                    rectangle.setEndPoint(e.getX(), e.getY());
-                    repaint();
-                    paintRectangle(getGraphics());
-                    isDrawing = false;
-                    break;
-                case LINE_HORIZONTAL:
-                    break;
+            if (currentView != null) {
+                switch (state) {
+                    case POINTER:
+                        break;
+                    case ZOOM_AND_PAN:
+                        moveObjects();
+                        break;
+                    case RECTANGLE:
+                        rectangle.setEndPoint(e.getX(), e.getY());
+                        repaint();
+                        isDrawing = false;
+                        break;
+                    case LINE_HORIZONTAL:
+                        horizontalLines.remove(creationLine);
+                        creationLine.setStartPoint(0, e.getY());
+                        creationLine.setEndPoint(currentView.getWidth(), e.getY());
+                        horizontalLines.add(creationLine);
+                        repaint();
+                        isDrawing = false;
+                        break;
+                }
             }
         }
 
         @Override
         public void mouseDragged(MouseEvent e) {
             super.mouseDragged(e);
-            switch (state) {
-                case POINTER:
-                    break;
-                case ZOOM_AND_PAN:
-                    if (rectangle.isFull()) {
-                        rectangle.move(-deltaX, -deltaY);
-                    }
-                    break;
-                case RECTANGLE:
-                    if (isDrawing) {
-                        rectangle.setEndPoint(e.getX(), e.getY());
-                        repaint();
-                        paintRectangle(getGraphics());
-                    }
-                    break;
-                case LINE_HORIZONTAL:
-                    break;
+            if (currentView != null) {
+                switch (state) {
+                    case POINTER:
+                        break;
+                    case ZOOM_AND_PAN:
+                        moveObjects();
+                        break;
+                    case RECTANGLE:
+                        if (isDrawing) {
+                            rectangle.setEndPoint(e.getX(), e.getY());
+                            repaint();
+                        }
+                        break;
+                    case LINE_HORIZONTAL:
+                        if (isDrawing) {
+                            horizontalLines.remove(creationLine);
+                            creationLine.setStartPoint(0, e.getY());
+                            creationLine.setEndPoint(currentView.getWidth(), e.getY());
+                            horizontalLines.add(creationLine);
+                            repaint();
+                        }
+                        break;
+                }
+            }
+        }
+
+        private void moveObjects() {
+            if (rectangle.isFull()) {
+                rectangle.move(-deltaX, -deltaY);
+            }
+            for (SimpleLine line : horizontalLines) {
+                if (line.isFull()) {
+                    line.move(0, -deltaY);
+                }
             }
         }
     }

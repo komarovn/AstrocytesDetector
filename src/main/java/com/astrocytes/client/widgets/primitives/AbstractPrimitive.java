@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!--
+/*
  * Copyright (c) Lobachevsky University, 2017. All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -19,25 +17,13 @@
  * DEALINGS IN THE SOFTWARE.
  *
  * Developed by: Komarov Nikolay.
--->
+ */
+package com.astrocytes.client.widgets.primitives;
 
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.AnchorPane?>
+public abstract class AbstractPrimitive {
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="600.0" styleClass="toolbar-pane" stylesheets="@../styles/toolbar.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.astrocytes.client.dialogs.javafx.ToolbarController">
-   <children>
-      <ToggleButton fx:id="cursorButton" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="28.0" styleClass="toolbar-button">
-         <tooltip>
-            <Tooltip text="Pointer" />
-         </tooltip></ToggleButton>
-      <ToggleButton fx:id="zoomAndPanButton" graphicTextGap="0.0" layoutX="28.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="28.0" styleClass="toolbar-button">
-         <tooltip>
-            <Tooltip text="Zoom and Pan" />
-         </tooltip></ToggleButton>
-      <ToggleButton fx:id="horizontalLineButton" graphicTextGap="0.0" layoutX="56.0" maxHeight="24.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="28.0" styleClass="toolbar-button">
-         <tooltip>
-            <Tooltip text="Draw Layer" />
-         </tooltip></ToggleButton>
-   </children>
-</AnchorPane>
+    public abstract boolean isFull();
+
+    public abstract void move(int deltaX, int deltaY);
+
+}

@@ -46,7 +46,7 @@ public class GraphicalWidget extends JPanel {
 
     private Boolean panEnabled = true;
     private Boolean zoomEnabled = true;
-    private Double zoomScale;
+    protected Double zoomScale;
     private java.util.List<Double> zoomLevels = new ArrayList<>(Arrays.asList(new Double[]
             {0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0}));
     private BufferedImage zoomedImage;
