@@ -18,30 +18,32 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes;
-
-import com.astrocytes.application.App;
-import org.opencv.core.Core;
+package com.astrocytes.application;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class EntryPoint {
+public class WarningMessage extends JDialog {
 
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) { }
+    private WarningMessagePopup popup;
+    private String message;
+
+    public WarningMessage(JFrame owner, String message) {
+        super(owner, "", true);
+        this.message = message;
+        popup = new WarningMessagePopup();
+        add(popup);
+        pack();
+        setVisible(true);
     }
 
-    public static void main(String[] argv) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                App app = new App();
-            }
-        });
+    private class WarningMessagePopup extends JPanel {
+
+        public WarningMessagePopup() {
+            JPanel main = new JPanel();
+            main.setPreferredSize(new Dimension(200, 70));
+            add(main);
+        }
     }
 
 }

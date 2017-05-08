@@ -25,7 +25,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="531.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.astrocytes.client.dialogs.javafx.CreateNewProjectController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="531.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.astrocytes.application.dialogs.javafx.CreateNewProjectController">
    <children>
       <TextField fx:id="projectName" layoutX="105.0" layoutY="14.0" prefHeight="25.0" prefWidth="405.0" />
       <Label layoutX="18.0" layoutY="18.0" text="Project Name:" />

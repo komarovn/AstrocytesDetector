@@ -25,7 +25,7 @@
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="600.0" styleClass="toolbar-pane" stylesheets="@../styles/toolbar.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.astrocytes.client.dialogs.javafx.ToolbarController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="600.0" styleClass="toolbar-pane" stylesheets="@../styles/toolbar.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.astrocytes.application.dialogs.javafx.ToolbarController">
    <children>
       <ToggleButton fx:id="cursorButton" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="28.0" styleClass="toolbar-button">
          <tooltip>

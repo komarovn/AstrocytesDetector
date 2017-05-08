@@ -18,30 +18,29 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes;
+package com.astrocytes.core.statistics;
 
-import com.astrocytes.application.App;
-import org.opencv.core.Core;
+import com.astrocytes.application.widgets.primitives.SimpleLine;
+import com.astrocytes.shared.Operations;
 
-import javax.swing.*;
-import java.awt.*;
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class EntryPoint {
+public class LayerStatistics {
+    private Map<Integer, Integer> horizontalLayers = new HashMap<Integer, Integer>();
 
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) { }
+    public boolean saveLayerStatisticsToXls(Operations operations, List<SimpleLine> layers, File fileToSave) {
+        
+        return true;
     }
 
-    public static void main(String[] argv) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                App app = new App();
-            }
-        });
+    private void calculateAstrocytesInLayers(List<SimpleLine> layers) {
+        for (int i = 0; i < layers.size(); i++) {
+            horizontalLayers.put(i, 0);
+        }
+
     }
 
 }

@@ -18,30 +18,16 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes;
+package com.astrocytes.application.dialogs.javafx;
 
 import com.astrocytes.application.App;
-import org.opencv.core.Core;
+import javafx.fxml.Initializable;
 
-import javax.swing.*;
-import java.awt.*;
+public abstract class AbstractController implements Initializable {
+    protected App mainApp;
 
-public class EntryPoint {
-
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) { }
-    }
-
-    public static void main(String[] argv) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                App app = new App();
-            }
-        });
+    public void setMainApp(App mainApp) {
+        this.mainApp = mainApp;
     }
 
 }

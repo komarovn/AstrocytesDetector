@@ -18,30 +18,12 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes;
+package com.astrocytes.application.widgets.primitives;
 
-import com.astrocytes.application.App;
-import org.opencv.core.Core;
+public abstract class AbstractPrimitive {
 
-import javax.swing.*;
-import java.awt.*;
+    public abstract boolean isFull();
 
-public class EntryPoint {
-
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) { }
-    }
-
-    public static void main(String[] argv) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                App app = new App();
-            }
-        });
-    }
+    public abstract void move(int deltaX, int deltaY);
 
 }

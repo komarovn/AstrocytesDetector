@@ -18,30 +18,35 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes;
+package com.astrocytes.application;
 
-import com.astrocytes.application.App;
-import org.opencv.core.Core;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 
-import javax.swing.*;
-import java.awt.*;
+import java.io.IOException;
+import java.net.URL;
 
-public class EntryPoint {
+public abstract class SwingJavaFXHelper {
 
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    public static Object initFX(final JFXPanel content, URL address) {
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) { }
-    }
-
-    public static void main(String[] argv) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                App app = new App();
-            }
-        });
+            FXMLLoader loader = new FXMLLoader(address);
+            final Parent root = loader.load();
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    Scene scene = new Scene(root);
+                    content.setScene(scene);
+                }
+            });
+            return loader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
