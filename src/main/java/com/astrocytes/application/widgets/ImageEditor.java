@@ -21,6 +21,7 @@
 package com.astrocytes.application.widgets;
 
 import com.astrocytes.application.InstrumentState;
+import com.astrocytes.application.widgets.primitives.DrawingLine;
 import com.astrocytes.application.widgets.primitives.SimpleLine;
 import com.astrocytes.application.widgets.primitives.SimpleRectangle;
 
@@ -36,7 +37,7 @@ public class ImageEditor extends GraphicalWidget {
 
     private InstrumentState state;
     protected SimpleRectangle rectangle = new SimpleRectangle();
-    protected java.util.List<SimpleLine> horizontalLines = new ArrayList<SimpleLine>();
+    protected java.util.List<DrawingLine> horizontalLines = new ArrayList<DrawingLine>();
 
     public ImageEditor() {
         this(null, null);
@@ -88,9 +89,12 @@ public class ImageEditor extends GraphicalWidget {
         Graphics2D graphics = (Graphics2D) g;
         graphics.setPaint(Color.MAGENTA);
         graphics.setStroke(new BasicStroke(2));
-        for (SimpleLine line : horizontalLines) {
+        for (DrawingLine line : horizontalLines) {
             if (line.isFull()) {
                 line.setxEnd(getImage().getWidth() < currentView.getWidth() ? Math.max(getImage().getWidth(), getWidth()) : currentView.getWidth());
+                if (line.isDrawing()) {
+                    graphics.setPaint(Color.ORANGE);
+                }
                 graphics.draw(new Line2D.Float(line.getxStart(), line.getyStart(), line.getxEnd(), line.getyEnd()));
             }
         }
@@ -107,14 +111,14 @@ public class ImageEditor extends GraphicalWidget {
 
     public List<SimpleLine> getHorizontalLines() {
         List<SimpleLine> result = new ArrayList<SimpleLine>();
-        Collections.sort(horizontalLines, new Comparator<SimpleLine>() {
+        Collections.sort(horizontalLines, new Comparator<DrawingLine>() {
             @Override
-            public int compare(SimpleLine o1, SimpleLine o2) {
+            public int compare(DrawingLine o1, DrawingLine o2) {
                 return o1.getyEnd() - o2.getyEnd();
             }
         });
-        for (SimpleLine line : horizontalLines) {
-            SimpleLine absoluteLine = new SimpleLine(line.getxStart(), line.getyStart() + currentY, line.getxEnd(), line.getyEnd() + currentY);
+        for (DrawingLine line : horizontalLines) {
+            DrawingLine absoluteLine = new DrawingLine(line.getxStart(), line.getyStart() + currentY, line.getxEnd(), line.getyEnd() + currentY);
             result.add(absoluteLine);
         }
         return result;
@@ -122,7 +126,7 @@ public class ImageEditor extends GraphicalWidget {
 
     protected class ImageEditorListener extends GraphicalWidgetListener {
         private boolean isDrawing = false;
-        private SimpleLine creationLine;
+        private DrawingLine creationLine;
 
         @Override
         public void mousePressed(MouseEvent e) {
@@ -144,7 +148,7 @@ public class ImageEditor extends GraphicalWidget {
                     case LINE_HORIZONTAL:
                         super.mousePressed(e);
                         lockZoomAndPan();
-                        creationLine = new SimpleLine();
+                        creationLine = new DrawingLine();
                         creationLine.setStartPoint(0, e.getY());
                         isDrawing = true;
                         break;
@@ -171,6 +175,7 @@ public class ImageEditor extends GraphicalWidget {
                         horizontalLines.remove(creationLine);
                         creationLine.setStartPoint(0, e.getY());
                         creationLine.setEndPoint(currentView.getWidth(), e.getY());
+                        creationLine.setDrawing(false);
                         horizontalLines.add(creationLine);
                         repaint();
                         isDrawing = false;
@@ -226,7 +231,7 @@ public class ImageEditor extends GraphicalWidget {
             if (rectangle.isFull()) {
                 rectangle.move(dX, dY);
             }
-            for (SimpleLine line : horizontalLines) {
+            for (DrawingLine line : horizontalLines) {
                 if (line.isFull()) {
                     line.move(0, dY);
                 }
@@ -234,7 +239,7 @@ public class ImageEditor extends GraphicalWidget {
         }
 
         private void zoomObjects() {
-            for (SimpleLine line : horizontalLines) {
+            for (DrawingLine line : horizontalLines) {
                 if (line.isFull()) {
                     int yNew = (int) (isZoomIn ? 2 : 0.5 * (line.getyEnd() + currentYOld)) - currentY;
                     line.setyEnd(yNew);
