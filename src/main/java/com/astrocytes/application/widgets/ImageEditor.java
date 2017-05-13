@@ -108,6 +108,14 @@ public class ImageEditor extends GraphicalWidget {
     }
 
     @Override
+    public void destroy() {
+        super.destroy();
+        state = InstrumentState.ZOOM_AND_PAN;
+        horizontalLines.clear();
+        rectangle = new SimpleRectangle();
+    }
+
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (rectangle.isFull()) {

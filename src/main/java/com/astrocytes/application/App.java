@@ -259,6 +259,7 @@ public class App {
         image = operationsExecuter.applyDilateAndErode(image);
         //image = operationsExecuter.applyFindAstocytes(image);
         menuController.setAvailability(false);
+        graphicalWidget.destroy();
         updateWindowSize();
         updateCurrentView();
         updateGrahicalWidget();

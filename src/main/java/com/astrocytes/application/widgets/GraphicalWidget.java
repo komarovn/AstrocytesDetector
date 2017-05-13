@@ -213,6 +213,14 @@ public class GraphicalWidget extends JPanel {
         return zoomedImage;
     }
 
+    protected void destroy() {
+        image = null;
+        zoomedImage = null;
+        currentView = null;
+        currentX = currentY = 0;
+        resetZoomScale();
+    }
+
     protected class GraphicalWidgetListener extends MouseAdapter {
         private Integer startPointX, startPointY;
         private Integer endPointX, endPointY;
