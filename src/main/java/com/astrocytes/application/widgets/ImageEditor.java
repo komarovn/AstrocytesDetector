@@ -65,6 +65,13 @@ public class ImageEditor extends GraphicalWidget {
 
     public void setState(InstrumentState state) {
         this.state = state;
+        switch (state) {
+            case ZOOM_AND_PAN:
+                unlockZoomAndPan();
+                break;
+            default:
+                lockZoomAndPan();
+        }
         updateWidget();
     }
 
@@ -91,7 +98,7 @@ public class ImageEditor extends GraphicalWidget {
         graphics.setStroke(new BasicStroke(2));
         for (DrawingLine line : horizontalLines) {
             if (line.isFull()) {
-                line.setxEnd(getImage().getWidth() < currentView.getWidth() ? Math.max(getImage().getWidth(), getWidth()) : currentView.getWidth());
+                line.setxEnd(getImage().getWidth() < currentView.getWidth() ? Math.max(getImage().getWidth(), getWidth()) : currentView.getWidth() - 1);
                 if (line.isDrawing()) {
                     graphics.setPaint(Color.ORANGE);
                 }
@@ -118,7 +125,8 @@ public class ImageEditor extends GraphicalWidget {
             }
         });
         for (DrawingLine line : horizontalLines) {
-            DrawingLine absoluteLine = new DrawingLine(line.getxStart(), line.getyStart() + currentY, line.getxEnd(), line.getyEnd() + currentY);
+            SimpleLine absoluteLine = new SimpleLine(line.getxStart(), (int) (zoomLevel * (line.getyStart() + currentY)),
+                    line.getxEnd(), (int) (zoomLevel * (line.getyEnd() + currentY)));
             result.add(absoluteLine);
         }
         return result;
@@ -133,23 +141,25 @@ public class ImageEditor extends GraphicalWidget {
             if (currentView != null) {
                 switch (state) {
                     case POINTER:
-                        lockZoomAndPan();
+                        //lockZoomAndPan();
                         break;
                     case ZOOM_AND_PAN:
-                        unlockZoomAndPan();
+                        //unlockZoomAndPan();
                         super.mousePressed(e);
                         break;
                     case RECTANGLE:
                         super.mousePressed(e);
-                        lockZoomAndPan();
+                        //lockZoomAndPan();
                         rectangle.setStartPoint(e.getX(), e.getY());
                         isDrawing = true;
                         break;
                     case LINE_HORIZONTAL:
                         super.mousePressed(e);
-                        lockZoomAndPan();
+                        //lockZoomAndPan();
                         creationLine = new DrawingLine();
                         creationLine.setStartPoint(0, e.getY());
+                        creationLine.setEndPoint(getZoomedImage().getWidth(), e.getY());
+                        repaint();
                         isDrawing = true;
                         break;
                 }
@@ -173,8 +183,10 @@ public class ImageEditor extends GraphicalWidget {
                         break;
                     case LINE_HORIZONTAL:
                         horizontalLines.remove(creationLine);
-                        creationLine.setStartPoint(0, e.getY());
-                        creationLine.setEndPoint(currentView.getWidth(), e.getY());
+                        if (isInOfImageBoundary(e.getX(), e.getY())) {
+                            creationLine.setStartPoint(0, e.getY());
+                            creationLine.setEndPoint(getZoomedImage().getWidth(), e.getY());
+                        }
                         creationLine.setDrawing(false);
                         horizontalLines.add(creationLine);
                         repaint();
@@ -195,16 +207,16 @@ public class ImageEditor extends GraphicalWidget {
                         moveObjects();
                         break;
                     case RECTANGLE:
-                        if (isDrawing) {
+                        if (isDrawing && isInOfImageBoundary(e.getX(), e.getY())) {
                             rectangle.setEndPoint(e.getX(), e.getY());
                             repaint();
                         }
                         break;
                     case LINE_HORIZONTAL:
-                        if (isDrawing) {
+                        if (isDrawing && isInOfImageBoundary(e.getX(), e.getY())) {
                             horizontalLines.remove(creationLine);
                             creationLine.setStartPoint(0, e.getY());
-                            creationLine.setEndPoint(currentView.getWidth(), e.getY());
+                            creationLine.setEndPoint(getZoomedImage().getWidth(), e.getY());
                             horizontalLines.add(creationLine);
                             repaint();
                         }
@@ -216,7 +228,7 @@ public class ImageEditor extends GraphicalWidget {
         @Override
         public void mouseWheelMoved(MouseWheelEvent e) {
             super.mouseWheelMoved(e);
-            if (currentView != null) {
+            if (currentView != null && !previousZoomLevel.equals(zoomLevel)) {
                 switch (state) {
                     case ZOOM_AND_PAN:
                         zoomObjects();
@@ -226,8 +238,8 @@ public class ImageEditor extends GraphicalWidget {
         }
 
         private void moveObjects() {
-            int dX = currentX > 0 && currentView.getWidth() + currentX < getImage().getWidth() * zoomScale ? -deltaX : 0;
-            int dY = currentY > 0 && currentView.getHeight() + currentY < getImage().getHeight() * zoomScale ? -deltaY : 0;
+            int dX = currentX > 0 && currentView.getWidth() + currentX < getImage().getWidth() * zoomLevel ? -deltaX : 0;
+            int dY = currentY > 0 && currentView.getHeight() + currentY < getImage().getHeight() * zoomLevel ? -deltaY : 0;
             if (rectangle.isFull()) {
                 rectangle.move(dX, dY);
             }
@@ -241,11 +253,18 @@ public class ImageEditor extends GraphicalWidget {
         private void zoomObjects() {
             for (DrawingLine line : horizontalLines) {
                 if (line.isFull()) {
-                    int yNew = (int) (isZoomIn ? 2 : 0.5 * (line.getyEnd() + currentYOld)) - currentY;
+                    int yNew = 2 * (line.getyEnd() + currentYOld) - currentY;
+                    if (!isZoomIn) {
+                        yNew = (line.getyEnd() + currentYOld) / 2 - currentY;
+                    }
                     line.setyEnd(yNew);
                     line.setyStart(yNew);
                 }
             }
+        }
+
+        private boolean isInOfImageBoundary(int x, int y) {
+            return y <= getZoomedImage().getHeight() && x <= getZoomedImage().getWidth();
         }
     }
 
