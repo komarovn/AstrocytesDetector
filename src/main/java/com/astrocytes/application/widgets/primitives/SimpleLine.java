@@ -22,12 +22,12 @@ package com.astrocytes.application.widgets.primitives;
 
 public class SimpleLine extends AbstractPrimitive {
 
-    private Integer xStart, yStart;
-    private Integer xEnd, yEnd;
+    private Double xStart, yStart;
+    private Double xEnd, yEnd;
 
     public SimpleLine() { }
 
-    public SimpleLine(Integer xStart, Integer yStart, Integer xEnd, Integer yEnd) {
+    public SimpleLine(Double xStart, Double yStart, Double xEnd, Double yEnd) {
         this.xStart = xStart;
         this.yStart = yStart;
         this.xEnd = xEnd;
@@ -39,45 +39,45 @@ public class SimpleLine extends AbstractPrimitive {
         return xStart != null && yStart != null && xEnd != null && yEnd != null;
     }
 
-    public void setStartPoint(Integer x, Integer y) {
+    public void setStartPoint(Double x, Double y) {
         setxStart(x);
         setyStart(y);
     }
 
-    public void setEndPoint(Integer x, Integer y) {
+    public void setEndPoint(Double x, Double y) {
         setxEnd(x);
         setyEnd(y);
     }
 
-    public Integer getxStart() {
+    public Double getxStart() {
         return xStart;
     }
 
-    public void setxStart(Integer xStart) {
+    public void setxStart(Double xStart) {
         this.xStart = xStart;
     }
 
-    public Integer getyStart() {
+    public Double getyStart() {
         return yStart;
     }
 
-    public void setyStart(Integer yStart) {
+    public void setyStart(Double yStart) {
         this.yStart = yStart;
     }
 
-    public Integer getxEnd() {
+    public Double getxEnd() {
         return xEnd;
     }
 
-    public void setxEnd(Integer xEnd) {
+    public void setxEnd(Double xEnd) {
         this.xEnd = xEnd;
     }
 
-    public Integer getyEnd() {
+    public Double getyEnd() {
         return yEnd;
     }
 
-    public void setyEnd(Integer yEnd) {
+    public void setyEnd(Double yEnd) {
         this.yEnd = yEnd;
     }
 

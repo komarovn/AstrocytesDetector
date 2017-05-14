@@ -28,7 +28,7 @@ public class DrawingLine extends SimpleLine {
         super();
     }
 
-    public DrawingLine(Integer xStart, Integer yStart, Integer xEnd, Integer yEnd) {
+    public DrawingLine(Double xStart, Double yStart, Double xEnd, Double yEnd) {
         super(xStart, yStart, xEnd, yEnd);
     }
 
