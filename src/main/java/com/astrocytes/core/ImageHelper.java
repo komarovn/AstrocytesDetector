@@ -18,7 +18,7 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes.application;
+package com.astrocytes.core;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;

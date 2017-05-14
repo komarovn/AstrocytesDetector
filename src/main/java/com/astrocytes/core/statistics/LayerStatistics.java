@@ -34,11 +34,11 @@ import java.util.List;
 import java.util.Map;
 
 public class LayerStatistics {
-    private Map<Integer, Integer> horizontalLayers = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> quantityInHorizontalLayers = new HashMap<Integer, Integer>();
 
-    private void calculateAstrocytesInLayers(List<Point> astrocyteCenters, List<SimpleLine> layers) {
+    private void countAstrocytesByLayers(List<Point> astrocyteCenters, List<SimpleLine> layers) {
         for (int i = 0; i < layers.size() + 1; i++) {
-            horizontalLayers.put(i, 0);
+            quantityInHorizontalLayers.put(i, 0);
         }
 
         for (Point center : astrocyteCenters) {
@@ -49,12 +49,12 @@ public class LayerStatistics {
                 }
                 numberOfLayer++;
             }
-            horizontalLayers.put(numberOfLayer, horizontalLayers.get(numberOfLayer) + 1);
+            quantityInHorizontalLayers.put(numberOfLayer, quantityInHorizontalLayers.get(numberOfLayer) + 1);
         }
     }
 
     public boolean saveLayerStatisticsToXls(List<Point> astrocyteCenters, List<SimpleLine> layers, File fileToSave) {
-        calculateAstrocytesInLayers(astrocyteCenters, layers);
+        countAstrocytesByLayers(astrocyteCenters, layers);
         try {
             FileOutputStream outputStream = new FileOutputStream(fileToSave);
 
@@ -65,7 +65,7 @@ public class LayerStatistics {
             headerRow.createCell(0).setCellValue("Layer #");
             headerRow.createCell(1).setCellValue("Astrocytes Count");
 
-            for (Map.Entry<Integer, Integer> count : horizontalLayers.entrySet()) {
+            for (Map.Entry<Integer, Integer> count : quantityInHorizontalLayers.entrySet()) {
                 HSSFRow row = sheet.createRow(count.getKey() + 1);
                 row.createCell(0).setCellValue(count.getKey() + 1);
                 row.createCell(1).setCellValue(count.getValue());

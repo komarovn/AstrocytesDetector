@@ -21,7 +21,7 @@
 package com.astrocytes.core.data;
 
 import com.astrocytes.application.App;
-import com.astrocytes.application.ImageHelper;
+import com.astrocytes.core.ImageHelper;
 import com.astrocytes.core.CoreConstants;
 
 import java.io.File;

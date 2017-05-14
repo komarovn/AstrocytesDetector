@@ -20,6 +20,7 @@
  */
 package com.astrocytes.application;
 
+import com.astrocytes.core.ImageHelper;
 import com.astrocytes.core.data.AppParameters;
 import com.astrocytes.application.dialogs.DialogCannyEdgeDetection;
 import com.astrocytes.application.dialogs.DialogDilateErode;

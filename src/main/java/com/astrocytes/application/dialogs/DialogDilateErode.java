@@ -21,7 +21,7 @@
 package com.astrocytes.application.dialogs;
 
 import com.astrocytes.application.App;
-import com.astrocytes.application.ImageHelper;
+import com.astrocytes.core.ImageHelper;
 import com.astrocytes.core.CoreConstants;
 import com.astrocytes.application.resources.StringResources;
 import com.astrocytes.application.widgets.PreviewImageEditor;

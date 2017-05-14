@@ -20,7 +20,7 @@
  */
 package com.astrocytes.application.widgets;
 
-import com.astrocytes.application.ImageHelper;
+import com.astrocytes.core.ImageHelper;
 import com.astrocytes.core.CoreConstants;
 
 import javax.swing.*;

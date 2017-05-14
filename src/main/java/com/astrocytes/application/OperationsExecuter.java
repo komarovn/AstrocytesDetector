@@ -20,6 +20,7 @@
  */
 package com.astrocytes.application;
 
+import com.astrocytes.core.ImageHelper;
 import com.astrocytes.core.data.AppParameters;
 import com.astrocytes.core.CoreConstants;
 import com.astrocytes.core.OperationsImpl;
