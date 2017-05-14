@@ -133,8 +133,8 @@ public class ImageEditor extends GraphicalWidget {
             }
         });
         for (DrawingLine line : horizontalLines) {
-            SimpleLine absoluteLine = new SimpleLine(line.getxStart(), (int) (zoomLevel * (line.getyStart() + currentY)),
-                    line.getxEnd(), (int) (zoomLevel * (line.getyEnd() + currentY)));
+            SimpleLine absoluteLine = new SimpleLine(line.getxStart(), (int) (1 / zoomLevel * (line.getyStart() + currentY)),
+                    line.getxEnd(), (int) (1 / zoomLevel * (line.getyEnd() + currentY)));
             result.add(absoluteLine);
         }
         return result;
