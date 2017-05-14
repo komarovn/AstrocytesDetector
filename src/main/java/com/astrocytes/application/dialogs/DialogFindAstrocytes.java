@@ -64,6 +64,9 @@ public class DialogFindAstrocytes extends AbstractDialog {
         private JButton pan;
 
         public FindAstrocytesBlock() {
+            ImageIcon iconPan = new ImageIcon(getClass().getResource("/img/pan.png"));
+            ImageIcon iconRectangle = new ImageIcon(getClass().getResource("/img/rectangle.png"));
+
             setLayout(new GridBagLayout());
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.gridx = 0;
@@ -83,9 +86,13 @@ public class DialogFindAstrocytes extends AbstractDialog {
 
             gridBagConstraints.gridy++;
             gridBagConstraints.gridwidth = 1;
-            drawRectangle = new JButton(StringResources.DRAW_RECTANGLE);
+            drawRectangle = new JButton("", iconRectangle);
+            drawRectangle.setMargin(new Insets(1, 1, 1, 1));
+            drawRectangle.setFocusPainted(false);
             add(drawRectangle, gridBagConstraints);
-            pan = new JButton(StringResources.PAN);
+            pan = new JButton("", iconPan);
+            pan.setMargin(new Insets(1, 1, 1, 1));
+            pan.setFocusPainted(false);
             gridBagConstraints.gridx++;
             add(pan, gridBagConstraints);
 
