@@ -45,7 +45,7 @@ public class ManageProject {
             File image = new File(projectDir, CoreConstants.FILE_IMAGE);
             image.createNewFile();
             ImageHelper.saveImage(ImageHelper.convertMatToBufferedImage(
-                    mainApp.getOperationsExecuter().getOperations().getSourceImage()), image);
+                    mainApp.getOperationsExecutor().getOperations().getSourceImage()), image);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -60,7 +60,7 @@ public class ManageProject {
         AppParameters.loadParameters(parameters);
         AppParameters.loadSettings(settings);
         File image = new File(projectDir, CoreConstants.FILE_IMAGE);
-        mainApp.getOperationsExecuter().getOperations().setSourceImage(
+        mainApp.getOperationsExecutor().getOperations().setSourceImage(
                 ImageHelper.convertBufferedImageToMat(ImageHelper.loadImage(image)));
     }
 

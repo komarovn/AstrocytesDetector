@@ -18,7 +18,7 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes.application;
+package com.astrocytes.application.widgets.message;
 
 import javax.swing.*;
 import java.awt.*;

@@ -20,11 +20,11 @@
  */
 package com.astrocytes.application.dialogs.javafx;
 
+import com.astrocytes.application.connector.StatisticsExecutor;
 import com.astrocytes.core.data.AppParameters;
 import com.astrocytes.core.data.ManageProject;
 import com.astrocytes.core.CoreConstants;
 import com.astrocytes.application.resources.StringResources;
-import com.astrocytes.core.statistics.LayerStatistics;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -39,7 +39,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class MenuController extends AbstractController {
 
@@ -220,8 +220,7 @@ public class MenuController extends AbstractController {
         exportDialog.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Spreadsheet (*.xls)", "*.xls"));
         File file = exportDialog.showSaveDialog(menuBar.getScene().getWindow());
         if (file != null) {
-            LayerStatistics layerStatistics = new LayerStatistics();
-            layerStatistics.saveLayerStatisticsToXls(mainApp.getOperationsExecuter().getOperations().getAstrocytesCenters(),
+            StatisticsExecutor.saveLayerStatisticsToXls(mainApp.getOperationsExecutor().getOperations().getAstrocytesCenters(),
                     mainApp.getGraphicalWidget().getHorizontalLines(), file);
         }
     }

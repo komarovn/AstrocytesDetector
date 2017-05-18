@@ -20,6 +20,8 @@
  */
 package com.astrocytes.application;
 
+import com.astrocytes.application.connector.OperationsExecutor;
+import com.astrocytes.application.widgets.message.WarningMessage;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.core.data.AppParameters;
 import com.astrocytes.application.dialogs.DialogCannyEdgeDetection;
@@ -53,7 +55,7 @@ public class App {
     private ToolbarController toolbarController;
     private StatusBarController statusBarController;
 
-    private OperationsExecuter operationsExecuter = new OperationsExecuter();
+    private OperationsExecutor operationsExecutor = new OperationsExecutor();
     protected BufferedImage image;
 
     public App() {
@@ -156,8 +158,8 @@ public class App {
         return graphicalWidget;
     }
 
-    public OperationsExecuter getOperationsExecuter() {
-        return operationsExecuter;
+    public OperationsExecutor getOperationsExecutor() {
+        return operationsExecutor;
     }
 
     @Deprecated
@@ -172,7 +174,7 @@ public class App {
         if (result == JFileChooser.APPROVE_OPTION) {
             File file = openFileDialog.getSelectedFile();
             BufferedImage bufferedImage = ImageHelper.loadImage(file);
-            operationsExecuter.setOriginalImage(bufferedImage);
+            operationsExecutor.setOriginalImage(bufferedImage);
             image = bufferedImage;
             updateWindowSize();
             updateCurrentView();
@@ -185,7 +187,7 @@ public class App {
         if (imagePath != null) {
             BufferedImage bufferedImage = ImageHelper.loadImage(imagePath);
             this.image = bufferedImage;
-            operationsExecuter.setOriginalImage(bufferedImage);
+            operationsExecutor.setOriginalImage(bufferedImage);
             updateWindowSize();
             updateCurrentView();
             updateGrahicalWidget();
@@ -202,7 +204,7 @@ public class App {
             int result = saveFileDialog.showSaveDialog(frame);
             if (result == JFileChooser.APPROVE_OPTION) {
                 File fileToSave = saveFileDialog.getSelectedFile();
-                BufferedImage bufferedImage = operationsExecuter.getCurrentImage();
+                BufferedImage bufferedImage = operationsExecutor.getCurrentImage();
                 ImageHelper.saveImage(bufferedImage, fileToSave);
             }
         }
@@ -216,7 +218,7 @@ public class App {
         if (image != null) {
             DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(this, graphicalWidget.getImage());
             if (dialog.isApplied()) {
-                image = operationsExecuter.applyCannyEdgeDetection(image);
+                image = operationsExecutor.applyCannyEdgeDetection(image);
                 updateCurrentView();
             }
         }
@@ -226,7 +228,7 @@ public class App {
         if (image != null) {
             DialogDilateErode dialog = new DialogDilateErode(this, graphicalWidget.getImage());
             if (dialog.isApplied()) {
-                image = operationsExecuter.applyDilateAndErode(image);
+                image = operationsExecutor.applyDilateAndErode(image);
                 updateCurrentView();
             }
         }
@@ -234,7 +236,7 @@ public class App {
 
     public void executeGrayscale() {
         if (image != null) {
-            image = operationsExecuter.applyGrayScale(image);
+            image = operationsExecutor.applyGrayScale(image);
             updateCurrentView();
         }
     }
@@ -243,7 +245,7 @@ public class App {
         if (image != null) {
             DialogFindAstrocytes dialog = new DialogFindAstrocytes(this, graphicalWidget.getImage());
             if (dialog.isApplied()) {
-                image = operationsExecuter.applyFindAstocytes(image);
+                image = operationsExecutor.applyFindAstocytes(image);
                 updateCurrentView();
                 menuController.setLayerStatisticsEnabled(true);
             }
@@ -255,10 +257,10 @@ public class App {
     }
 
     public void processLoadedProject() {
-        image = operationsExecuter.getCurrentImage();
-        image = operationsExecuter.applyCannyEdgeDetection(image);
-        image = operationsExecuter.applyDilateAndErode(image);
-        //image = operationsExecuter.applyFindAstocytes(image);
+        image = operationsExecutor.getCurrentImage();
+        image = operationsExecutor.applyCannyEdgeDetection(image);
+        image = operationsExecutor.applyDilateAndErode(image);
+        //image = operationsExecutor.applyFindAstocytes(image);
         menuController.setAvailability(false);
         graphicalWidget.destroy();
         updateWindowSize();

@@ -48,7 +48,7 @@ public class DialogFindAstrocytes extends AbstractDialog {
         this.owner = owner;
         preview.setImage(image);
         preview.setOriginalImage(ImageHelper.convertMatToBufferedImage(
-                owner.getOperationsExecuter().getOperations().getSourceImage()));
+                owner.getOperationsExecutor().getOperations().getSourceImage()));
         preview.processPreviewImage();
         state = InstrumentState.ZOOM_AND_PAN;
         setVisible(true);

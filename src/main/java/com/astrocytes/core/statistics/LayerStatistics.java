@@ -20,7 +20,7 @@
  */
 package com.astrocytes.core.statistics;
 
-import com.astrocytes.application.widgets.primitives.SimpleLine;
+import com.astrocytes.core.primitives.Line;
 import com.astrocytes.core.primitives.Point;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -36,14 +36,14 @@ import java.util.Map;
 public class LayerStatistics {
     private Map<Integer, Integer> quantityInHorizontalLayers = new HashMap<Integer, Integer>();
 
-    private void countAstrocytesByLayers(List<Point> astrocyteCenters, List<SimpleLine> layers) {
+    private void countAstrocytesByLayers(List<Point> astrocyteCenters, List<Line> layers) {
         for (int i = 0; i < layers.size() + 1; i++) {
             quantityInHorizontalLayers.put(i, 0);
         }
 
         for (Point center : astrocyteCenters) {
             int numberOfLayer = 0;
-            for (SimpleLine layer : layers) {
+            for (Line layer : layers) {
                 if (layer.getyEnd() > center.getY()) {
                     break;
                 }
@@ -53,7 +53,7 @@ public class LayerStatistics {
         }
     }
 
-    public boolean saveLayerStatisticsToXls(List<Point> astrocyteCenters, List<SimpleLine> layers, File fileToSave) {
+    public boolean saveLayerStatisticsToXls(List<Point> astrocyteCenters, List<Line> layers, File fileToSave) {
         countAstrocytesByLayers(astrocyteCenters, layers);
         try {
             FileOutputStream outputStream = new FileOutputStream(fileToSave);

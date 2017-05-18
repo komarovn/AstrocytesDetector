@@ -18,7 +18,7 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes.application;
+package com.astrocytes.application.connector;
 
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.core.data.AppParameters;
@@ -29,7 +29,7 @@ import org.opencv.core.Mat;
 
 import java.awt.image.BufferedImage;
 
-public class OperationsExecuter {
+public class OperationsExecutor {
     private Operations operations = new OperationsImpl();
 
     public void setOriginalImage(BufferedImage in) {
