@@ -20,8 +20,7 @@
  */
 package com.astrocytes.application.dialogs.javafx;
 
-import com.astrocytes.core.data.AppParameters;
-import com.astrocytes.core.CoreConstants;
+import com.astrocytes.core.data.DataProvider;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -34,6 +33,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class StatusBarController extends AbstractController {
+    private DataProvider dataProvider = new DataProvider();
 
     @FXML
     private Pane statusBar;
@@ -74,7 +74,7 @@ public class StatusBarController extends AbstractController {
     }
 
     private void setScaleBarValue() {
-        int scaleCoeff = Integer.parseInt(((String) AppParameters.getParameter(CoreConstants.SCALE))) * 2;
+        int scaleCoeff = dataProvider.getScale() * 2;
         scaleBar.setPrefWidth((int) (mainApp.getGraphicalWidget().getZoomScale() * scaleCoeff));
         scaleBarLabel.setText(mainApp.getGraphicalWidget().getZoomScale() * scaleCoeff + " μm");
     }

@@ -24,7 +24,7 @@ import com.astrocytes.application.connector.OperationsExecutor;
 import com.astrocytes.application.resources.ApplicationConstants;
 import com.astrocytes.application.widgets.message.WarningMessage;
 import com.astrocytes.core.ImageHelper;
-import com.astrocytes.core.data.AppParameters;
+import com.astrocytes.core.data.Data;
 import com.astrocytes.application.dialogs.DialogCannyEdgeDetection;
 import com.astrocytes.application.dialogs.DialogDilateErode;
 import com.astrocytes.application.dialogs.DialogFindAstrocytes;
@@ -35,6 +35,7 @@ import com.astrocytes.application.dialogs.javafx.ToolbarController;
 import com.astrocytes.core.CoreConstants;
 import com.astrocytes.application.resources.StringResources;
 import com.astrocytes.application.widgets.ImageEditor;
+import com.astrocytes.core.data.DataProvider;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
@@ -56,6 +57,7 @@ public class App {
     private ToolbarController toolbarController;
     private StatusBarController statusBarController;
 
+    private DataProvider dataProvider = new DataProvider();
     private OperationsExecutor operationsExecutor = new OperationsExecutor();
     protected BufferedImage image;
 
@@ -71,8 +73,8 @@ public class App {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(new Dimension(Integer.parseInt(ApplicationConstants.DEFAULT_WINDOW_WIDTH),
-                Integer.parseInt(ApplicationConstants.DEFAULT_WINDOW_HEIGHT)));
+        frame.setSize(new Dimension(ApplicationConstants.DEFAULT_WINDOW_WIDTH,
+                ApplicationConstants.DEFAULT_WINDOW_HEIGHT));
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -105,8 +107,8 @@ public class App {
         statusBarController = (StatusBarController) SwingJavaFXHelper.initFX(statusBar, getClass().getResource("/fxml/StatusBar.fxml"));
         statusBarController.setMainApp(this);
 
-        AppParameters.setSetting(CoreConstants.WINDOW_WIDTH, ApplicationConstants.DEFAULT_WINDOW_WIDTH);
-        AppParameters.setSetting(CoreConstants.WINDOW_HEIGHT, ApplicationConstants.DEFAULT_WINDOW_HEIGHT);
+        dataProvider.setWindowWidth(ApplicationConstants.DEFAULT_WINDOW_WIDTH);
+        dataProvider.setWindowHeight(ApplicationConstants.DEFAULT_WINDOW_HEIGHT);
     }
 
     private void addResizeListener() {
@@ -115,8 +117,8 @@ public class App {
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
                 updateGrahicalWidget();
-                AppParameters.setSetting(CoreConstants.WINDOW_WIDTH, String.valueOf((int) frame.getSize().getWidth()));
-                AppParameters.setSetting(CoreConstants.WINDOW_HEIGHT, String.valueOf((int) frame.getSize().getHeight()));
+                dataProvider.setWindowWidth((int) frame.getSize().getWidth());
+                dataProvider.setWindowHeight((int) frame.getSize().getHeight());
             }
         });
     }
@@ -133,8 +135,7 @@ public class App {
     }
 
     private void updateWindowSize() {
-        frame.setSize(new Dimension(Integer.parseInt((String) AppParameters.getSetting(CoreConstants.WINDOW_WIDTH)),
-                Integer.parseInt((String) AppParameters.getSetting(CoreConstants.WINDOW_HEIGHT))));
+        frame.setSize(new Dimension(dataProvider.getWindowWidth(), dataProvider.getWindowHeight()));
         frame.repaint();
     }
 
@@ -171,6 +172,10 @@ public class App {
         return operationsExecutor;
     }
 
+    public DataProvider getDataProvider() {
+        return dataProvider;
+    }
+
     @Deprecated
     public void executeCreateNewProject() {
         final NativeJFileChooser openFileDialog = new NativeJFileChooser();
@@ -201,6 +206,7 @@ public class App {
             BufferedImage bufferedImage = ImageHelper.loadImage(imagePath);
             this.image = bufferedImage;
             operationsExecutor.setOriginalImage(bufferedImage);
+            dataProvider.setWorkingImage(operationsExecutor.getOriginalImage());
             updateWindowSize();
             updateCurrentView();
             updateGrahicalWidget();

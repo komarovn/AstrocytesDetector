@@ -18,45 +18,39 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes.core.data;
+package com.astrocytes.core.manage;
 
-import com.astrocytes.application.App;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.core.CoreConstants;
+import com.astrocytes.core.data.DataProvider;
 
 import java.io.File;
 import java.io.IOException;
 
 public class ProjectManager {
-    private App mainApp;
-
-    public ProjectManager(App mainApp) {
-        this.mainApp = mainApp;
-    }
+    private DataProvider dataProvider = new DataProvider();
+    private ProjectBuilder projectBuilder = new ProjectBuilder();
 
     public void saveProject(File projectDir) throws IOException {
         File settings = new File(projectDir, CoreConstants.FILE_SETTINGS);
         settings.createNewFile();
         File parameters = new File(projectDir, CoreConstants.FILE_PARAMETERS);
         parameters.createNewFile();
-        AppParameters.saveParameters(parameters);
-        AppParameters.saveSettings(settings);
+        projectBuilder.saveParameters(parameters);
+        projectBuilder.saveSettings(settings);
         File image = new File(projectDir, CoreConstants.FILE_IMAGE);
         image.createNewFile();
-        ImageHelper.saveImage(ImageHelper.convertMatToBufferedImage(
-                mainApp.getOperationsExecutor().getOperations().getSourceImage()), image);
+        ImageHelper.saveImage(dataProvider.getWorkingImage(), image);
     }
 
     public void loadProject(File projectDir) {
-        AppParameters.destroyParameters();
-        AppParameters.destroySettings();
+        dataProvider.destroyAllData();
         File settings = new File(projectDir, CoreConstants.FILE_SETTINGS);
         File parameters = new File(projectDir, CoreConstants.FILE_PARAMETERS);
-        AppParameters.loadParameters(parameters);
-        AppParameters.loadSettings(settings);
+        projectBuilder.loadParameters(parameters);
+        projectBuilder.loadSettings(settings);
         File image = new File(projectDir, CoreConstants.FILE_IMAGE);
-        mainApp.getOperationsExecutor().getOperations().setSourceImage(
-                ImageHelper.convertBufferedImageToMat(ImageHelper.loadImage(image)));
+        dataProvider.setWorkingImage(ImageHelper.loadImage(image));
     }
 
 }

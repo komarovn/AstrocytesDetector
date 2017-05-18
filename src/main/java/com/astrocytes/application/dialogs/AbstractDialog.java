@@ -21,6 +21,7 @@
 package com.astrocytes.application.dialogs;
 
 import com.astrocytes.application.resources.StringResources;
+import com.astrocytes.core.data.DataProvider;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,6 +31,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class AbstractDialog extends JDialog {
+    protected DataProvider dataProvider = new DataProvider();
     private Boolean applied = false; // ok (true) or reset (false) button was pressed
 
     public AbstractDialog(JFrame owner, String title) {

@@ -21,9 +21,7 @@
 package com.astrocytes.application.dialogs.javafx;
 
 import com.astrocytes.application.connector.StatisticsExecutor;
-import com.astrocytes.core.data.AppParameters;
-import com.astrocytes.core.data.ProjectManager;
-import com.astrocytes.core.CoreConstants;
+import com.astrocytes.core.manage.ProjectManager;
 import com.astrocytes.application.resources.StringResources;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -42,6 +40,7 @@ import java.net.URL;
 import java.util.*;
 
 public class MenuController extends AbstractController {
+    private ProjectManager manager = new ProjectManager();
 
     @FXML
     private javafx.scene.control.MenuBar menuBar;
@@ -191,10 +190,9 @@ public class MenuController extends AbstractController {
     }
 
     private void saveProject(File selectedDirectory) {
-        File projectDir = new File(selectedDirectory, (String) AppParameters.getSetting(CoreConstants.PROJECT_NAME));
+        File projectDir = new File(selectedDirectory, mainApp.getDataProvider().getProjectName());
         projectDir.mkdir();
-        AppParameters.setSetting(CoreConstants.PROJECT_DIR, projectDir);
-        ProjectManager manager = new ProjectManager(mainApp);
+        mainApp.getDataProvider().setProjectDirectory(projectDir.getPath());;
         try {
             manager.saveProject(projectDir);
         } catch (IOException e) {
@@ -207,7 +205,6 @@ public class MenuController extends AbstractController {
         saveProjectDialog.setTitle(StringResources.OPEN_PROJECT);
         File selectedDirectory = saveProjectDialog.showDialog(menuBar.getScene().getWindow());
         if (selectedDirectory != null) {
-            ProjectManager manager = new ProjectManager(mainApp);
             manager.loadProject(selectedDirectory);
             SwingUtilities.invokeLater(new Runnable() {
                 @Override

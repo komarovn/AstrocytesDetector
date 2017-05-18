@@ -20,8 +20,6 @@
  */
 package com.astrocytes.application.dialogs.javafx;
 
-import com.astrocytes.core.data.AppParameters;
-import com.astrocytes.core.CoreConstants;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -71,8 +69,8 @@ public class CreateNewProjectController extends AbstractController {
         createProjectButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                AppParameters.setSetting(CoreConstants.PROJECT_NAME, projectName.getText());
-                AppParameters.setParameter(CoreConstants.SCALE, scale.getText());
+                mainApp.getDataProvider().setProjectName(projectName.getText());
+                mainApp.getDataProvider().setScale(Integer.valueOf(scale.getText()));
                 EventQueue.invokeLater(new Runnable() {
                     @Override
                     public void run() {

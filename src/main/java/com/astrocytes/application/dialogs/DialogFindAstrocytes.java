@@ -23,8 +23,6 @@ package com.astrocytes.application.dialogs;
 import com.astrocytes.application.App;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.application.widgets.InstrumentState;
-import com.astrocytes.core.data.AppParameters;
-import com.astrocytes.core.CoreConstants;
 import com.astrocytes.application.resources.StringResources;
 import com.astrocytes.application.widgets.PreviewImageEditor;
 import com.astrocytes.application.widgets.primitives.SimpleRectangle;
@@ -128,14 +126,10 @@ public class DialogFindAstrocytes extends AbstractDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (boundingRectangle.isFull()) {
-                    AppParameters.setParameter(CoreConstants.BOUNDING_RECTANGLE_WIDTH,
-                            String.valueOf(boundingRectangle.getWidth()));
-                    AppParameters.setParameter(CoreConstants.BOUNDING_RECTANGLE_HEIGHT,
-                            String.valueOf(boundingRectangle.getHeight()));
-                    AppParameters.setParameter(CoreConstants.BOUNDING_RECTANGLE_CENTER_X,
-                            String.valueOf(boundingRectangle.getCenterX()  + preview.getOffsetX()));
-                    AppParameters.setParameter(CoreConstants.BOUNDING_RECTANGLE_CENTER_Y,
-                            String.valueOf(boundingRectangle.getCenterY() + preview.getOffsetY()));
+                    dataProvider.setBoundingRectangleWidth(boundingRectangle.getWidth());
+                    dataProvider.setBoundingRectangleHeight(boundingRectangle.getHeight());
+                    dataProvider.setBoundingRectangleCenterX(boundingRectangle.getCenterX() + preview.getOffsetX());
+                    dataProvider.setBoundingRectangleCenterY(boundingRectangle.getCenterY() + preview.getOffsetY());
                     setApplied(true);
                     setVisible(false);
                 }

@@ -25,8 +25,6 @@ import com.astrocytes.application.resources.ApplicationConstants;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.application.widgets.PreviewImageEditor;
 import com.astrocytes.core.OperationsImpl;
-import com.astrocytes.core.data.AppParameters;
-import com.astrocytes.core.CoreConstants;
 import com.astrocytes.application.resources.StringResources;
 import com.astrocytes.core.Operations;
 
@@ -84,8 +82,8 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
             minThresholdLabel = new JLabel(StringResources.MINIMUM_THRESHOLD);
             maxThresholdLabel =new JLabel(StringResources.MAXIMUM_THRESHOLD);
 
-            preview = new PreviewImageEditor(Integer.parseInt(ApplicationConstants.PREVIEW_WINDOW_WIDTH),
-                    Integer.parseInt(ApplicationConstants.PREVIEW_WINDOW_HEIGHT)) {
+            preview = new PreviewImageEditor(ApplicationConstants.PREVIEW_WINDOW_WIDTH,
+                    ApplicationConstants.PREVIEW_WINDOW_HEIGHT) {
                 @Override
                 public void processPreviewImage() {
                     processPreview();
@@ -159,8 +157,8 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
         proceedAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AppParameters.setParameter(CoreConstants.CANNY_MIN_THRESH, String.valueOf(getMinThresh()));
-                AppParameters.setParameter(CoreConstants.CANNY_MAX_THRESH, String.valueOf(getMaxThresh()));
+                dataProvider.setCannyMinThreshold(getMinThresh());
+                dataProvider.setCannyMaxThreshold(getMaxThresh());
                 setApplied(true);
                 setVisible(false);
             }

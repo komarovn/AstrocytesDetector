@@ -22,8 +22,7 @@ package com.astrocytes;
 
 import com.astrocytes.application.App;
 import com.astrocytes.application.connector.OperationsExecutor;
-import com.astrocytes.core.data.AppParameters;
-import com.astrocytes.core.CoreConstants;
+import com.astrocytes.core.data.DataProvider;
 import org.opencv.core.Core;
 
 import javax.imageio.ImageIO;
@@ -35,6 +34,7 @@ import java.io.IOException;
 
 public class FindAstrocytesTest {
     private OperationsExecutor operationsExecutor = new OperationsExecutor();
+    private DataProvider dataProvider = new DataProvider();
     private BufferedImage testImage;
 
     private void prepare() {
@@ -42,10 +42,10 @@ public class FindAstrocytesTest {
             BufferedImage bufferedImage = ImageIO.read(new File("D:\\Studying\\233x200.jpg"));
             operationsExecutor.setOriginalImage(bufferedImage);
             testImage = bufferedImage;
-            AppParameters.setParameter(CoreConstants.CANNY_MIN_THRESH, "26");
-            AppParameters.setParameter(CoreConstants.CANNY_MAX_THRESH, "58");
-            AppParameters.setParameter(CoreConstants.RADIUS_DIL_ER, "2");
-            AppParameters.setParameter(CoreConstants.SCALE, "50");
+            dataProvider.setCannyMinThreshold(26);
+            dataProvider.setCannyMaxThreshold(58);
+            dataProvider.setRadiusMathMorphology(2);
+            dataProvider.setScale(50);
         } catch (IOException e) {
             e.printStackTrace();
         }

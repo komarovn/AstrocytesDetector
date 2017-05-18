@@ -23,11 +23,9 @@ package com.astrocytes.application.dialogs;
 import com.astrocytes.application.App;
 import com.astrocytes.application.resources.ApplicationConstants;
 import com.astrocytes.core.ImageHelper;
-import com.astrocytes.core.CoreConstants;
 import com.astrocytes.application.resources.StringResources;
 import com.astrocytes.application.widgets.PreviewImageEditor;
 import com.astrocytes.core.OperationsImpl;
-import com.astrocytes.core.data.AppParameters;
 import com.astrocytes.core.Operations;
 
 import javax.swing.*;
@@ -73,8 +71,8 @@ public class DialogDilateErode extends AbstractDialog {
             radiusTextbox.setColumns(5);
             radiusSlider = new JSlider(1, 7, RADIUS_DEFAULT);
 
-            preview = new PreviewImageEditor(Integer.parseInt(ApplicationConstants.PREVIEW_WINDOW_WIDTH),
-                    Integer.parseInt(ApplicationConstants.PREVIEW_WINDOW_HEIGHT)) {
+            preview = new PreviewImageEditor(ApplicationConstants.PREVIEW_WINDOW_WIDTH,
+                    ApplicationConstants.PREVIEW_WINDOW_HEIGHT) {
                 @Override
                 public void processPreviewImage() {
                     processPreview();
@@ -124,7 +122,7 @@ public class DialogDilateErode extends AbstractDialog {
         proceedAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AppParameters.setParameter(CoreConstants.RADIUS_DIL_ER, String.valueOf(getInstrumentRadius()));
+                dataProvider.setRadiusMathMorphology(getInstrumentRadius());
                 setApplied(true);
                 setVisible(false);
             }

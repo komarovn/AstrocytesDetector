@@ -21,32 +21,36 @@
 package com.astrocytes.application.connector;
 
 import com.astrocytes.core.ImageHelper;
-import com.astrocytes.core.data.AppParameters;
-import com.astrocytes.core.CoreConstants;
 import com.astrocytes.core.OperationsImpl;
 import com.astrocytes.core.Operations;
+import com.astrocytes.core.data.DataProvider;
 import org.opencv.core.Mat;
 
 import java.awt.image.BufferedImage;
 
 public class OperationsExecutor {
     private Operations operations = new OperationsImpl();
+    private DataProvider dataProvider = new DataProvider();
 
     public void setOriginalImage(BufferedImage in) {
         Mat sourceImage = ImageHelper.convertBufferedImageToMat(in);
         operations.setSourceImage(sourceImage);
     }
 
+    public BufferedImage getOriginalImage() {
+        return ImageHelper.convertMatToBufferedImage(operations.getSourceImage());
+    }
+
     public BufferedImage applyCannyEdgeDetection(BufferedImage in) {
         operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(in),
-                Integer.parseInt((String) AppParameters.getParameter(CoreConstants.CANNY_MIN_THRESH)),
-                Integer.parseInt((String) AppParameters.getParameter(CoreConstants.CANNY_MAX_THRESH)));
+                dataProvider.getCannyMinThreshold(),
+                dataProvider.getCannyMaxThreshold());
         return ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
     }
 
     public BufferedImage applyDilateAndErode(BufferedImage in) {
         operations.applyMathMorphology(ImageHelper.convertBufferedImageToMat(in),
-                Integer.parseInt((String) AppParameters.getParameter(CoreConstants.RADIUS_DIL_ER)));
+                dataProvider.getRadiusMathMorphology());
         return ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
     }
 
@@ -57,10 +61,10 @@ public class OperationsExecutor {
 
     public BufferedImage applyFindAstocytes(BufferedImage in) {
         operations.findAstrocytes(ImageHelper.convertBufferedImageToMat(in),
-                Integer.parseInt((String) AppParameters.getParameter(CoreConstants.BOUNDING_RECTANGLE_WIDTH)),
-                Integer.parseInt((String) AppParameters.getParameter(CoreConstants.BOUNDING_RECTANGLE_HEIGHT)),
-                Integer.parseInt((String) AppParameters.getParameter(CoreConstants.BOUNDING_RECTANGLE_CENTER_X)),
-                Integer.parseInt((String) AppParameters.getParameter(CoreConstants.BOUNDING_RECTANGLE_CENTER_Y)));
+                dataProvider.getBoundingRectangleWidth(),
+                dataProvider.getBoundingRectangleHeight(),
+                dataProvider.getBoundingRectangleCenterX(),
+                dataProvider.getBoundingRectangleCenterY());
         return ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
     }
 
