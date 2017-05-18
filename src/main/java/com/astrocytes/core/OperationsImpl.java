@@ -20,7 +20,6 @@
  */
 package com.astrocytes.core;
 
-import com.astrocytes.shared.Operations;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;

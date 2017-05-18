@@ -24,7 +24,7 @@ import com.astrocytes.core.ImageHelper;
 import com.astrocytes.core.data.AppParameters;
 import com.astrocytes.core.CoreConstants;
 import com.astrocytes.core.OperationsImpl;
-import com.astrocytes.shared.Operations;
+import com.astrocytes.core.Operations;
 import org.opencv.core.Mat;
 
 import java.awt.image.BufferedImage;
@@ -50,13 +50,12 @@ public class OperationsExecutor {
         return ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
     }
 
-    public BufferedImage applyGrayScale(BufferedImage in) {
+    public BufferedImage applyGrayscale(BufferedImage in) {
         Mat converted = operations.convertGrayscale(ImageHelper.convertBufferedImageToMat(in));
         return ImageHelper.convertMatToBufferedImage(converted);
     }
 
     public BufferedImage applyFindAstocytes(BufferedImage in) {
-        //operations.drawAstrocyteCenters(ImageHelper.convertBufferedImageToMat(in));
         operations.findAstrocytes(ImageHelper.convertBufferedImageToMat(in),
                 Integer.parseInt((String) AppParameters.getParameter(CoreConstants.BOUNDING_RECTANGLE_WIDTH)),
                 Integer.parseInt((String) AppParameters.getParameter(CoreConstants.BOUNDING_RECTANGLE_HEIGHT)),

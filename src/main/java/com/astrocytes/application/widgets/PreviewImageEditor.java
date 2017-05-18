@@ -20,7 +20,7 @@
  */
 package com.astrocytes.application.widgets;
 
-import com.astrocytes.core.CoreConstants;
+import com.astrocytes.application.resources.ApplicationConstants;
 import com.astrocytes.application.widgets.primitives.SimpleRectangle;
 
 import javax.swing.*;
@@ -39,8 +39,8 @@ public abstract class PreviewImageEditor extends ImageEditor {
 
     public PreviewImageEditor(Integer width, Integer height) {
         super(width, height);
-        widthWidget = width == null ? Integer.parseInt(CoreConstants.PREVIEW_WINDOW_WIDTH) : width;
-        heightWidget = height == null ? Integer.parseInt(CoreConstants.PREVIEW_WINDOW_HEIGHT) : height;
+        widthWidget = width == null ? Integer.parseInt(ApplicationConstants.PREVIEW_WINDOW_WIDTH) : width;
+        heightWidget = height == null ? Integer.parseInt(ApplicationConstants.PREVIEW_WINDOW_HEIGHT) : height;
         updateWidget(width, height);
         setZoomEnabled(false);
         setBorder(BorderFactory.createLineBorder(Color.darkGray));

@@ -22,14 +22,14 @@ package com.astrocytes.application.dialogs;
 
 import com.astrocytes.application.App;
 import com.astrocytes.core.ImageHelper;
-import com.astrocytes.application.InstrumentState;
+import com.astrocytes.application.widgets.InstrumentState;
 import com.astrocytes.core.data.AppParameters;
 import com.astrocytes.core.CoreConstants;
 import com.astrocytes.application.resources.StringResources;
 import com.astrocytes.application.widgets.PreviewImageEditor;
 import com.astrocytes.application.widgets.primitives.SimpleRectangle;
 import com.astrocytes.core.OperationsImpl;
-import com.astrocytes.shared.Operations;
+import com.astrocytes.core.Operations;
 
 import javax.swing.*;
 import java.awt.*;

@@ -21,13 +21,14 @@
 package com.astrocytes.application.dialogs;
 
 import com.astrocytes.application.App;
+import com.astrocytes.application.resources.ApplicationConstants;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.application.widgets.PreviewImageEditor;
 import com.astrocytes.core.OperationsImpl;
 import com.astrocytes.core.data.AppParameters;
 import com.astrocytes.core.CoreConstants;
 import com.astrocytes.application.resources.StringResources;
-import com.astrocytes.shared.Operations;
+import com.astrocytes.core.Operations;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -40,6 +41,7 @@ import java.text.NumberFormat;
 public class DialogCannyEdgeDetection extends AbstractDialog {
     private final int MIN_THRESHOLD_DEFAULT = 40;
     private final int MAX_THRESHOLD_DEFAULT = 70;
+
     private JFormattedTextField minTextbox;
     private JFormattedTextField maxTextBox;
     private JSlider minThreshold;
@@ -82,8 +84,8 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
             minThresholdLabel = new JLabel(StringResources.MINIMUM_THRESHOLD);
             maxThresholdLabel =new JLabel(StringResources.MAXIMUM_THRESHOLD);
 
-            preview = new PreviewImageEditor(Integer.parseInt(CoreConstants.PREVIEW_WINDOW_WIDTH),
-                    Integer.parseInt(CoreConstants.PREVIEW_WINDOW_HEIGHT)) {
+            preview = new PreviewImageEditor(Integer.parseInt(ApplicationConstants.PREVIEW_WINDOW_WIDTH),
+                    Integer.parseInt(ApplicationConstants.PREVIEW_WINDOW_HEIGHT)) {
                 @Override
                 public void processPreviewImage() {
                     processPreview();

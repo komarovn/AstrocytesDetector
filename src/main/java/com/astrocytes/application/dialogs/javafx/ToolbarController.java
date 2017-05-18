@@ -20,7 +20,7 @@
  */
 package com.astrocytes.application.dialogs.javafx;
 
-import com.astrocytes.application.InstrumentState;
+import com.astrocytes.application.widgets.InstrumentState;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

@@ -20,10 +20,27 @@
  */
 package com.astrocytes.application;
 
-public enum InstrumentState {
-    POINTER,
-    ZOOM_AND_PAN,
-    RECTANGLE,
-    LINE_HORIZONTAL,
-    LINE_VERTICAL
+import org.opencv.core.Core;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class EntryPoint {
+
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored) { }
+    }
+
+    public static void main(String[] argv) {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                App app = new App();
+            }
+        });
+    }
+
 }

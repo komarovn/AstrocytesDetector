@@ -21,6 +21,7 @@
 package com.astrocytes.application;
 
 import com.astrocytes.application.connector.OperationsExecutor;
+import com.astrocytes.application.resources.ApplicationConstants;
 import com.astrocytes.application.widgets.message.WarningMessage;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.core.data.AppParameters;
@@ -58,6 +59,9 @@ public class App {
     private OperationsExecutor operationsExecutor = new OperationsExecutor();
     protected BufferedImage image;
 
+    /**
+     * Create and build an application form.
+     */
     public App() {
         mainPanel = new JPanel();
         frame.setLayout(new BorderLayout());
@@ -67,7 +71,8 @@ public class App {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(new Dimension(Integer.parseInt(CoreConstants.DEFAULT_WINDOW_WIDTH), Integer.parseInt(CoreConstants.DEFAULT_WINDOW_HEIGHT)));
+        frame.setSize(new Dimension(Integer.parseInt(ApplicationConstants.DEFAULT_WINDOW_WIDTH),
+                Integer.parseInt(ApplicationConstants.DEFAULT_WINDOW_HEIGHT)));
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -100,8 +105,8 @@ public class App {
         statusBarController = (StatusBarController) SwingJavaFXHelper.initFX(statusBar, getClass().getResource("/fxml/StatusBar.fxml"));
         statusBarController.setMainApp(this);
 
-        AppParameters.setSetting(CoreConstants.WINDOW_WIDTH, CoreConstants.DEFAULT_WINDOW_WIDTH);
-        AppParameters.setSetting(CoreConstants.WINDOW_HEIGHT, CoreConstants.DEFAULT_WINDOW_HEIGHT);
+        AppParameters.setSetting(CoreConstants.WINDOW_WIDTH, ApplicationConstants.DEFAULT_WINDOW_WIDTH);
+        AppParameters.setSetting(CoreConstants.WINDOW_HEIGHT, ApplicationConstants.DEFAULT_WINDOW_HEIGHT);
     }
 
     private void addResizeListener() {
@@ -154,6 +159,10 @@ public class App {
         return frame;
     }
 
+    /**
+     * Get an image editor which is presented in application form.
+     * @return an image editor.
+     */
     public ImageEditor getGraphicalWidget() {
         return graphicalWidget;
     }
@@ -183,6 +192,10 @@ public class App {
         }
     }
 
+    /**
+     * Process creation of a new project
+     * @param imagePath - path where loaded image is located
+     */
     public void executeCreateNewProject(File imagePath) {
         if (imagePath != null) {
             BufferedImage bufferedImage = ImageHelper.loadImage(imagePath);
@@ -195,6 +208,9 @@ public class App {
         }
     }
 
+    /**
+     * Process export of current work image which is displayed in image editor.
+     */
     public void executeExportImage() {
         if (image != null) {
             final NativeJFileChooser saveFileDialog = new NativeJFileChooser();
@@ -214,6 +230,9 @@ public class App {
         }
     }
 
+    /**
+     * Process Canny edge detection operation for the current work image.
+     */
     public void executeEdgeDetection() {
         if (image != null) {
             DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(this, graphicalWidget.getImage());
@@ -224,6 +243,9 @@ public class App {
         }
     }
 
+    /**
+     * Process operations of math morphology: dilation and erosion for the current work image.
+     */
     public void executeDilateErode() {
         if (image != null) {
             DialogDilateErode dialog = new DialogDilateErode(this, graphicalWidget.getImage());
@@ -234,13 +256,19 @@ public class App {
         }
     }
 
+    /**
+     * Process operation of grayscale for the current image.
+     */
     public void executeGrayscale() {
         if (image != null) {
-            image = operationsExecutor.applyGrayScale(image);
+            image = operationsExecutor.applyGrayscale(image);
             updateCurrentView();
         }
     }
 
+    /**
+     * Process find astrocytes operation for the current work image.
+     */
     public void executeFindAstrocytes() {
         if (image != null) {
             DialogFindAstrocytes dialog = new DialogFindAstrocytes(this, graphicalWidget.getImage());
@@ -252,10 +280,16 @@ public class App {
         }
     }
 
+    /**
+     * Process closing of the application form and exiting the program.
+     */
     public void executeExit() {
         frame.dispose();
     }
 
+    /**
+     * Process chain of operations for loaded project.
+     */
     public void processLoadedProject() {
         image = operationsExecutor.getCurrentImage();
         image = operationsExecutor.applyCannyEdgeDetection(image);

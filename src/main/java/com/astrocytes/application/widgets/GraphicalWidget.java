@@ -20,6 +20,7 @@
  */
 package com.astrocytes.application.widgets;
 
+import com.astrocytes.application.resources.ApplicationConstants;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.core.CoreConstants;
 
@@ -67,8 +68,8 @@ public class GraphicalWidget extends JPanel {
     public GraphicalWidget(Integer width, Integer height) {
         currentX = 0;
         currentY = 0;
-        widthWidget = width == null ? CoreConstants.DEFAULT_GRAPHICAL_WIDGET_WIDTH : width;
-        heightWidget = height == null ? CoreConstants.DEFAULT_GRAPHICAL_WIDGET_HEIGHT : height;
+        widthWidget = width == null ? ApplicationConstants.DEFAULT_GRAPHICAL_WIDGET_WIDTH : width;
+        heightWidget = height == null ? ApplicationConstants.DEFAULT_GRAPHICAL_WIDGET_HEIGHT : height;
         resetZoomScale();
         setSize(new Dimension(widthWidget, heightWidget));
         setPreferredSize(new Dimension(widthWidget, heightWidget));

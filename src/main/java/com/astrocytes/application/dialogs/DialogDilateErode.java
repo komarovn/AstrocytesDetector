@@ -21,13 +21,14 @@
 package com.astrocytes.application.dialogs;
 
 import com.astrocytes.application.App;
+import com.astrocytes.application.resources.ApplicationConstants;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.core.CoreConstants;
 import com.astrocytes.application.resources.StringResources;
 import com.astrocytes.application.widgets.PreviewImageEditor;
 import com.astrocytes.core.OperationsImpl;
 import com.astrocytes.core.data.AppParameters;
-import com.astrocytes.shared.Operations;
+import com.astrocytes.core.Operations;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -40,6 +41,7 @@ import java.text.NumberFormat;
 
 public class DialogDilateErode extends AbstractDialog {
     private final int RADIUS_DEFAULT = 2;
+
     private JSlider radiusSlider;
     private PreviewImageEditor preview;
 
@@ -71,7 +73,8 @@ public class DialogDilateErode extends AbstractDialog {
             radiusTextbox.setColumns(5);
             radiusSlider = new JSlider(1, 7, RADIUS_DEFAULT);
 
-            preview = new PreviewImageEditor(Integer.parseInt(CoreConstants.PREVIEW_WINDOW_WIDTH), Integer.parseInt(CoreConstants.PREVIEW_WINDOW_HEIGHT)) {
+            preview = new PreviewImageEditor(Integer.parseInt(ApplicationConstants.PREVIEW_WINDOW_WIDTH),
+                    Integer.parseInt(ApplicationConstants.PREVIEW_WINDOW_HEIGHT)) {
                 @Override
                 public void processPreviewImage() {
                     processPreview();
@@ -128,14 +131,14 @@ public class DialogDilateErode extends AbstractDialog {
         };
     }
 
-    public int getInstrumentRadius() {
+    private int getInstrumentRadius() {
         return radiusSlider.getValue();
     }
 
     private void processPreview() {
         BufferedImage currentView = preview.getCurrentView();
         Operations operations = new OperationsImpl();
-        operations.applyMathMorphology(ImageHelper.convertBufferedImageToMat(currentView), radiusSlider.getValue());
+        operations.applyMathMorphology(ImageHelper.convertBufferedImageToMat(currentView), getInstrumentRadius());
         BufferedImage newCurrentView = ImageHelper.convertMatToBufferedImage(operations.getOutputImage()) ;
         preview.updatePreview(newCurrentView);
     }

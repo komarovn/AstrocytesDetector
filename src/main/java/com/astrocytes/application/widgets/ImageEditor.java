@@ -20,7 +20,6 @@
  */
 package com.astrocytes.application.widgets;
 
-import com.astrocytes.application.InstrumentState;
 import com.astrocytes.application.widgets.primitives.DrawingLine;
 import com.astrocytes.application.widgets.primitives.SimpleLine;
 import com.astrocytes.application.widgets.primitives.SimpleRectangle;

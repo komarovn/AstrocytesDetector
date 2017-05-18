@@ -27,29 +27,24 @@ import com.astrocytes.core.CoreConstants;
 import java.io.File;
 import java.io.IOException;
 
-public class ManageProject {
+public class ProjectManager {
     private App mainApp;
 
-    public ManageProject(App mainApp) {
+    public ProjectManager(App mainApp) {
         this.mainApp = mainApp;
     }
 
-    public void saveProject(File projectDir) {
-        try {
-            File settings = new File(projectDir, CoreConstants.FILE_SETTINGS);
-            settings.createNewFile();
-            File parameters = new File(projectDir, CoreConstants.FILE_PARAMETERS);
-            parameters.createNewFile();
-            AppParameters.saveParameters(parameters);
-            AppParameters.saveSettings(settings);
-            File image = new File(projectDir, CoreConstants.FILE_IMAGE);
-            image.createNewFile();
-            ImageHelper.saveImage(ImageHelper.convertMatToBufferedImage(
-                    mainApp.getOperationsExecutor().getOperations().getSourceImage()), image);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void saveProject(File projectDir) throws IOException {
+        File settings = new File(projectDir, CoreConstants.FILE_SETTINGS);
+        settings.createNewFile();
+        File parameters = new File(projectDir, CoreConstants.FILE_PARAMETERS);
+        parameters.createNewFile();
+        AppParameters.saveParameters(parameters);
+        AppParameters.saveSettings(settings);
+        File image = new File(projectDir, CoreConstants.FILE_IMAGE);
+        image.createNewFile();
+        ImageHelper.saveImage(ImageHelper.convertMatToBufferedImage(
+                mainApp.getOperationsExecutor().getOperations().getSourceImage()), image);
     }
 
     public void loadProject(File projectDir) {

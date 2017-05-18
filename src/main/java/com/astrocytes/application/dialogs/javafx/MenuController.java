@@ -22,7 +22,7 @@ package com.astrocytes.application.dialogs.javafx;
 
 import com.astrocytes.application.connector.StatisticsExecutor;
 import com.astrocytes.core.data.AppParameters;
-import com.astrocytes.core.data.ManageProject;
+import com.astrocytes.core.data.ProjectManager;
 import com.astrocytes.core.CoreConstants;
 import com.astrocytes.application.resources.StringResources;
 import javafx.event.ActionEvent;
@@ -194,8 +194,12 @@ public class MenuController extends AbstractController {
         File projectDir = new File(selectedDirectory, (String) AppParameters.getSetting(CoreConstants.PROJECT_NAME));
         projectDir.mkdir();
         AppParameters.setSetting(CoreConstants.PROJECT_DIR, projectDir);
-        ManageProject manager = new ManageProject(mainApp);
-        manager.saveProject(projectDir);
+        ProjectManager manager = new ProjectManager(mainApp);
+        try {
+            manager.saveProject(projectDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadProjectAction() {
@@ -203,7 +207,7 @@ public class MenuController extends AbstractController {
         saveProjectDialog.setTitle(StringResources.OPEN_PROJECT);
         File selectedDirectory = saveProjectDialog.showDialog(menuBar.getScene().getWindow());
         if (selectedDirectory != null) {
-            ManageProject manager = new ManageProject(mainApp);
+            ProjectManager manager = new ProjectManager(mainApp);
             manager.loadProject(selectedDirectory);
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
