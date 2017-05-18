@@ -297,7 +297,8 @@ public class App {
      * Process chain of operations for loaded project.
      */
     public void processLoadedProject() {
-        image = operationsExecutor.getCurrentImage();
+        operationsExecutor.setOriginalImage(dataProvider.getWorkingImage());
+        image = dataProvider.getWorkingImage();
         image = operationsExecutor.applyCannyEdgeDetection(image);
         image = operationsExecutor.applyDilateAndErode(image);
         //image = operationsExecutor.applyFindAstocytes(image);

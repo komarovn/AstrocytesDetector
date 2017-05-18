@@ -195,7 +195,44 @@ public class ProjectBuilder {
             NodeList root = document.getElementsByTagName(paramName);
             for (int i = 0; i < root.getLength(); i++) {
                 Node node = root.item(i);
-                //data.put(node.getAttributes().item(0).getNodeValue(), node.getTextContent());
+                switch (node.getAttributes().item(0).getNodeValue()) {
+                    case CoreConstants.SCALE:
+                        dataProvider.setScale(Integer.valueOf(node.getTextContent()));
+                        break;
+                    case CoreConstants.CANNY_MIN_THRESH:
+                        dataProvider.setCannyMinThreshold(Integer.valueOf(node.getTextContent()));
+                        break;
+                    case CoreConstants.CANNY_MAX_THRESH:
+                        dataProvider.setCannyMaxThreshold(Integer.valueOf(node.getTextContent()));
+                        break;
+                    case CoreConstants.RADIUS_DIL_ER:
+                        dataProvider.setRadiusMathMorphology(Integer.valueOf(node.getTextContent()));
+                        break;
+                    case CoreConstants.BOUNDING_RECTANGLE_HEIGHT:
+                        dataProvider.setBoundingRectangleHeight(Integer.valueOf(node.getTextContent()));
+                        break;
+                    case CoreConstants.BOUNDING_RECTANGLE_WIDTH:
+                        dataProvider.setBoundingRectangleWidth(Integer.valueOf(node.getTextContent()));
+                        break;
+                    case CoreConstants.BOUNDING_RECTANGLE_CENTER_X:
+                        dataProvider.setBoundingRectangleCenterX(Integer.valueOf(node.getTextContent()));
+                        break;
+                    case CoreConstants.BOUNDING_RECTANGLE_CENTER_Y:
+                        dataProvider.setBoundingRectangleCenterY(Integer.valueOf(node.getTextContent()));
+                        break;
+                    case CoreConstants.PROJECT_DIR:
+                        dataProvider.setProjectDirectory(node.getTextContent());
+                        break;
+                    case CoreConstants.PROJECT_NAME:
+                        dataProvider.setProjectName(node.getTextContent());
+                        break;
+                    case CoreConstants.WINDOW_WIDTH:
+                        dataProvider.setWindowWidth(Integer.valueOf(node.getTextContent()));
+                        break;
+                    case CoreConstants.WINDOW_HEIGHT:
+                        dataProvider.setWindowHeight(Integer.valueOf(node.getTextContent()));
+                        break;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
