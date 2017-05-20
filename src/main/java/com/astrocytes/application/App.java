@@ -24,7 +24,6 @@ import com.astrocytes.application.connector.OperationsExecutor;
 import com.astrocytes.application.resources.ApplicationConstants;
 import com.astrocytes.application.widgets.message.WarningMessage;
 import com.astrocytes.core.ImageHelper;
-import com.astrocytes.core.data.Data;
 import com.astrocytes.application.dialogs.DialogCannyEdgeDetection;
 import com.astrocytes.application.dialogs.DialogDilateErode;
 import com.astrocytes.application.dialogs.DialogFindAstrocytes;
@@ -32,7 +31,6 @@ import com.astrocytes.application.dialogs.NativeJFileChooser;
 import com.astrocytes.application.dialogs.javafx.MenuController;
 import com.astrocytes.application.dialogs.javafx.StatusBarController;
 import com.astrocytes.application.dialogs.javafx.ToolbarController;
-import com.astrocytes.core.CoreConstants;
 import com.astrocytes.application.resources.StringResources;
 import com.astrocytes.application.widgets.ImageEditor;
 import com.astrocytes.core.data.DataProvider;
@@ -297,10 +295,11 @@ public class App {
      * Process chain of operations for loaded project.
      */
     public void processLoadedProject() {
+        operationsExecutor = new OperationsExecutor();
         operationsExecutor.setOriginalImage(dataProvider.getWorkingImage());
-        image = dataProvider.getWorkingImage();
+        image = operationsExecutor.getCurrentImage();
         image = operationsExecutor.applyCannyEdgeDetection(image);
-        image = operationsExecutor.applyDilateAndErode(image);
+        //image = operationsExecutor.applyDilateAndErode(image);
         //image = operationsExecutor.applyFindAstocytes(image);
         menuController.setAvailability(false);
         graphicalWidget.destroy();

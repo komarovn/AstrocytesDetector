@@ -23,6 +23,8 @@ package com.astrocytes.core.manage;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.core.CoreConstants;
 import com.astrocytes.core.data.DataProvider;
+import com.astrocytes.core.exception.LoadProjectException;
+import com.astrocytes.core.exception.SaveProjectException;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +33,7 @@ public class ProjectManager {
     private DataProvider dataProvider = new DataProvider();
     private ProjectBuilder projectBuilder = new ProjectBuilder();
 
-    public void saveProject(File projectDir) throws IOException {
+    public void saveProject(File projectDir) throws IOException, SaveProjectException {
         File settings = new File(projectDir, CoreConstants.FILE_SETTINGS);
         settings.createNewFile();
         File parameters = new File(projectDir, CoreConstants.FILE_PARAMETERS);
@@ -43,7 +45,7 @@ public class ProjectManager {
         ImageHelper.saveImage(dataProvider.getWorkingImage(), image);
     }
 
-    public void loadProject(File projectDir) {
+    public void loadProject(File projectDir) throws LoadProjectException {
         dataProvider.destroyAllData();
         File settings = new File(projectDir, CoreConstants.FILE_SETTINGS);
         File parameters = new File(projectDir, CoreConstants.FILE_PARAMETERS);

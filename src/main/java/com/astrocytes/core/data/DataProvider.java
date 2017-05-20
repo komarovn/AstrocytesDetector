@@ -83,7 +83,7 @@ public class DataProvider {
     }
 
     public void setCannyMaxThreshold(Integer maxThreshold) {
-        Data.setParameter(CoreConstants.CANNY_MIN_THRESH, maxThreshold);
+        Data.setParameter(CoreConstants.CANNY_MAX_THRESH, maxThreshold);
     }
 
     public Integer getCannyMaxThreshold() {

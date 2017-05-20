@@ -21,20 +21,11 @@
 package com.astrocytes.core.data;
 
 import com.sun.istack.internal.NotNull;
-import org.w3c.dom.*;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.HashMap;
-import java.util.Map;
 
-public class Data {
+class Data {
 
     /**
      * settings   - storage of system setting (e.g. window size)

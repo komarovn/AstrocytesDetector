@@ -21,6 +21,8 @@
 package com.astrocytes.application.dialogs.javafx;
 
 import com.astrocytes.application.connector.StatisticsExecutor;
+import com.astrocytes.core.exception.LoadProjectException;
+import com.astrocytes.core.exception.SaveProjectException;
 import com.astrocytes.core.manage.ProjectManager;
 import com.astrocytes.application.resources.StringResources;
 import javafx.event.ActionEvent;
@@ -195,23 +197,27 @@ public class MenuController extends AbstractController {
         mainApp.getDataProvider().setProjectDirectory(projectDir.getPath());;
         try {
             manager.saveProject(projectDir);
-        } catch (IOException e) {
+        } catch (IOException|SaveProjectException e) {
             e.printStackTrace();
         }
     }
 
     private void loadProjectAction() {
-        DirectoryChooser saveProjectDialog = new DirectoryChooser();
-        saveProjectDialog.setTitle(StringResources.OPEN_PROJECT);
-        File selectedDirectory = saveProjectDialog.showDialog(menuBar.getScene().getWindow());
-        if (selectedDirectory != null) {
-            manager.loadProject(selectedDirectory);
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    mainApp.processLoadedProject();
-                }
-            });
+        try {
+            DirectoryChooser saveProjectDialog = new DirectoryChooser();
+            saveProjectDialog.setTitle(StringResources.OPEN_PROJECT);
+            File selectedDirectory = saveProjectDialog.showDialog(menuBar.getScene().getWindow());
+            if (selectedDirectory != null) {
+                manager.loadProject(selectedDirectory);
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        mainApp.processLoadedProject();
+                    }
+                });
+            }
+        } catch (LoadProjectException ex) {
+            ex.printStackTrace();
         }
     }
 

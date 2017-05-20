@@ -22,6 +22,8 @@ package com.astrocytes.core.manage;
 
 import com.astrocytes.core.CoreConstants;
 import com.astrocytes.core.data.DataProvider;
+import com.astrocytes.core.exception.LoadProjectException;
+import com.astrocytes.core.exception.SaveProjectException;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -38,23 +40,23 @@ public class ProjectBuilder {
 
     private DataProvider dataProvider = new DataProvider();
 
-    public void saveParameters(File file) {
+    public void saveParameters(File file) throws SaveProjectException {
         saveXML(file, PROJECT_PARAMS_TAG, "parameter");
     }
 
-    public void saveSettings(File file) {
+    public void saveSettings(File file) throws SaveProjectException {
         saveXML(file, APP_SETTINGS_TAG, "setting");
     }
 
-    public void loadParameters(File file) {
+    public void loadParameters(File file) throws LoadProjectException {
         loadXML(file, PROJECT_PARAMS_TAG, "parameter");
     }
 
-    public void loadSettings(File file) {
+    public void loadSettings(File file) throws LoadProjectException {
         loadXML(file, APP_SETTINGS_TAG, "setting");
     }
 
-    private void saveXML(File file, String rootName, String paramName) {
+    private void saveXML(File file, String rootName, String paramName) throws SaveProjectException {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
@@ -181,11 +183,11 @@ public class ProjectBuilder {
             StreamResult result = new StreamResult(file);
             transformer.transform(source, result);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new SaveProjectException(e);
         }
     }
 
-    private void loadXML(File file, String rootName, String paramName) {
+    private void loadXML(File file, String rootName, String paramName) throws LoadProjectException {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
@@ -235,7 +237,7 @@ public class ProjectBuilder {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new LoadProjectException(e);
         }
     }
 }
