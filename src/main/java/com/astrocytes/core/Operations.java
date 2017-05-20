@@ -25,42 +25,77 @@ import org.opencv.core.Mat;
 
 import java.util.List;
 
+/**
+ * Instruments of Operations Engine
+ */
 public interface Operations {
 
-    public void applyCannyEdgeDetection(Mat image, Integer minThreshold, Integer maxThreshold);
-
+    /**
+     * Set an original working image to Operations Engine.
+     * @param sourceImage - an original working image.
+     */
     public void setSourceImage(Mat sourceImage);
 
+    /**
+     * Get an original working image in Operations Engine.
+     * @return an original working image.
+     */
     public Mat getSourceImage();
 
+    /**
+     * Get current working image in Operations Engine.
+     * @return current working image.
+     */
     public Mat getOutputImage();
 
     /**
-     * Making dilation and erosion with contours after Canny method applying.
+     * Apply Canny edge detection algorythm for working image.
      *
-     * @param source - black and white image
+     * @param image - a working image for applying Canny edge detection
+     * @param minThreshold - minimal thresh
+     * @param maxThreshold - maximal thresh
+     */
+    public void applyCannyEdgeDetection(Mat image, Integer minThreshold, Integer maxThreshold);
+
+    /**
+     * Make closing operation (dilation and erosion) for contours after applying Canny edge detection operation.
+     *
+     * @param source - binary image after applying Canny edge detection operation
      * @param radius - radius of structuring element; must be > 0
      */
     public Mat applyMathMorphology(Mat source, Integer radius);
 
     /**
-     * Converting color image into gray image.
+     * Convert color image to grayscale image.
      *
-     * @param source - source color image
-     * @return grayscale image
+     * @param source - source color image.
+     * @return grayscale image of original one.
      */
     public Mat convertGrayscale(Mat source);
 
     /**
-     * @param source - source white-black image after Canny edge detection
-     * @return color image with contours
+     * Fill an array of astrocytes' centers which are placed on original working image.
+     * Steps of the algorythm:
+     *   1) find and parameterize all contours on working image after Canny edge detection operation;
+     *   2) check each contour area and delete all small contours;
+     *   3) check size and form of the bounding rectangle of each contour;
+     *   4) check circularity of the contour's form;
+     *   5) check average intensity within each contour.
+     *
+     * @param source - working image after applying Canny edge detection and math morphology operations
+     * @param widthRectangle - width of bounding rectangle
+     * @param heightRectangle - height of bounding rectangle
+     * @param centerX - x-coordinate of center of bounding rectangle by absolute value
+     * @param centerY - y-coordinate of center of bounding rectangle by absolute value
+     * @return original working image with colored astrocytes' centers.
      */
-    public void drawAstrocyteCenters(Mat source);
-
     public Mat findAstrocytes(Mat source, Integer widthRectangle, Integer heightRectangle, Integer centerX, Integer centerY);
 
-    public void drawLayerDelimiters(Mat source);
-
+    /**
+     * Get a list of all astrocytes' centers finded by <code>findAstrocytes</code> operation.
+     * @return a list of all astrocytes' centers or an empty list if <code>findAstrocytes</code> operation
+     *     wasn't been applyed.
+     */
     public List<Point> getAstrocytesCenters();
 
 }

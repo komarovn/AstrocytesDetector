@@ -31,30 +31,10 @@ import static java.lang.Math.PI;
 import static org.opencv.imgproc.Imgproc.*;
 
 public class OperationsImpl implements Operations {
-
     private Mat sourceImage = new Mat();
     private Mat outputImage;
 
     private List<Point> astrocytesCenters;
-
-    @Override
-    public void applyCannyEdgeDetection(Mat image, Integer minThreshold, Integer maxThreshold) {
-        if (minThreshold == null) {
-            minThreshold = 0;
-        }
-
-        if (maxThreshold == null) {
-            maxThreshold = 255;
-        }
-
-        Mat dest = convertGrayscale(image);
-        Mat copy = new Mat(dest.rows(), dest.cols(), dest.type());
-
-        GaussianBlur(dest, copy, new Size(9, 9), 1.4, 1.4);
-        Canny(copy, dest, minThreshold, maxThreshold, 3, true);
-
-        dest.copyTo(getOutputImage());
-    }
 
     @Override
     public void setSourceImage(Mat sourceImage) {
@@ -73,6 +53,25 @@ public class OperationsImpl implements Operations {
             sourceImage.copyTo(outputImage);
         }
         return outputImage;
+    }
+
+    @Override
+    public void applyCannyEdgeDetection(Mat image, Integer minThreshold, Integer maxThreshold) {
+        if (minThreshold == null) {
+            minThreshold = 0;
+        }
+
+        if (maxThreshold == null) {
+            maxThreshold = 255;
+        }
+
+        Mat dest = convertGrayscale(image);
+        Mat copy = new Mat(dest.rows(), dest.cols(), dest.type());
+
+        GaussianBlur(dest, copy, new Size(9, 9), 1.4, 1.4);
+        Canny(copy, dest, minThreshold, maxThreshold, 3, true);
+
+        dest.copyTo(getOutputImage());
     }
 
     @Override
@@ -107,43 +106,17 @@ public class OperationsImpl implements Operations {
                 (widthRectangle + heightRectangle) / 2,
                 widthRectangle * heightRectangle * PI / 4,
                 calculateIntensity(sourceImage, centerX, centerY));
-        drawAstrocyteCenters(source);
+        drawAstrocyteCenters();
         //Imgproc.circle(getOutputImage(), new Point(centerX, centerY), 3, new Scalar(3, 108, 240));
         return getOutputImage();
     }
 
-    @Override
-    public void drawAstrocyteCenters(Mat source) {
-        if (astrocytesCenters == null) {
-            return;
-        }
-        Mat dest = sourceImage.clone();
-        for (Point center : astrocytesCenters) {
-            Imgproc.circle(dest, center, 3, new Scalar(108, 240, 3));
-        }
-        dest.copyTo(getOutputImage());
-    }
-
-    /**
-     * Fill array of astrocytes' centers placed on original image.
-     * Steps of the algorythm:
-     *   1) finding and parameterizing all contours on imege after Canny edge detection;
-     *   2) checking contour area;
-     *   3) checking size and form of the bounding rectangle;
-     *   4) checking for circularity;
-     *   5) checking for average intensity within contour.
-     *
-     * @param source          - image after applying Canny edge detection and morphology operations
-     * @param averageRectSize - average size of bounding rectangle
-     * @param averageArea     - average area of astrocyte
-     * @param intensity       - the value of intensity of the astrocyte center's color
-     */
     private void detectAstrocytes(Mat source, Integer averageRectSize, Double averageArea, int intensity) {
         if (source.channels() == 3) {
             return;
         }
-        astrocytesCenters = new ArrayList<>();
 
+        astrocytesCenters = new ArrayList<>();
         List<MatOfPoint> contoursAfterFirstIteration = new ArrayList<>();
         Mat hierarchy = new Mat();
 
@@ -185,6 +158,20 @@ public class OperationsImpl implements Operations {
         }
     }
 
+    private void drawAstrocyteCenters() {
+        if (astrocytesCenters == null) {
+            return;
+        }
+
+        Mat dest = sourceImage.clone();
+
+        for (Point center : astrocytesCenters) {
+            Imgproc.circle(dest, center, 3, new Scalar(108, 240, 3));
+        }
+
+        dest.copyTo(getOutputImage());
+    }
+
     private int calculateIntensity(Mat image, int x, int y) {
         double[] pixel = image.get(y, x);
 
@@ -197,11 +184,6 @@ public class OperationsImpl implements Operations {
         }
 
         return  (int) (0.11 * pixel[2] + 0.53 * pixel[1] + 0.36 * pixel[0]);
-    }
-
-    @Override
-    public void drawLayerDelimiters(Mat source) {
-
     }
 
     @Override
