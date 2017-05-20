@@ -24,6 +24,9 @@ import com.astrocytes.core.CoreConstants;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Gives an access to system's data storage via special methods.
+ */
 public class DataProvider {
 
     public void setWorkingImage(BufferedImage image) {
@@ -130,6 +133,9 @@ public class DataProvider {
         return (Integer) Data.getParameter(CoreConstants.BOUNDING_RECTANGLE_CENTER_Y);
     }
 
+    /**
+     * Clear all data stored in the system.
+     */
     public void destroyAllData() {
         Data.destroyImage();
         Data.destroyParameters();

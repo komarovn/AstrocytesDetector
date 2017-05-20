@@ -67,113 +67,65 @@ public class ProjectBuilder {
 
             if (rootName.equals(PROJECT_PARAMS_TAG)) {
                 if (dataProvider.getScale() != null) {
-                    Element parElement = document.createElement(paramName);
-                    Attr attribute = document.createAttribute("name");
-                    attribute.setValue(CoreConstants.SCALE);
-                    parElement.setAttributeNode(attribute);
-                    parElement.appendChild(document.createTextNode(dataProvider.getScale().toString()));
-                    rootElement.appendChild(parElement);
+                    addElement(paramName, CoreConstants.SCALE,
+                            dataProvider.getScale().toString(), rootElement, document);
                 }
 
                 if (dataProvider.getCannyMinThreshold() != null) {
-                    Element parElement = document.createElement(paramName);
-                    Attr attribute = document.createAttribute("name");
-                    attribute.setValue(CoreConstants.CANNY_MIN_THRESH);
-                    parElement.setAttributeNode(attribute);
-                    parElement.appendChild(document.createTextNode(dataProvider.getCannyMinThreshold().toString()));
-                    rootElement.appendChild(parElement);
+                    addElement(paramName, CoreConstants.CANNY_MIN_THRESH,
+                            dataProvider.getCannyMinThreshold().toString(), rootElement, document);
                 }
 
                 if (dataProvider.getCannyMaxThreshold() != null) {
-                    Element parElement = document.createElement(paramName);
-                    Attr attribute = document.createAttribute("name");
-                    attribute.setValue(CoreConstants.CANNY_MAX_THRESH);
-                    parElement.setAttributeNode(attribute);
-                    parElement.appendChild(document.createTextNode(dataProvider.getCannyMaxThreshold().toString()));
-                    rootElement.appendChild(parElement);
+                    addElement(paramName, CoreConstants.CANNY_MAX_THRESH,
+                            dataProvider.getCannyMaxThreshold().toString(), rootElement, document);
                 }
 
                 if (dataProvider.getRadiusMathMorphology() != null) {
-                    Element parElement = document.createElement(paramName);
-                    Attr attribute = document.createAttribute("name");
-                    attribute.setValue(CoreConstants.RADIUS_DIL_ER);
-                    parElement.setAttributeNode(attribute);
-                    parElement.appendChild(document.createTextNode(dataProvider.getRadiusMathMorphology().toString()));
-                    rootElement.appendChild(parElement);
+                    addElement(paramName, CoreConstants.RADIUS_DIL_ER,
+                            dataProvider.getRadiusMathMorphology().toString(), rootElement, document);
                 }
 
                 if (dataProvider.getBoundingRectangleHeight() != null) {
-                    Element parElement = document.createElement(paramName);
-                    Attr attribute = document.createAttribute("name");
-                    attribute.setValue(CoreConstants.BOUNDING_RECTANGLE_HEIGHT);
-                    parElement.setAttributeNode(attribute);
-                    parElement.appendChild(document.createTextNode(dataProvider.getBoundingRectangleHeight().toString()));
-                    rootElement.appendChild(parElement);
+                    addElement(paramName, CoreConstants.BOUNDING_RECTANGLE_HEIGHT,
+                            dataProvider.getBoundingRectangleHeight().toString(), rootElement, document);
                 }
 
                 if (dataProvider.getBoundingRectangleWidth() != null) {
-                    Element parElement = document.createElement(paramName);
-                    Attr attribute = document.createAttribute("name");
-                    attribute.setValue(CoreConstants.BOUNDING_RECTANGLE_WIDTH);
-                    parElement.setAttributeNode(attribute);
-                    parElement.appendChild(document.createTextNode(dataProvider.getBoundingRectangleWidth().toString()));
-                    rootElement.appendChild(parElement);
+                    addElement(paramName, CoreConstants.BOUNDING_RECTANGLE_WIDTH,
+                            dataProvider.getBoundingRectangleWidth().toString(), rootElement, document);
                 }
 
                 if (dataProvider.getBoundingRectangleCenterX() != null) {
-                    Element parElement = document.createElement(paramName);
-                    Attr attribute = document.createAttribute("name");
-                    attribute.setValue(CoreConstants.BOUNDING_RECTANGLE_CENTER_X);
-                    parElement.setAttributeNode(attribute);
-                    parElement.appendChild(document.createTextNode(dataProvider.getBoundingRectangleCenterX().toString()));
-                    rootElement.appendChild(parElement);
+                    addElement(paramName, CoreConstants.BOUNDING_RECTANGLE_CENTER_X,
+                            dataProvider.getBoundingRectangleCenterX().toString(), rootElement, document);
                 }
 
                 if (dataProvider.getBoundingRectangleCenterY() != null) {
-                    Element parElement = document.createElement(paramName);
-                    Attr attribute = document.createAttribute("name");
-                    attribute.setValue(CoreConstants.BOUNDING_RECTANGLE_CENTER_Y);
-                    parElement.setAttributeNode(attribute);
-                    parElement.appendChild(document.createTextNode(dataProvider.getBoundingRectangleCenterY().toString()));
-                    rootElement.appendChild(parElement);
+                    addElement(paramName, CoreConstants.BOUNDING_RECTANGLE_CENTER_Y,
+                            dataProvider.getBoundingRectangleCenterY().toString(), rootElement, document);
                 }
             }
 
             if (rootName.equals(APP_SETTINGS_TAG)) {
                 if (dataProvider.getProjectDirectory() != null) {
-                    Element parElement = document.createElement(paramName);
-                    Attr attribute = document.createAttribute("name");
-                    attribute.setValue(CoreConstants.PROJECT_DIR);
-                    parElement.setAttributeNode(attribute);
-                    parElement.appendChild(document.createTextNode(dataProvider.getProjectDirectory()));
-                    rootElement.appendChild(parElement);
+                    addElement(paramName, CoreConstants.PROJECT_DIR,
+                            dataProvider.getProjectDirectory(), rootElement, document);
                 }
 
                 if (dataProvider.getProjectName() != null) {
-                    Element parElement = document.createElement(paramName);
-                    Attr attribute = document.createAttribute("name");
-                    attribute.setValue(CoreConstants.PROJECT_NAME);
-                    parElement.setAttributeNode(attribute);
-                    parElement.appendChild(document.createTextNode(dataProvider.getProjectName()));
-                    rootElement.appendChild(parElement);
+                    addElement(paramName, CoreConstants.PROJECT_NAME,
+                            dataProvider.getProjectName(), rootElement, document);
                 }
 
                 if (dataProvider.getWindowWidth() != null) {
-                    Element parElement = document.createElement(paramName);
-                    Attr attribute = document.createAttribute("name");
-                    attribute.setValue(CoreConstants.WINDOW_WIDTH);
-                    parElement.setAttributeNode(attribute);
-                    parElement.appendChild(document.createTextNode(dataProvider.getWindowWidth().toString()));
-                    rootElement.appendChild(parElement);
+                    addElement(paramName, CoreConstants.WINDOW_WIDTH,
+                            dataProvider.getWindowWidth().toString(), rootElement, document);
                 }
 
                 if (dataProvider.getWindowHeight() != null) {
-                    Element parElement = document.createElement(paramName);
-                    Attr attribute = document.createAttribute("name");
-                    attribute.setValue(CoreConstants.WINDOW_HEIGHT);
-                    parElement.setAttributeNode(attribute);
-                    parElement.appendChild(document.createTextNode(dataProvider.getWindowHeight().toString()));
-                    rootElement.appendChild(parElement);
+                    addElement(paramName, CoreConstants.WINDOW_HEIGHT,
+                            dataProvider.getWindowHeight().toString(), rootElement, document);
                 }
             }
 
@@ -185,6 +137,15 @@ public class ProjectBuilder {
         } catch (Exception e) {
             throw new SaveProjectException(e);
         }
+    }
+
+    private void addElement(String paramName, String name, String value, Element root, Document document) {
+        Element parElement = document.createElement(paramName);
+        Attr attribute = document.createAttribute("name");
+        attribute.setValue(name);
+        parElement.setAttributeNode(attribute);
+        parElement.appendChild(document.createTextNode(value));
+        root.appendChild(parElement);
     }
 
     private void loadXML(File file, String rootName, String paramName) throws LoadProjectException {
