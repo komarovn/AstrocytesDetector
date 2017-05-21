@@ -18,7 +18,7 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes.core;
+package com.astrocytes.core.operationsengine;
 
 import org.opencv.core.*;
 import org.opencv.core.Point;

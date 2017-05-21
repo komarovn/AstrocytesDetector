@@ -24,9 +24,9 @@ import com.astrocytes.application.App;
 import com.astrocytes.application.resources.ApplicationConstants;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.application.widgets.PreviewImageEditor;
-import com.astrocytes.core.OperationsImpl;
+import com.astrocytes.core.operationsengine.OperationsImpl;
 import com.astrocytes.application.resources.StringResources;
-import com.astrocytes.core.Operations;
+import com.astrocytes.core.operationsengine.Operations;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;

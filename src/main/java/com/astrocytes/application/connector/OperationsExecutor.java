@@ -21,8 +21,8 @@
 package com.astrocytes.application.connector;
 
 import com.astrocytes.core.ImageHelper;
-import com.astrocytes.core.OperationsImpl;
-import com.astrocytes.core.Operations;
+import com.astrocytes.core.operationsengine.OperationsImpl;
+import com.astrocytes.core.operationsengine.Operations;
 import com.astrocytes.core.data.DataProvider;
 import org.opencv.core.Mat;
 

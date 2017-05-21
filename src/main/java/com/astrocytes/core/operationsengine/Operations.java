@@ -18,7 +18,7 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes.core;
+package com.astrocytes.core.operationsengine;
 
 import com.astrocytes.core.primitives.Point;
 import org.opencv.core.Mat;
@@ -61,7 +61,8 @@ public interface Operations {
      * Make closing operation (dilation and erosion) for contours after applying Canny edge detection operation.
      *
      * @param source - binary image after applying Canny edge detection operation
-     * @param radius - radius of structuring element; must be > 0
+     * @param radius - radius of structuring element; must be &gt; 0
+     * @return a working image with applyed closing operation.
      */
     public Mat applyMathMorphology(Mat source, Integer radius);
 
