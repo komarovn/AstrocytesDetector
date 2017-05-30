@@ -1,3 +1,3 @@
-# Astrocytes Detector App
+# Astrocytes Detector
 
 TBD at late spring 2017.
