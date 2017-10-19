@@ -284,6 +284,12 @@ public class App {
         }
     }
 
+    public void executeKmeans() {
+        if (image != null) {
+            image = operationsExecutor.applyKmeans(image);
+        }
+    }
+
     /**
      * Process closing of the application form and exiting the program.
      */

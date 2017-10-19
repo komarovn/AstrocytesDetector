@@ -39,7 +39,8 @@ public class FindAstrocytesTest {
 
     private void prepare() {
         try {
-            BufferedImage bufferedImage = ImageIO.read(new File("D:\\Studying\\233x200.jpg"));
+            //BufferedImage bufferedImage = ImageIO.read(new File("D:\\Studying\\temp\\ererer\\image.jpg"));
+            BufferedImage bufferedImage = ImageIO.read(new File("D:\\Studying\\temp\\normalized-histogram.jpg"));
             operationsExecutor.setOriginalImage(bufferedImage);
             testImage = bufferedImage;
             dataProvider.setCannyMinThreshold(26);
@@ -56,6 +57,16 @@ public class FindAstrocytesTest {
         testImage = operationsExecutor.applyDilateAndErode(testImage);
         testImage = operationsExecutor.applyFindAstocytes(testImage);
         testImage = operationsExecutor.getCurrentImage();
+    }
+
+    private void testCanny() {
+        dataProvider.setCannyMinThreshold(26);
+        dataProvider.setCannyMaxThreshold(58);
+        testImage = operationsExecutor.applyCannyEdgeDetection(testImage);
+    }
+
+    private void executeKmeans() {
+        testImage = operationsExecutor.applyKmeans(testImage);
     }
 
     private void run() {
@@ -77,7 +88,9 @@ public class FindAstrocytesTest {
     public static void main(String[] args) {
         FindAstrocytesTest test = new FindAstrocytesTest();
         test.prepare();
-        test.executeFindAstrocytes();
+        //test.executeFindAstrocytes();
+        //test.executeKmeans();
+        test.testCanny();
         test.run();
     }
 
@@ -87,6 +100,7 @@ public class FindAstrocytesTest {
             image = testImage;
             updateCurrentView();
             menuController.setAvailability(false);
+            getFrame().setSize(new Dimension(530, 640));
         }
     }
 

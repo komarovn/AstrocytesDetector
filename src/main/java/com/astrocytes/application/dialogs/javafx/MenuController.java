@@ -75,6 +75,9 @@ public class MenuController extends AbstractController {
     private MenuItem findAstrocytes;
 
     @FXML
+    private MenuItem kmeans;
+
+    @FXML
     private MenuItem layersStatistics;
 
     @Override
@@ -139,6 +142,12 @@ public class MenuController extends AbstractController {
             @Override
             public void handle(ActionEvent event) {
                 mainApp.executeFindAstrocytes();
+            }
+        });
+        kmeans.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                mainApp.executeKmeans();
             }
         });
 

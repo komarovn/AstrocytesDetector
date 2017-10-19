@@ -25,7 +25,9 @@ import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.Math.PI;
 import static org.opencv.imgproc.Imgproc.*;
@@ -67,6 +69,8 @@ public class OperationsImpl implements Operations {
 
         Mat dest = convertGrayscale(image);
         Mat copy = new Mat(dest.rows(), dest.cols(), dest.type());
+
+        double th2 = threshold(dest, new Mat(), 0, 255, THRESH_OTSU);
 
         GaussianBlur(dest, copy, new Size(9, 9), 1.4, 1.4);
         Canny(copy, dest, minThreshold, maxThreshold, 3, true);
@@ -199,5 +203,54 @@ public class OperationsImpl implements Operations {
         }
 
         return result;
+    }
+
+    @Override
+    public Mat applyKmeans(Mat source) {
+        Mat dest = new Mat();//source.rows(), source.cols(), CvType.CV_32FC3);
+
+        source.convertTo(source, CvType.CV_32F, 1.0 / 255.0);
+
+        Mat centers = new Mat();
+        Mat labels = new Mat();
+        TermCriteria criteria = new TermCriteria(TermCriteria.COUNT, 20, 0.1);
+        Core.kmeans(source, 4, labels, criteria, 10, Core.KMEANS_PP_CENTERS, centers);
+
+        List<Mat> mats = showClusters(source, labels, centers);
+        //mats.get(0).convertTo(dest, CvType.CV_8UC3);
+        centers.convertTo(dest, CvType.CV_8UC3);
+        dest.copyTo(getOutputImage());
+        return dest;
+    }
+
+    private List<Mat> showClusters(Mat cutout, Mat labels, Mat centers) {
+        centers.convertTo(centers, CvType.CV_8UC1, 255.0);
+        centers.reshape(3);
+
+        List<Mat> clusters = new ArrayList<Mat>();
+        for(int i = 0; i < centers.rows(); i++) {
+            clusters.add(Mat.zeros(cutout.size(), cutout.type()));
+        }
+
+        Map<Integer, Integer> counts = new HashMap<Integer, Integer>();
+        for(int i = 0; i < centers.rows(); i++) {
+            counts.put(i, 0);
+        }
+
+
+        for(int y = 0; y < cutout.rows(); y++) {
+            int rows = 0;
+            for(int x = 0; x < cutout.cols(); x++) {
+                int label = (int)labels.get(rows, 0)[0];
+                int r = (int)centers.get(label, 2)[0];
+                int g = (int)centers.get(label, 1)[0];
+                int b = (int)centers.get(label, 0)[0];
+                counts.put(label, counts.get(label) + 1);
+                clusters.get(label).put(y, x, b, g, r);
+                rows++;
+            }
+        }
+        System.out.println(counts);
+        return clusters;
     }
 }

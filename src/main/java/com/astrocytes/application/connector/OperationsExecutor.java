@@ -68,6 +68,11 @@ public class OperationsExecutor {
         return ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
     }
 
+    public BufferedImage applyKmeans(BufferedImage in) {
+        operations.applyKmeans(ImageHelper.convertBufferedImageToMat(in));
+        return ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
+    }
+
     public BufferedImage getCurrentImage() {
         return ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
     }

@@ -99,4 +99,6 @@ public interface Operations {
      */
     public List<Point> getAstrocytesCenters();
 
+    public Mat applyKmeans(Mat source);
+
 }
