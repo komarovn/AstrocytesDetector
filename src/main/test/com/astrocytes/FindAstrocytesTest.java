@@ -40,7 +40,7 @@ public class FindAstrocytesTest {
     private void prepare() {
         try {
             //BufferedImage bufferedImage = ImageIO.read(new File("D:\\Studying\\temp\\ererer\\image.jpg"));
-            BufferedImage bufferedImage = ImageIO.read(new File("D:\\Studying\\temp\\orig-cropped-not-norm.jpg"));
+            BufferedImage bufferedImage = ImageIO.read(new File("D:\\Studying\\temp\\original.jpg"));
             operationsExecutor.setOriginalImage(bufferedImage);
             testImage = bufferedImage;
             dataProvider.setCannyMinThreshold(26);

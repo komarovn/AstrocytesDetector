@@ -105,7 +105,7 @@ public class OperationsImpl implements Operations {
         detectAstrocytes(source,
                 (widthRectangle + heightRectangle) / 2,
                 widthRectangle * heightRectangle * PI / 4,
-                calculateIntensity(sourceImage, centerX, centerY));
+                CoreOperations.intensity(sourceImage, centerX, centerY));
         drawAstrocyteCenters();
         drawBoundingRectangles();
         return getOutputImage();
@@ -139,17 +139,19 @@ public class OperationsImpl implements Operations {
                         (boundingRectangle.width / (float) boundingRectangle.height < 1.8f) && (boundingRectangle.height / (float) boundingRectangle.width < 1.8f)) {
                     /* Step 4 */
                     if (contourArea / (contourPerimeter * contourPerimeter) > 0.05 && contourArea / (contourPerimeter * contourPerimeter) < 0.30) {
-                        int averageIntensityWithinContour = 0;
-                        int quantityOfPixelsWithinContour = 0;
+                        int averageIntensityWithinContour = CoreOperations.averageIntensity(sourceImage, contour);
+
+                        /*int quantityOfPixelsWithinContour = 0;
                         for (int xCoord = (int) boundingRectangle.tl().x; xCoord <= (int) boundingRectangle.br().x; xCoord++) {
                             for (int yCoord = (int) boundingRectangle.tl().y; yCoord <= (int) boundingRectangle.br().y; yCoord++) {
                                 if (pointPolygonTest(new MatOfPoint2f(contour.toArray()), new Point(xCoord, yCoord), false) > 0) {
-                                    averageIntensityWithinContour += calculateIntensity(sourceImage, xCoord, yCoord);
+                                    averageIntensityWithinContour += CoreOperations.intensity(sourceImage, xCoord, yCoord);
                                     quantityOfPixelsWithinContour++;
                                 }
                             }
                         }
-                        averageIntensityWithinContour /= quantityOfPixelsWithinContour;
+                        averageIntensityWithinContour /= quantityOfPixelsWithinContour;*/
+
                         /* Step 5 */
                         if (averageIntensityWithinContour <= intensity + 20) {
                             int xCoordOfAstrocyteCenter = (int) boundingRectangle.tl().x + boundingRectangle.width / 2;
@@ -184,20 +186,6 @@ public class OperationsImpl implements Operations {
         }
 
         dest.copyTo(getOutputImage());
-    }
-
-    private int calculateIntensity(Mat image, int x, int y) {
-        double[] pixel = image.get(y, x);
-
-        if (pixel == null) {
-            return 0;
-        }
-
-        if (pixel.length == 1) {
-            return (int) pixel[0];
-        }
-
-        return  (int) (0.11 * pixel[2] + 0.53 * pixel[1] + 0.36 * pixel[0]);
     }
 
     @Override
@@ -264,14 +252,15 @@ public class OperationsImpl implements Operations {
     }
 
     public void prepareImage() {
-        Mat result = CoreOperations.grayscale(sourceImage);//CoreOperations.normalize(sourceImage);
+        Mat result = //CoreOperations.normalize(sourceImage);
+                CoreOperations.grayscale(sourceImage);
         //result = CoreOperations.grayscale(result);
-        result = CoreOperations.threshold(result, 159);
-        result = CoreOperations.erode(result, 2);
+        result = CoreOperations.threshold(result, 197);
+        result = CoreOperations.erode(result, 3);
         result = CoreOperations.invert(result);
-        //result = CoreOperations.erode(result, 3);
-        Mat bigErode = CoreOperations.erode(result, 25);
-        result = CoreOperations.xor(result, bigErode);
+        result = CoreOperations.clearContours(result, 125);
+        //Mat bigErode = CoreOperations.erode(result, 25);
+        //result = CoreOperations.xor(result, bigErode);
         result.copyTo(getOutputImage());
     }
 }
