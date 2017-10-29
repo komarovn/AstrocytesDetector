@@ -51,6 +51,18 @@ public class CoreOperations {
         return dest;
     }
 
+    public static Mat and(Mat first, Mat second) {
+        Mat dest = new Mat();
+        Core.bitwise_and(first, second, dest);
+        return dest;
+    }
+
+    public static Mat or(Mat first, Mat second) {
+        Mat dest = new Mat();
+        Core.bitwise_or(first, second, dest);
+        return dest;
+    }
+
     public static Mat normalize(Mat src) {
         Mat dest = new Mat();
         Mat ycrcb = new Mat();
@@ -81,29 +93,21 @@ public class CoreOperations {
             Double contourArea = contourArea(contour);
 
             if (contourArea < thresh) {
-                /*List<Point> pointsOfContour = contour.toList();
-                int xMin = src.cols(), xMax = 0, yMin = src.rows(), yMax = 0;
-                for (Point point : pointsOfContour) {
-                    if (point.y > yMax) {
-                        yMax = (int) point.y;
-                    }
-                    if (point.y < yMin) {
-                        yMin = (int) point.y;
-                    }
-                    if (point.x > xMax) {
-                        xMax = (int) point.x;
-                    }
-                    if (point.x < xMin) {
-                        xMin = (int) point.x;
-                    }
-                }*/
-                /*Rect boundingRectangle = boundingRect(contour);
-                int centerX = boundingRectangle.width / 2 + boundingRectangle.x;
-                int centerY = boundingRectangle.height / 2 + boundingRectangle.y;*/
-                int pixelColor = averageIntensity(src, contour) /*(int) src.get(centerY, centerX)[0]*/;
+                int pixelColor = averageIntensity(src, contour);
                 //Scalar color = new Scalar(127, 128, 123);
-                Scalar color = new Scalar(pixelColor > 127 ? 80 : 167);
-                drawContours(dest, contours, i, color, Core.FILLED);
+                //Scalar color = new Scalar(pixelColor > 127 ? 80 : 167);
+                //drawContours(dest, contours, i, color, 2/*Core.FILLED*/);
+
+                Mat mask = new Mat(src.rows(), src.cols(), CvType.CV_8U, new Scalar(pixelColor > 127 ? 255 : 0));
+                drawContours(mask, contours, i, new Scalar(pixelColor > 127 ? 0 : 255), Core.FILLED);
+                if (pixelColor > 127) {
+                    mask = erode(mask, 2);
+                    dest = and(mask, dest);
+                } else {
+                    mask = dilate(mask, 2);
+                    dest = or(mask, dest);
+                }
+                mask.release();
             }
         }
 
