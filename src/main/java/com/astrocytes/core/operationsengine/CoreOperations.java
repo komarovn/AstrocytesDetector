@@ -88,28 +88,22 @@ public class CoreOperations {
 
         findContours(src, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_TC89_L1);
 
+        Mat maskWhite = new Mat(src.rows(), src.cols(), CvType.CV_8UC1, new Scalar(255));
+        Mat maskBlack = maskWhite.clone();
+
         for (int i = 0; i < contours.size(); i++) {
-            MatOfPoint contour = contours.get(i);
-            Double contourArea = contourArea(contour);
+            Double contourArea = contourArea(contours.get(i));
 
             if (contourArea < thresh) {
-                int pixelColor = averageIntensity(src, contour);
-                //Scalar color = new Scalar(127, 128, 123);
-                //Scalar color = new Scalar(pixelColor > 127 ? 80 : 167);
-                //drawContours(dest, contours, i, color, 2/*Core.FILLED*/);
-
-                Mat mask = new Mat(src.rows(), src.cols(), CvType.CV_8U, new Scalar(pixelColor > 127 ? 255 : 0));
-                drawContours(mask, contours, i, new Scalar(pixelColor > 127 ? 0 : 255), Core.FILLED);
-                if (pixelColor > 127) {
-                    mask = erode(mask, 2);
-                    dest = and(mask, dest);
-                } else {
-                    mask = dilate(mask, 2);
-                    dest = or(mask, dest);
-                }
-                mask.release();
+                int pixelColor = averageIntensity(src, contours.get(i));
+                drawContours(pixelColor > 127 ? maskWhite : maskBlack, contours, i, new Scalar(0), Core.FILLED);
             }
         }
+
+        maskWhite = erode(maskWhite, 2);
+        maskBlack = erode(maskBlack, 2);
+        dest = and(maskWhite, dest);
+        dest = or(invert(maskBlack), dest);
 
         return dest;
     }

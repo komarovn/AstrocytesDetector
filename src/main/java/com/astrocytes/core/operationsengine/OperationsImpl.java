@@ -260,7 +260,8 @@ public class OperationsImpl implements Operations {
         result = CoreOperations.invert(result);
         result = CoreOperations.clearContours(result, 125);
         Mat bigErode = CoreOperations.erode(result, 30);
-        result = CoreOperations.xor(result, bigErode);
+        //result = CoreOperations.xor(result, bigErode);
+        result = CoreOperations.and(CoreOperations.grayscale(sourceImage), result);
         result.copyTo(getOutputImage());
     }
 }
