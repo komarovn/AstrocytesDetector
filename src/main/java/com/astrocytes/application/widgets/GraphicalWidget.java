@@ -297,7 +297,7 @@ public class GraphicalWidget extends JPanel {
         private void changeZoomedImage() {
             AffineTransform affineTransform = new AffineTransform();
             affineTransform.scale(zoomLevel, zoomLevel);
-            AffineTransformOp affineTransformOp = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_BILINEAR);
+            AffineTransformOp affineTransformOp = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
             int w = (int) (image.getWidth() * zoomLevel);
             int h = (int) (image.getHeight() * zoomLevel);
             int centerXBefore = currentX + widthImage / 2;

@@ -38,6 +38,8 @@ public class OperationsImpl implements Operations {
 
     private List<Point> astrocytesCenters;
 
+    private List<Rect> boundingRectangles;
+
     @Override
     public void setSourceImage(Mat sourceImage) {
         this.sourceImage = sourceImage;
@@ -92,16 +94,10 @@ public class OperationsImpl implements Operations {
 
     @Override
     public Mat convertGrayscale(Mat source) {
-        if (source.channels() < 3) {
-            source.copyTo(getOutputImage());
-            return source;
-        }
-        Mat dest = new Mat(source.rows(), source.cols(), CvType.CV_8UC1);
-
-        cvtColor(source, dest, COLOR_BGR2GRAY);
-
-        dest.copyTo(getOutputImage());
-        return dest;
+        prepareImage();
+        //Mat result = CoreOperations.grayscale(source);
+        //result.copyTo(getOutputImage());
+        return getOutputImage();
     }
 
     @Override
@@ -111,7 +107,7 @@ public class OperationsImpl implements Operations {
                 widthRectangle * heightRectangle * PI / 4,
                 calculateIntensity(sourceImage, centerX, centerY));
         drawAstrocyteCenters();
-        //Imgproc.circle(getOutputImage(), new Point(centerX, centerY), 3, new Scalar(3, 108, 240));
+        drawBoundingRectangles();
         return getOutputImage();
     }
 
@@ -121,16 +117,20 @@ public class OperationsImpl implements Operations {
         }
 
         astrocytesCenters = new ArrayList<>();
+        boundingRectangles = new ArrayList<>();
         List<MatOfPoint> contoursAfterFirstIteration = new ArrayList<>();
         Mat hierarchy = new Mat();
 
         /* Step 1 */
-        findContours(source, contoursAfterFirstIteration, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_TC89_L1);
+        findContours(source, contoursAfterFirstIteration, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_TC89_L1);
 
         for (MatOfPoint contour : contoursAfterFirstIteration) {
             Rect boundingRectangle = boundingRect(contour);
             Double contourArea = contourArea(contour);
             Double contourPerimeter = arcLength(new MatOfPoint2f(contour.toArray()), true);
+
+            boundingRectangles.add(boundingRectangle);
+
             /* Step 2 */
             if (averageArea - 160 <= contourArea /*&& contourArea <= averageArea + 10*/) {
                 /* Step 3 */
@@ -171,6 +171,16 @@ public class OperationsImpl implements Operations {
 
         for (Point center : astrocytesCenters) {
             Imgproc.circle(dest, center, 3, new Scalar(108, 240, 3));
+        }
+
+        dest.copyTo(getOutputImage());
+    }
+
+    private void drawBoundingRectangles() {
+        Mat dest = sourceImage.clone();
+
+        for (Rect rect : boundingRectangles) {
+            Imgproc.rectangle(dest, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0.3, 0.5, 0.6), 1);
         }
 
         dest.copyTo(getOutputImage());
@@ -237,7 +247,6 @@ public class OperationsImpl implements Operations {
             counts.put(i, 0);
         }
 
-
         for(int y = 0; y < cutout.rows(); y++) {
             int rows = 0;
             for(int x = 0; x < cutout.cols(); x++) {
@@ -252,5 +261,17 @@ public class OperationsImpl implements Operations {
         }
         System.out.println(counts);
         return clusters;
+    }
+
+    public void prepareImage() {
+        Mat result = CoreOperations.grayscale(sourceImage);//CoreOperations.normalize(sourceImage);
+        //result = CoreOperations.grayscale(result);
+        result = CoreOperations.threshold(result, 159);
+        result = CoreOperations.erode(result, 2);
+        result = CoreOperations.invert(result);
+        //result = CoreOperations.erode(result, 3);
+        Mat bigErode = CoreOperations.erode(result, 25);
+        result = CoreOperations.xor(result, bigErode);
+        result.copyTo(getOutputImage());
     }
 }
