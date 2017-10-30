@@ -69,7 +69,7 @@ public class OperationsImpl implements Operations {
             maxThreshold = 255;
         }
 
-        Mat dest = convertGrayscale(image);
+        Mat dest = CoreOperations.grayscale(image);
         Mat copy = new Mat(dest.rows(), dest.cols(), dest.type());
 
         double th2 = threshold(dest, new Mat(), 0, 255, THRESH_OTSU);
@@ -140,17 +140,6 @@ public class OperationsImpl implements Operations {
                     /* Step 4 */
                     if (contourArea / (contourPerimeter * contourPerimeter) > 0.05 && contourArea / (contourPerimeter * contourPerimeter) < 0.30) {
                         int averageIntensityWithinContour = CoreOperations.averageIntensity(sourceImage, contour);
-
-                        /*int quantityOfPixelsWithinContour = 0;
-                        for (int xCoord = (int) boundingRectangle.tl().x; xCoord <= (int) boundingRectangle.br().x; xCoord++) {
-                            for (int yCoord = (int) boundingRectangle.tl().y; yCoord <= (int) boundingRectangle.br().y; yCoord++) {
-                                if (pointPolygonTest(new MatOfPoint2f(contour.toArray()), new Point(xCoord, yCoord), false) > 0) {
-                                    averageIntensityWithinContour += CoreOperations.intensity(sourceImage, xCoord, yCoord);
-                                    quantityOfPixelsWithinContour++;
-                                }
-                            }
-                        }
-                        averageIntensityWithinContour /= quantityOfPixelsWithinContour;*/
 
                         /* Step 5 */
                         if (averageIntensityWithinContour <= intensity + 20) {
@@ -266,7 +255,7 @@ public class OperationsImpl implements Operations {
         cvtColor(result, result, Imgproc.COLOR_GRAY2BGR);
         result = CoreOperations.and(sourceImage, result);
 
-        result = CoreOperations.threshold(result, 200, 80, 200);
+        //result = CoreOperations.threshold(result, 200, 80, 200);
 
         result.copyTo(getOutputImage());
     }
