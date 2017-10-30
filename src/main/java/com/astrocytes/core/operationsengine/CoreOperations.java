@@ -50,14 +50,17 @@ public class CoreOperations {
      */
     public static Mat threshold(Mat src, int r, int g, int b) {
         if (src.channels() < 3) return src;
+
         Mat dest = new Mat();
-        //List<Mat> channels = new ArrayList<Mat>();
+        Mat srcBin = new Mat();
 
-        //Core.split(src, channels);
-
+        Imgproc.threshold(src, srcBin, 1, 255, Imgproc.THRESH_BINARY);
         Core.inRange(src, new Scalar(0), new Scalar(r, g, b), dest);
-        //Imgproc.threshold(channels.get(0), channels.get(0), b, 255, Imgproc.THRESH_BINARY);
+        dest = invert(dest);
+        cvtColor(dest, dest, Imgproc.COLOR_GRAY2BGR);
 
+        dest = xor(srcBin, dest);
+        dest = and(src, dest);
         return dest;
     }
 
