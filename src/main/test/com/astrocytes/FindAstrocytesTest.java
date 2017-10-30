@@ -39,8 +39,8 @@ public class FindAstrocytesTest {
 
     private void prepare() {
         try {
-            //BufferedImage bufferedImage = ImageIO.read(new File("D:\\Studying\\temp\\ererer\\image.jpg"));
-            BufferedImage bufferedImage = ImageIO.read(new File("D:\\Studying\\temp\\original.jpg"));
+            File file = new File("src/main/resources/presets/original-cortex.jpg");
+            BufferedImage bufferedImage = ImageIO.read(file);
             operationsExecutor.setOriginalImage(bufferedImage);
             testImage = bufferedImage;
             dataProvider.setCannyMinThreshold(26);
