@@ -259,9 +259,15 @@ public class OperationsImpl implements Operations {
         result = CoreOperations.erode(result, 3);
         result = CoreOperations.invert(result);
         result = CoreOperations.clearContours(result, 125);
+
         Mat bigErode = CoreOperations.erode(result, 30);
         //result = CoreOperations.xor(result, bigErode);
-        result = CoreOperations.and(CoreOperations.grayscale(sourceImage), result);
+
+        cvtColor(result, result, Imgproc.COLOR_GRAY2BGR);
+        result = CoreOperations.and(sourceImage, result);
+
+        //result = CoreOperations.threshold(result, 200, 80, 200);
+
         result.copyTo(getOutputImage());
     }
 }

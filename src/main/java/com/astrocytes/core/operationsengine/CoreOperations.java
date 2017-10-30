@@ -8,20 +8,65 @@ import java.util.List;
 
 import static org.opencv.imgproc.Imgproc.*;
 
+/**
+ * A bundle of basic operations for images, with customized some parameters
+ * which are needed for project.
+ */
 public class CoreOperations {
 
+    /**
+     * Invert image.
+     *
+     * @param src - source image.
+     * @return inverted image.
+     */
     public static Mat invert(Mat src) {
         Mat dest = new Mat();
         Core.bitwise_not(src, dest);
         return dest;
     }
 
+    /**
+     * Applies thresholding for gray image.
+     *
+     * @param src - gray source image.
+     * @param thresh - the level of threshold.
+     * @return thresholded gray image.
+     */
     public static Mat threshold(Mat src, int thresh) {
         Mat dest = new Mat();
         Imgproc.threshold(src, dest, thresh, 255, Imgproc.THRESH_BINARY);
         return dest;
     }
 
+    /**
+     * Applies thresholding for color image.
+     *
+     * @param src - color source image.
+     * @param r - the value for red value in threshold.
+     * @param g - the value for green value in threshold.
+     * @param b - the value for blue value in threshold.
+     * @return thresholded color image.
+     */
+    public static Mat threshold(Mat src, int r, int g, int b) {
+        if (src.channels() < 3) return src;
+        Mat dest = new Mat();
+        //List<Mat> channels = new ArrayList<Mat>();
+
+        //Core.split(src, channels);
+
+        Core.inRange(src, new Scalar(0), new Scalar(r, g, b), dest);
+        //Imgproc.threshold(channels.get(0), channels.get(0), b, 255, Imgproc.THRESH_BINARY);
+
+        return dest;
+    }
+
+    /**
+     * Converts a source color image to a gray image.
+     *
+     * @param src - BGR image.
+     * @return gray image.
+     */
     public static Mat grayscale(Mat src) {
         if (src.channels() < 3) return src;
         Mat dest = new Mat(src.rows(), src.cols(), CvType.CV_8UC1);
@@ -29,6 +74,13 @@ public class CoreOperations {
         return dest;
     }
 
+    /**
+     * Applies morphological erosion.
+     *
+     * @param src - source image.
+     * @param radius - radius of structure element.
+     * @return eroded image.
+     */
     public static Mat erode(Mat src, int radius) {
         Mat dest = new Mat();
         int kernelSize = radius * 2 + 1;
@@ -37,6 +89,13 @@ public class CoreOperations {
         return dest;
     }
 
+    /**
+     * Applies morphological dilation.
+     *
+     * @param src - source image.
+     * @param radius - radius of structure element.
+     * @return dilated image.
+     */
     public static Mat dilate(Mat src, int radius) {
         Mat dest = new Mat();
         int kernelSize = radius * 2 + 1;
@@ -63,6 +122,13 @@ public class CoreOperations {
         return dest;
     }
 
+    /**
+     * Equalizes a histogram for the image (color).
+     *
+     * @param src - color image to be applyed auto contrast.
+     * @return the source image with equalized histogram.
+     */
+    @Deprecated
     public static Mat normalize(Mat src) {
         Mat dest = new Mat();
         Mat ycrcb = new Mat();
@@ -79,6 +145,13 @@ public class CoreOperations {
         return dest;
     }
 
+    /**
+     * Remove all small contours on binary image with areas less than specified threshold.
+     *
+     * @param src - binary source image.
+     * @param thresh - minimum area of contour.
+     * @return a source image with removed all contours with area less than {@param thresh}.
+     */
     public static Mat clearContours(Mat src, int thresh) {
         if (src.channels() > 1) return src;
 
@@ -108,6 +181,13 @@ public class CoreOperations {
         return dest;
     }
 
+    /**
+     * Calculates an average intensity of pixels on image within specified contour.
+     *
+     * @param src - source image used for calculating an average intensity.
+     * @param contour - a contour which is presented as some region of interest for operation.
+     * @return a level of average intensity.
+     */
     public static int averageIntensity(Mat src, MatOfPoint contour) {
         int averageIntensityWithinContour = 0;
         int quantityOfPixelsWithinContour = 0;
@@ -133,6 +213,14 @@ public class CoreOperations {
         return averageIntensityWithinContour / quantityOfPixelsWithinContour;
     }
 
+    /**
+     * Calculates an intensity of specified pixel on image. Use for color image.
+     *
+     * @param src - source image
+     * @param x - a column of pixel on image.
+     * @param y - a row of pixel on image.
+     * @return an intensity of pixel ({@param x}, {@param y}).
+     */
     public static int intensity(Mat src, int x, int y) {
         double[] pixel = src.get(y, x);
 
