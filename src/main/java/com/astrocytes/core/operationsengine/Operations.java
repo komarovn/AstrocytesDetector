@@ -48,6 +48,8 @@ public interface Operations {
      */
     public Mat getOutputImage();
 
+    public void prepareImage();
+
     /**
      * Apply Canny edge detection algorythm for working image.
      *
@@ -91,6 +93,8 @@ public interface Operations {
      * @return original working image with colored astrocytes' centers.
      */
     public Mat findAstrocytes(Mat source, Integer widthRectangle, Integer heightRectangle, Integer centerX, Integer centerY);
+
+    public Mat detectAstrocytes();
 
     /**
      * Get a list of all astrocytes' centers finded by <code>findAstrocytes</code> operation.

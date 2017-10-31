@@ -41,6 +41,11 @@ public class OperationsExecutor {
         return ImageHelper.convertMatToBufferedImage(operations.getSourceImage());
     }
 
+    public BufferedImage getPreparedImage() {
+        operations.prepareImage();
+        return getCurrentImage();
+    }
+
     public BufferedImage applyCannyEdgeDetection(BufferedImage in) {
         operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(in),
                 dataProvider.getCannyMinThreshold(),

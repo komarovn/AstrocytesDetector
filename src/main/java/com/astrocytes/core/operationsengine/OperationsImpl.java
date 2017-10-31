@@ -35,10 +35,11 @@ import static org.opencv.imgproc.Imgproc.*;
 public class OperationsImpl implements Operations {
     private Mat sourceImage = new Mat();
     private Mat outputImage;
+    private Mat preparedImage;
 
     private List<Point> astrocytesCenters;
 
-    private List<Rect> boundingRectangles;
+    //private List<Rect> boundingRectangles;
 
     @Override
     public void setSourceImage(Mat sourceImage) {
@@ -69,15 +70,16 @@ public class OperationsImpl implements Operations {
             maxThreshold = 255;
         }
 
-        Mat dest = CoreOperations.grayscale(image);
-        Mat copy = new Mat(dest.rows(), dest.cols(), dest.type());
+        Mat grayscaled = CoreOperations.grayscale(image);
+        Mat blurred = new Mat();
+        Mat edged = new Mat();
 
-        double th2 = threshold(dest, new Mat(), 0, 255, THRESH_OTSU);
+        //double th2 = threshold(dest, new Mat(), 0, 255, THRESH_OTSU);
 
-        GaussianBlur(dest, copy, new Size(9, 9), 1.4, 1.4);
-        Canny(copy, dest, minThreshold, maxThreshold, 3, true);
+        GaussianBlur(grayscaled, blurred, new Size(9, 9), 1.4, 1.4);
+        Canny(blurred, edged, minThreshold, maxThreshold, 3, true);
 
-        dest.copyTo(getOutputImage());
+        edged.copyTo(getOutputImage());
     }
 
     @Override
@@ -94,9 +96,8 @@ public class OperationsImpl implements Operations {
 
     @Override
     public Mat convertGrayscale(Mat source) {
-        prepareImage();
-        //Mat result = CoreOperations.grayscale(source);
-        //result.copyTo(getOutputImage());
+        Mat result = CoreOperations.grayscale(source);
+        result.copyTo(getOutputImage());
         return getOutputImage();
     }
 
@@ -106,9 +107,9 @@ public class OperationsImpl implements Operations {
                 (widthRectangle + heightRectangle) / 2,
                 widthRectangle * heightRectangle * PI / 4,
                 CoreOperations.intensity(sourceImage, centerX, centerY));
-        drawAstrocyteCenters();
-        drawBoundingRectangles();
-        return getOutputImage();
+        return drawAstrocyteCenters();
+        //drawBoundingRectangles();
+        //return getOutputImage();
     }
 
     @Deprecated
@@ -118,7 +119,7 @@ public class OperationsImpl implements Operations {
         }
 
         astrocytesCenters = new ArrayList<>();
-        boundingRectangles = new ArrayList<>();
+        //boundingRectangles = new ArrayList<>();
         List<MatOfPoint> contoursAfterFirstIteration = new ArrayList<>();
         Mat hierarchy = new Mat();
 
@@ -130,7 +131,7 @@ public class OperationsImpl implements Operations {
             Double contourArea = contourArea(contour);
             Double contourPerimeter = arcLength(new MatOfPoint2f(contour.toArray()), true);
 
-            boundingRectangles.add(boundingRectangle);
+            //boundingRectangles.add(boundingRectangle);
 
             /* Step 2 */
             if (averageArea - 160 <= contourArea /*&& contourArea <= averageArea + 10*/) {
@@ -154,21 +155,22 @@ public class OperationsImpl implements Operations {
         }
     }
 
-    private void drawAstrocyteCenters() {
+    private Mat drawAstrocyteCenters() {
         if (astrocytesCenters == null) {
-            return;
+            return sourceImage;
         }
 
-        Mat dest = sourceImage.clone();
+        Mat result = sourceImage.clone();
 
         for (Point center : astrocytesCenters) {
-            Imgproc.circle(dest, center, 3, new Scalar(108, 240, 3));
+            Imgproc.circle(result, center, 3, new Scalar(108, 240, 3));
         }
 
-        dest.copyTo(getOutputImage());
+        return result;
+        //dest.copyTo(getOutputImage());
     }
 
-    private void drawBoundingRectangles() {
+    /*private void drawBoundingRectangles() {
         Mat dest = sourceImage.clone();
 
         for (Rect rect : boundingRectangles) {
@@ -176,7 +178,7 @@ public class OperationsImpl implements Operations {
         }
 
         dest.copyTo(getOutputImage());
-    }
+    }*/
 
     @Override
     public List<com.astrocytes.core.primitives.Point> getAstrocytesCenters() {
@@ -195,7 +197,7 @@ public class OperationsImpl implements Operations {
 
     @Override
     public Mat applyKmeans(Mat source) {
-        Mat dest = new Mat();//source.rows(), source.cols(), CvType.CV_32FC3);
+        Mat dest = new Mat();
 
         source.convertTo(source, CvType.CV_32F, 1.0 / 255.0);
 
@@ -206,7 +208,8 @@ public class OperationsImpl implements Operations {
 
         List<Mat> mats = showClusters(source, labels, centers);
         //mats.get(0).convertTo(dest, CvType.CV_8UC3);
-        centers.convertTo(dest, CvType.CV_8UC3);
+        Core.merge(mats, dest);
+        //centers.convertTo(dest, CvType.CV_8UC3);
         dest.copyTo(getOutputImage());
         return dest;
     }
@@ -216,22 +219,22 @@ public class OperationsImpl implements Operations {
         centers.reshape(3);
 
         List<Mat> clusters = new ArrayList<Mat>();
-        for(int i = 0; i < centers.rows(); i++) {
+        for (int i = 0; i < centers.rows(); i++) {
             clusters.add(Mat.zeros(cutout.size(), cutout.type()));
         }
 
         Map<Integer, Integer> counts = new HashMap<Integer, Integer>();
-        for(int i = 0; i < centers.rows(); i++) {
+        for (int i = 0; i < centers.rows(); i++) {
             counts.put(i, 0);
         }
 
-        for(int y = 0; y < cutout.rows(); y++) {
+        for (int y = 0; y < cutout.rows(); y++) {
             int rows = 0;
-            for(int x = 0; x < cutout.cols(); x++) {
-                int label = (int)labels.get(rows, 0)[0];
-                int r = (int)centers.get(label, 2)[0];
-                int g = (int)centers.get(label, 1)[0];
-                int b = (int)centers.get(label, 0)[0];
+            for (int x = 0; x < cutout.cols(); x++) {
+                int label = (int) labels.get(rows, 0)[0];
+                int r = (int) centers.get(label, 2)[0];
+                int g = (int) centers.get(label, 1)[0];
+                int b = (int) centers.get(label, 0)[0];
                 counts.put(label, counts.get(label) + 1);
                 clusters.get(label).put(y, x, b, g, r);
                 rows++;
@@ -241,6 +244,7 @@ public class OperationsImpl implements Operations {
         return clusters;
     }
 
+    @Override
     public void prepareImage() {
         Mat result = //CoreOperations.normalize(sourceImage);
                 CoreOperations.grayscale(sourceImage);
@@ -255,27 +259,27 @@ public class OperationsImpl implements Operations {
 
         cvtColor(result, result, Imgproc.COLOR_GRAY2BGR);
         result = CoreOperations.and(sourceImage, result);
-
-        result = CoreOperations.threshold(result, 200, 80, 200);
-
-        detectAstrocytes(result);
-
         result.copyTo(getOutputImage());
-
-        drawAstrocyteCenters();
+        this.preparedImage = result;
     }
 
-    public void detectAstrocytes(Mat src) {
-        if (src.channels() < 3) return;
+    @Override
+    public Mat detectAstrocytes() {
+        if (preparedImage == null) return sourceImage;
 
+        Mat thresholdedImage = CoreOperations.threshold(preparedImage, 200, 80, 200);
+        findAstrocytes(thresholdedImage);
+        return drawAstrocyteCenters();
+        //return getOutputImage();
+    }
+
+    private void findAstrocytes(Mat src) {
         astrocytesCenters = new ArrayList<Point>();
 
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         Mat hierarchy = new Mat();
 
-        //src.convertTo(src, CvType.CV_32SC1);
-        cvtColor(src, src, Imgproc.COLOR_BGR2GRAY);
-        findContours(src, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_TC89_L1);
+        findContours(CoreOperations.grayscale(src), contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_TC89_L1);
 
         for (MatOfPoint contour : contours) {
             Rect boundingRectangle = boundingRect(contour);
@@ -284,11 +288,9 @@ public class OperationsImpl implements Operations {
 
             if (contourArea / (contourPerimeter * contourPerimeter) > 0.05 &&
                     contourArea / (contourPerimeter * contourPerimeter) < 0.30) {
-//                if (contourArea > 25) {
-                    int xCenter = boundingRectangle.x + boundingRectangle.width / 2;
-                    int yCenter = boundingRectangle.y + boundingRectangle.height / 2;
-                    astrocytesCenters.add(new Point(xCenter, yCenter));
-                //}
+                int xCenter = boundingRectangle.x + boundingRectangle.width / 2;
+                int yCenter = boundingRectangle.y + boundingRectangle.height / 2;
+                astrocytesCenters.add(new Point(xCenter, yCenter));
             }
         }
     }

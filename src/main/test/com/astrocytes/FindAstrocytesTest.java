@@ -74,7 +74,7 @@ public class FindAstrocytesTest {
     }
 
     private void executePrepareImage() {
-        testImage = operationsExecutor.applyGrayscale(testImage);
+        testImage = operationsExecutor.getPreparedImage();
     }
 
     private void run() {
