@@ -234,6 +234,13 @@ public class App {
         }
     }
 
+    public void executePrepareImage() {
+        if (image != null) {
+            image = operationsExecutor.getPreparedImage();
+            updateCurrentView();
+        }
+    }
+
     /**
      * Process Canny edge detection operation for the current work image.
      */
@@ -284,9 +291,16 @@ public class App {
         }
     }
 
+    public void executeFindAstrocytesAuto() {
+        if (image != null) {
+            image = operationsExecutor.applyDetectAstrocytes();
+        }
+    }
+
     public void executeKmeans() {
         if (image != null) {
             image = operationsExecutor.applyKmeans(image);
+            updateCurrentView();
         }
     }
 

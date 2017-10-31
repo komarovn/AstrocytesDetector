@@ -73,6 +73,10 @@ public class OperationsExecutor {
         return ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
     }
 
+    public BufferedImage applyDetectAstrocytes() {
+        return ImageHelper.convertMatToBufferedImage(operations.detectAstrocytes());
+    }
+
     public BufferedImage applyKmeans(BufferedImage in) {
         operations.applyKmeans(ImageHelper.convertBufferedImageToMat(in));
         return ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
