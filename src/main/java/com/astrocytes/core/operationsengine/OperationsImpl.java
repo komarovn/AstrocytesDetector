@@ -111,6 +111,7 @@ public class OperationsImpl implements Operations {
         return getOutputImage();
     }
 
+    @Deprecated
     private void detectAstrocytes(Mat source, Integer averageRectSize, Double averageArea, int intensity) {
         if (source.channels() == 3) {
             return;
@@ -255,8 +256,40 @@ public class OperationsImpl implements Operations {
         cvtColor(result, result, Imgproc.COLOR_GRAY2BGR);
         result = CoreOperations.and(sourceImage, result);
 
-        //result = CoreOperations.threshold(result, 200, 80, 200);
+        result = CoreOperations.threshold(result, 200, 80, 200);
+
+        detectAstrocytes(result);
 
         result.copyTo(getOutputImage());
+
+        drawAstrocyteCenters();
+    }
+
+    public void detectAstrocytes(Mat src) {
+        if (src.channels() < 3) return;
+
+        astrocytesCenters = new ArrayList<Point>();
+
+        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+        Mat hierarchy = new Mat();
+
+        //src.convertTo(src, CvType.CV_32SC1);
+        cvtColor(src, src, Imgproc.COLOR_BGR2GRAY);
+        findContours(src, contours, hierarchy, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_TC89_L1);
+
+        for (MatOfPoint contour : contours) {
+            Rect boundingRectangle = boundingRect(contour);
+            Double contourArea = contourArea(contour);
+            Double contourPerimeter = arcLength(new MatOfPoint2f(contour.toArray()), true);
+
+            if (contourArea / (contourPerimeter * contourPerimeter) > 0.05 &&
+                    contourArea / (contourPerimeter * contourPerimeter) < 0.30) {
+//                if (contourArea > 25) {
+                    int xCenter = boundingRectangle.x + boundingRectangle.width / 2;
+                    int yCenter = boundingRectangle.y + boundingRectangle.height / 2;
+                    astrocytesCenters.add(new Point(xCenter, yCenter));
+                //}
+            }
+        }
     }
 }
