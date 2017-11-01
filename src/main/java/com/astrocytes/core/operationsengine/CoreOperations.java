@@ -255,4 +255,10 @@ public class CoreOperations {
 
         return (int) (0.11 * pixel[2] + 0.53 * pixel[1] + 0.36 * pixel[0]);
     }
+
+    public static Mat gaussianBlur(Mat src, int size) {
+        Mat dest = new Mat();
+        GaussianBlur(src, dest, new Size(size, size), 1.4, 1.4);
+        return dest;
+    }
 }

@@ -76,7 +76,7 @@ public class OperationsImpl implements Operations {
 
         //double th2 = threshold(dest, new Mat(), 0, 255, THRESH_OTSU);
 
-        GaussianBlur(grayscaled, blurred, new Size(9, 9), 1.4, 1.4);
+        blurred = CoreOperations.gaussianBlur(grayscaled, 9);
         Canny(blurred, edged, minThreshold, maxThreshold, 3, true);
 
         edged.copyTo(getOutputImage());
@@ -247,18 +247,22 @@ public class OperationsImpl implements Operations {
     @Override
     public void prepareImage() {
         Mat result = //CoreOperations.normalize(sourceImage);
-                CoreOperations.grayscale(sourceImage);
-        //result = CoreOperations.grayscale(result);
-        result = CoreOperations.threshold(result, 197);
-        result = CoreOperations.erode(result, 3);
+                //CoreOperations.grayscale(sourceImage);
+                CoreOperations.gaussianBlur(sourceImage, 5);
+        result = CoreOperations.grayscale(result);
+        result = CoreOperations.threshold(result, 195);
+        result = CoreOperations.erode(result, 2);
         result = CoreOperations.invert(result);
-        result = CoreOperations.clearContours(result, 140);
+        result = CoreOperations.clearContours(result, 190);
 
         Mat bigErode = CoreOperations.erode(result, 30);
-        //result = CoreOperations.xor(result, bigErode);
+        result = CoreOperations.xor(result, bigErode);
 
         cvtColor(result, result, Imgproc.COLOR_GRAY2BGR);
         result = CoreOperations.and(sourceImage, result);
+
+        result = CoreOperations.erode(result, 12);
+
         result.copyTo(getOutputImage());
         this.preparedImage = result;
     }
