@@ -294,6 +294,7 @@ public class App {
     public void executeFindAstrocytesAuto() {
         if (image != null) {
             image = operationsExecutor.applyDetectAstrocytes();
+            updateCurrentView();
         }
     }
 
