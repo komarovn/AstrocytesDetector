@@ -24,6 +24,8 @@ import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.opencv.imgproc.Imgproc.*;
@@ -151,10 +153,9 @@ public class CoreOperations {
      * @param src - color image to be applyed auto contrast.
      * @return the source image with equalized histogram.
      */
-    @Deprecated
-    public static Mat normalize(Mat src) {
+    public static Mat equalize(Mat src) {
         Mat dest = new Mat();
-        Mat ycrcb = new Mat();
+        /*Mat ycrcb = new Mat();
 
         cvtColor(src, ycrcb, Imgproc.COLOR_BGR2YCrCb);
 
@@ -164,7 +165,25 @@ public class CoreOperations {
         Imgproc.equalizeHist(channels.get(0), channels.get(0));
 
         Core.merge(channels, ycrcb);
-        cvtColor(ycrcb, dest, Imgproc.COLOR_YCrCb2BGR);
+        cvtColor(ycrcb, dest, Imgproc.COLOR_YCrCb2BGR);*/
+
+        /*Mat histogram = new Mat();
+        MatOfInt size = new MatOfInt(256);
+        MatOfFloat range = new MatOfFloat(0, 256);
+        Mat graySrc = grayscale(src);
+        graySrc.convertTo(graySrc, CvType.CV_32F);
+        Imgproc.calcHist(Arrays.asList(graySrc), new MatOfInt(0), new Mat(), histogram, size, range);
+
+        histogram = histogram.reshape(1, 1);
+
+        Core.normalize(histogram, histogram, 0, histogram.rows(), Core.NORM_MINMAX);
+
+        float[] data = new float[histogram.cols() * histogram.rows() * (int) histogram.elemSize()];
+        histogram.get(0, 0, data);
+        histogram.convertTo(histogram, CvType.CV_8UC1);*/
+
+        Imgproc.equalizeHist(grayscale(src), dest);
+
         return dest;
     }
 

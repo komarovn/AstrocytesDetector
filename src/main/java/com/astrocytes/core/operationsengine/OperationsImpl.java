@@ -246,7 +246,7 @@ public class OperationsImpl implements Operations {
 
     @Override
     public void prepareImage() {
-        Mat result = //CoreOperations.normalize(sourceImage);
+        Mat result = //CoreOperations.equalize(sourceImage);
                 //CoreOperations.grayscale(sourceImage);
                 CoreOperations.gaussianBlur(sourceImage, 5);
         result = CoreOperations.grayscale(result);
@@ -261,10 +261,17 @@ public class OperationsImpl implements Operations {
         cvtColor(result, result, Imgproc.COLOR_GRAY2BGR);
         result = CoreOperations.and(sourceImage, result);
 
-        result = CoreOperations.erode(result, 12);
+        result = CoreOperations.erode(result, 24);
 
+        result = detectLayers(); // TODO: remove it later
         result.copyTo(getOutputImage());
         this.preparedImage = result;
+    }
+
+    public Mat detectLayers() {
+        Mat result = CoreOperations.equalize(sourceImage);
+
+        return result;
     }
 
     @Override
