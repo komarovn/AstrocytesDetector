@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.Math.PI;
+import static java.lang.Math.min;
+import static java.lang.Math.round;
 import static org.opencv.imgproc.Imgproc.*;
 
 public class OperationsImpl implements Operations {
@@ -249,7 +251,7 @@ public class OperationsImpl implements Operations {
         Mat result = //CoreOperations.equalize(sourceImage);
                 //CoreOperations.grayscale(sourceImage);
                 CoreOperations.gaussianBlur(sourceImage, 5);
-        result = CoreOperations.grayscale(result);
+        /*result = CoreOperations.grayscale(result);
         result = CoreOperations.threshold(result, 195);
         result = CoreOperations.erode(result, 2);
         result = CoreOperations.invert(result);
@@ -261,7 +263,7 @@ public class OperationsImpl implements Operations {
         cvtColor(result, result, Imgproc.COLOR_GRAY2BGR);
         result = CoreOperations.and(sourceImage, result);
 
-        result = CoreOperations.erode(result, 24);
+        result = CoreOperations.erode(result, 24);*/
 
         result = detectLayers(); // TODO: remove it later
         result.copyTo(getOutputImage());
@@ -271,7 +273,84 @@ public class OperationsImpl implements Operations {
     public Mat detectLayers() {
         Mat result = CoreOperations.equalize(sourceImage);
 
-        return result;
+        int k = 50;
+        //int partsCount = (int) Math.ceil((float) result.cols() / k);
+        Mat density = new Mat(result.rows(), result.cols(), CvType.CV_32F);
+        for (int i = 0; i < density.rows(); i++) {
+            for (int j = 0; j < density.cols(); j++) {
+                double p = 0;
+
+                int leftThresh = Math.max(j - k, 0);
+                int rightThresh = Math.min(density.cols() - 1, j + k);
+                for (int s = leftThresh; s <= rightThresh; s++) {
+                    p += result.get(i, s)[0];
+                }
+                p /= rightThresh - leftThresh + 1;
+
+                density.put(i, j, p);
+            }
+        }
+
+        Mat sumOfIntensityInColumn = new Mat(1, density.cols(), CvType.CV_32F);
+
+        for (int j = 0; j < density.cols(); j++) {
+            double intensity = 0.0;
+
+            for (int i = 0; i < density.rows(); i++) {
+                intensity += density.get(i, j)[0];
+            }
+
+            sumOfIntensityInColumn.put(0, j, intensity);
+
+            for (int i = 0; i < density.rows(); i++) {
+                intensity = density.get(i, j)[0] / sumOfIntensityInColumn.get(0, j)[0];
+                density.put(i, j, intensity);
+            }
+        }
+
+        Mat ndlAverage = new Mat(1, density.cols(), CvType.CV_32F);
+
+        for (int j = 0; j < density.cols(); j++) {
+            double intensity = 0.0;
+
+            for (int i = 0; i < density.rows(); i++) {
+                intensity += density.get(i, j)[0];
+            }
+
+            intensity /= (double) density.rows();
+            ndlAverage.put(0, j, intensity);
+        }
+
+        Mat bounds = new Mat(2, density.cols(), CvType.CV_32F);
+        double k1 = 0.5E-4;
+        double k2 = 0.5E-4;
+
+        for (int j = 0; j < density.cols(); j++) {
+            int upperBound = 0;
+            int lowerBound = 0;
+
+            for (int i = 0; i < density.rows(); i++) {
+                if (density.get(i, j)[0] > ndlAverage.get(0, j)[0] + k1) {
+                    upperBound = i;
+                    break;
+                }
+            }
+            for (int i = density.cols() - 1; i <= 0; i--) {
+                if (density.get(i, j)[0] > ndlAverage.get(0, j)[0] + k2) {
+                    lowerBound = i;
+                    break;
+                }
+            }
+
+            bounds.put(0, j, upperBound);
+            bounds.put(1, j, lowerBound);
+        }
+
+
+        float[] data = new float[bounds.cols() * (int) bounds.elemSize()];
+        bounds.get(0, 0, data);
+
+        return sourceImage;
     }
 
     @Override
