@@ -322,8 +322,10 @@ public class OperationsImpl implements Operations {
         }
 
         Mat bounds = new Mat(2, density.cols(), CvType.CV_32F);
-        double k1 = 0.5E-4;
-        double k2 = 0.5E-4;
+        double k1 = 0.1E-4;
+        double k2 = 0.1E-4;
+
+        astrocytesCenters = new ArrayList<Point>();
 
         for (int j = 0; j < density.cols(); j++) {
             int upperBound = 0;
@@ -344,13 +346,17 @@ public class OperationsImpl implements Operations {
 
             bounds.put(0, j, upperBound);
             bounds.put(1, j, lowerBound);
+
+            astrocytesCenters.add(new Point(j, upperBound));
+            astrocytesCenters.add(new Point(j, lowerBound));
         }
 
 
-        float[] data = new float[bounds.cols() * (int) bounds.elemSize()];
-        bounds.get(0, 0, data);
+        //float[] data = new float[bounds.cols() * (int) bounds.elemSize()];
+        //bounds.get(0, 0, data);
 
-        return sourceImage;
+
+        return drawAstrocyteCenters();
     }
 
     @Override
