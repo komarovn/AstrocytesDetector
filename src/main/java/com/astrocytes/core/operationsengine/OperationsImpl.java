@@ -271,27 +271,27 @@ public class OperationsImpl implements Operations {
     }
 
     public Mat detectLayers() {
-        Mat result = CoreOperations.equalize(sourceImage);
+        Mat equalizedImage = CoreOperations.equalize(sourceImage);
 
-        int k = 50;
-        //int partsCount = (int) Math.ceil((float) result.cols() / k);
-        Mat density = new Mat(result.rows(), result.cols(), CvType.CV_32F);
+        int k = 80;
+        Mat density = new Mat(equalizedImage.rows(), equalizedImage.cols(), CvType.CV_32F);
+
         for (int i = 0; i < density.rows(); i++) {
             for (int j = 0; j < density.cols(); j++) {
-                double p = 0;
+                double p = 0.0;
+                int leftBoundInterval = Math.max(j - k, 0);
+                int rightBoundInterval = Math.min(density.cols() - 1, j + k);
+                int intervalLength = rightBoundInterval - leftBoundInterval + 1;
 
-                int leftThresh = Math.max(j - k, 0);
-                int rightThresh = Math.min(density.cols() - 1, j + k);
-                for (int s = leftThresh; s <= rightThresh; s++) {
-                    p += result.get(i, s)[0];
+                for (int s = leftBoundInterval; s <= rightBoundInterval; s++) {
+                    p += equalizedImage.get(i, s)[0];
                 }
-                p /= rightThresh - leftThresh + 1;
 
-                density.put(i, j, p);
+                density.put(i, j, p / intervalLength);
             }
         }
-
-        Mat sumOfIntensityInColumn = new Mat(1, density.cols(), CvType.CV_32F);
+        /*density.convertTo(density, CvType.CV_8UC1);
+        return density;*/
 
         for (int j = 0; j < density.cols(); j++) {
             double intensity = 0.0;
@@ -300,15 +300,12 @@ public class OperationsImpl implements Operations {
                 intensity += density.get(i, j)[0];
             }
 
-            sumOfIntensityInColumn.put(0, j, intensity);
-
             for (int i = 0; i < density.rows(); i++) {
-                intensity = density.get(i, j)[0] / sumOfIntensityInColumn.get(0, j)[0];
-                density.put(i, j, intensity);
+                density.put(i, j, density.get(i, j)[0] / intensity);
             }
         }
 
-        Mat ndlAverage = new Mat(1, density.cols(), CvType.CV_32F);
+        /*Mat ndlAverage = new Mat(1, density.cols(), CvType.CV_32F);
 
         for (int j = 0; j < density.cols(); j++) {
             double intensity = 0.0;
@@ -319,11 +316,13 @@ public class OperationsImpl implements Operations {
 
             intensity /= (double) density.rows();
             ndlAverage.put(0, j, intensity);
-        }
+        }*/
+
+        double ndlAverage = 1.0 / (double) density.rows();
 
         Mat bounds = new Mat(2, density.cols(), CvType.CV_32F);
-        double k1 = 2.56E-4;
-        double k2 = 1.94E-4;
+        double k1 = -0.56E-4;
+        double k2 = -0.54E-4;
 
         astrocytesCenters = new ArrayList<Point>();
 
@@ -335,13 +334,13 @@ public class OperationsImpl implements Operations {
             int lowerBound = 0;
 
             for (int i = 0; i < density.rows(); i++) {
-                if (density.get(i, j)[0] > ndlAverage.get(0, j)[0] + k1) {
+                if (density.get(i, j)[0] < ndlAverage/*.get(0, j)[0]*/ + k1) {
                     upperBound = i;
                     break;
                 }
             }
-            for (int i = density.cols() - 1; i <= 0; i--) {
-                if (density.get(i, j)[0] > ndlAverage.get(0, j)[0] + k2) {
+            for (int i = density.rows() - 1; i >= 0; i--) {
+                if (density.get(i, j)[0] < ndlAverage/*.get(0, j)[0]*/ + k2) {
                     lowerBound = i;
                     break;
                 }
@@ -351,7 +350,7 @@ public class OperationsImpl implements Operations {
             bounds.put(1, j, lowerBound);
 
             astrocytesCenters.add(new Point(j, upperBound));
-            //astrocytesCenters.add(new Point(j, lowerBound));
+            astrocytesCenters.add(new Point(j, lowerBound));
         }
 
         return drawAstrocyteCenters();
