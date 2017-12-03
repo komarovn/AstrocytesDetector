@@ -273,7 +273,7 @@ public class OperationsImpl implements Operations {
         Mat result = //CoreOperations.equalize(sourceImage);
                 //CoreOperations.grayscale(sourceImage);
                 CoreOperations.gaussianBlur(sourceImage, 5);
-        /*result = CoreOperations.grayscale(result);
+        result = CoreOperations.grayscale(result);
         result = CoreOperations.threshold(result, 195);
         result = CoreOperations.erode(result, 2);
         result = CoreOperations.invert(result);
@@ -285,9 +285,17 @@ public class OperationsImpl implements Operations {
         cvtColor(result, result, Imgproc.COLOR_GRAY2BGR);
         result = CoreOperations.and(sourceImage, result);
 
-        result = CoreOperations.erode(result, 24);*/
+        result = CoreOperations.erode(result, 5);
 
-        result = detectLayers(); // TODO: remove it later
+        int minNeuronRadius = 6;
+        int maxNeuronRadius = 27;
+        int stepSize = 3;
+
+        for (int step = maxNeuronRadius; step >= minNeuronRadius; step -= stepSize) {
+            //TODO: analyze each step
+        }
+
+        //result = detectLayers(); // TODO: remove it later
         result.copyTo(getOutputImage());
         this.preparedImage = result;
     }
