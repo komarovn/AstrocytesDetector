@@ -30,16 +30,17 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.Math.PI;
-import static java.lang.Math.min;
-import static java.lang.Math.round;
 import static org.opencv.imgproc.Imgproc.*;
 
 public class OperationsImpl implements Operations {
+    public static final float[] BRODMANN_COEFFS = {0.09f, 0.34f, 0.42f, 0.64f, 1.0f};
+
     private Mat sourceImage = new Mat();
     private Mat outputImage;
     private Mat preparedImage;
 
     private List<Point> astrocytesCenters;
+    private Mat layerBounds;
 
     //private List<Rect> boundingRectangles;
 
@@ -170,6 +171,27 @@ public class OperationsImpl implements Operations {
 
         return result;
         //dest.copyTo(getOutputImage());
+    }
+
+    private Mat drawLayerBounds() {
+        if (layerBounds == null) {
+            return sourceImage;
+        }
+
+        Mat result = sourceImage.clone();
+
+        for (int i = 0; i < layerBounds.rows(); i++) {
+            Scalar color = new Scalar(250, 20, 18);
+            if (i == 0 || i == layerBounds.rows() - 1) {
+                color = new Scalar(18, 20, 250);
+            }
+
+            for (int j = 0; j < layerBounds.cols(); j++) {
+                Imgproc.circle(result, new Point(j, layerBounds.get(i, j)[0]), 1, color);
+            }
+        }
+
+        return result;
     }
 
     /*private void drawBoundingRectangles() {
@@ -320,7 +342,7 @@ public class OperationsImpl implements Operations {
 
         double ndlAverage = 1.0 / (double) density.rows();
 
-        Mat bounds = new Mat(2, density.cols(), CvType.CV_32F);
+        layerBounds = new Mat(6, density.cols(), CvType.CV_32F);
         double k1 = -0.56E-4;
         double k2 = -0.54E-4;
 
@@ -346,14 +368,19 @@ public class OperationsImpl implements Operations {
                 }
             }
 
-            bounds.put(0, j, upperBound);
-            bounds.put(1, j, lowerBound);
+            layerBounds.put(0, j, upperBound);
+            int columnHeight = lowerBound - upperBound;
+            for (int h = 1; h < 5; h++) {
+                layerBounds.put(h, j, upperBound + BRODMANN_COEFFS[h - 1] * columnHeight);
+            }
+            layerBounds.put(5, j, lowerBound);
 
-            astrocytesCenters.add(new Point(j, upperBound));
-            astrocytesCenters.add(new Point(j, lowerBound));
+            //astrocytesCenters.add(new Point(j, upperBound));
+            //astrocytesCenters.add(new Point(j, lowerBound));
         }
 
-        return drawAstrocyteCenters();
+        //return drawAstrocyteCenters();
+        return drawLayerBounds();
     }
 
     @Override
