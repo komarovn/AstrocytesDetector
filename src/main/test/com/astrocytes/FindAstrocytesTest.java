@@ -39,7 +39,7 @@ public class FindAstrocytesTest {
 
     private void prepare() {
         try {
-            File file = new File("src/main/resources/presets/original-cortex.jpg");
+            File file = new File("src/main/resources/presets/original-cortex-one-column.jpg");
             BufferedImage bufferedImage = ImageIO.read(file);
             operationsExecutor.setOriginalImage(bufferedImage);
             testImage = bufferedImage;
