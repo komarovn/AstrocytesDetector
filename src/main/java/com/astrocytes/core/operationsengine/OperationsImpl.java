@@ -166,13 +166,29 @@ public class OperationsImpl implements Operations {
         }
 
         Mat result = sourceImage.clone();
+        Scalar color = new Scalar(108, 240, 3);
 
         for (Point center : astrocytesCenters) {
-            Imgproc.circle(result, center, 1, new Scalar(18, 20, 250));
+            Imgproc.circle(result, center, 3, color);
         }
 
         return result;
         //dest.copyTo(getOutputImage());
+    }
+
+    private Mat drawNeuronsCenters() {
+        if (neurons == null) {
+            return sourceImage;
+        }
+
+        Mat result = sourceImage.clone();
+        Scalar color = new Scalar(250, 50, 19);
+
+        for (Neuron neuron : neurons) {
+            Imgproc.circle(result, neuron.getCenter(), 4, color);
+        }
+
+        return result;
     }
 
     private Mat drawLayerBounds() {
@@ -288,6 +304,7 @@ public class OperationsImpl implements Operations {
         result = CoreOperations.and(sourceImage, result);
 
         findNeurons(result);
+        result = drawNeuronsCenters();
         //result = detectLayers(); // TODO: remove it later
 
         result.copyTo(getOutputImage());
