@@ -5,7 +5,7 @@ import org.opencv.core.Point;
 public class Neuron {
     private Point center;
     private float radius;
-    private float epsilon = 5.0f;
+    private float epsilon = 10.0f;
 
     public Neuron(Point center, float radius) {
         this.center = center;

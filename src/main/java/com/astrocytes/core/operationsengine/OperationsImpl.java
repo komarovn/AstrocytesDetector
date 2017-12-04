@@ -182,10 +182,10 @@ public class OperationsImpl implements Operations {
         }
 
         Mat result = sourceImage.clone();
-        Scalar color = new Scalar(250, 50, 19);
+        Scalar color = new Scalar(250, 10, 19);
 
         for (Neuron neuron : neurons) {
-            Imgproc.circle(result, neuron.getCenter(), 4, color);
+            Imgproc.circle(result, neuron.getCenter(), 4, color, 2);
         }
 
         return result;
@@ -303,9 +303,13 @@ public class OperationsImpl implements Operations {
         cvtColor(result, result, Imgproc.COLOR_GRAY2BGR);
         result = CoreOperations.and(sourceImage, result);
 
-        findNeurons(result);
-        result = drawNeuronsCenters();
-        //result = detectLayers(); // TODO: remove it later
+        // TODO: remove it later
+        if (true) {
+            findNeurons(result);
+            result = drawNeuronsCenters();
+        } else {
+            result = detectLayers();
+        }
 
         result.copyTo(getOutputImage());
         this.preparedImage = result;
@@ -404,22 +408,32 @@ public class OperationsImpl implements Operations {
         int maxNeuronRadius = 27;
         int stepSize = 3;
 
-        //TODO: analyze each step
         for (int step = maxNeuronRadius; step >= minNeuronRadius; step -= stepSize) {
             List<Neuron> neuronsInStep = findNeuronsInStep(CoreOperations.erode(preparedImage, step), step);
 
             for (Neuron neuron : neuronsInStep) {
-                if (neurons.contains(neuron)) {
-                    neuronsInStep.remove(neuron);
+                if (!neurons.contains(neuron)) {
+                    neurons.add(neuron);
                 }
             }
-
-            neurons.addAll(neuronsInStep);
         }
     }
 
     private List<Neuron> findNeuronsInStep(Mat source, int stepRadius) {
         List<Neuron> neurons = new ArrayList<Neuron>();
+
+        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+        Mat hierarchy = new Mat();
+
+        findContours(CoreOperations.grayscale(source), contours, hierarchy,
+                Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_TC89_L1);
+
+        for (MatOfPoint contour : contours) {
+            Rect boundingRectangle = boundingRect(contour);
+            int xCenter = boundingRectangle.x + boundingRectangle.width / 2;
+            int yCenter = boundingRectangle.y + boundingRectangle.height / 2;
+            neurons.add(new Neuron(new Point(xCenter, yCenter), stepRadius));
+        }
         //TODO: find contours, its centers (with bounding rectangle)
         return neurons;
     }
