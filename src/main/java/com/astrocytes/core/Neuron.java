@@ -5,6 +5,7 @@ import org.opencv.core.Point;
 public class Neuron {
     private Point center;
     private float radius;
+    private float epsilon = 5.0f;
 
     public Neuron(Point center, float radius) {
         this.center = center;
@@ -34,11 +35,18 @@ public class Neuron {
 
         Neuron neuron = (Neuron) o;
 
-        if (center == null && neuron.center != null || center != null && neuron.center == null) return false;
+        if (center == null && neuron.center != null ||
+                center != null && neuron.center == null) return false;
+
         if (center != null) {
             //TODO: compare coordinates
+            if (center.x - epsilon <= neuron.center.x && neuron.center.x <= center.x + epsilon &&
+                    center.y - epsilon <= neuron.center.y && neuron.center.y <= center.y + epsilon) {
+                return true;
+            }
         }
-        return center != null ? center.equals(neuron.center) : neuron.center == null;
+
+        return false;
     }
 
     @Override
