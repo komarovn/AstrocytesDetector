@@ -20,6 +20,7 @@
  */
 package com.astrocytes.core.operationsengine;
 
+import com.astrocytes.core.Neuron;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
@@ -40,6 +41,7 @@ public class OperationsImpl implements Operations {
     private Mat preparedImage;
 
     private List<Point> astrocytesCenters;
+    private List<Neuron> neurons;
     private Mat layerBounds;
 
     //private List<Rect> boundingRectangles;
@@ -285,17 +287,9 @@ public class OperationsImpl implements Operations {
         cvtColor(result, result, Imgproc.COLOR_GRAY2BGR);
         result = CoreOperations.and(sourceImage, result);
 
-        result = CoreOperations.erode(result, 5);
-
-        int minNeuronRadius = 6;
-        int maxNeuronRadius = 27;
-        int stepSize = 3;
-
-        for (int step = maxNeuronRadius; step >= minNeuronRadius; step -= stepSize) {
-            //TODO: analyze each step
-        }
-
+        findNeurons(result);
         //result = detectLayers(); // TODO: remove it later
+
         result.copyTo(getOutputImage());
         this.preparedImage = result;
     }
@@ -382,13 +376,35 @@ public class OperationsImpl implements Operations {
                 layerBounds.put(h, j, upperBound + BRODMANN_COEFFS[h - 1] * columnHeight);
             }
             layerBounds.put(5, j, lowerBound);
-
-            //astrocytesCenters.add(new Point(j, upperBound));
-            //astrocytesCenters.add(new Point(j, lowerBound));
         }
 
-        //return drawAstrocyteCenters();
         return drawLayerBounds();
+    }
+
+    private void findNeurons(Mat preparedImage) {
+        neurons = new ArrayList<Neuron>();
+        int minNeuronRadius = 6;
+        int maxNeuronRadius = 27;
+        int stepSize = 3;
+
+        //TODO: analyze each step
+        for (int step = maxNeuronRadius; step >= minNeuronRadius; step -= stepSize) {
+            List<Neuron> neuronsInStep = findNeuronsInStep(CoreOperations.erode(preparedImage, step), step);
+
+            for (Neuron neuron : neuronsInStep) {
+                if (neurons.contains(neuron)) {
+                    neuronsInStep.remove(neuron);
+                }
+            }
+
+            neurons.addAll(neuronsInStep);
+        }
+    }
+
+    private List<Neuron> findNeuronsInStep(Mat source, int stepRadius) {
+        List<Neuron> neurons = new ArrayList<Neuron>();
+        //TODO: find contours, its centers (with bounding rectangle)
+        return neurons;
     }
 
     @Override
