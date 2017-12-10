@@ -304,7 +304,7 @@ public class OperationsImpl implements Operations {
         result = CoreOperations.and(sourceImage, result);
 
         // TODO: remove it later
-        if (true) {
+        if (false) {
             findNeurons(result);
             result = drawNeuronsCenters();
         } else {
@@ -316,16 +316,16 @@ public class OperationsImpl implements Operations {
     }
 
     public Mat detectLayers() {
-        Mat equalizedImage = CoreOperations.equalize(sourceImage);
+        Mat equalizedImage = CoreOperations.invert(CoreOperations.equalize(sourceImage));
 
-        int k = 80;
+        int halfColumnWidth = 50;
         Mat density = new Mat(equalizedImage.rows(), equalizedImage.cols(), CvType.CV_32F);
 
         for (int i = 0; i < density.rows(); i++) {
             for (int j = 0; j < density.cols(); j++) {
                 double p = 0.0;
-                int leftBoundInterval = Math.max(j - k, 0);
-                int rightBoundInterval = Math.min(density.cols() - 1, j + k);
+                int leftBoundInterval = Math.max(j - halfColumnWidth, 0);
+                int rightBoundInterval = Math.min(density.cols() - 1, j + halfColumnWidth);
                 int intervalLength = rightBoundInterval - leftBoundInterval + 1;
 
                 for (int s = leftBoundInterval; s <= rightBoundInterval; s++) {
@@ -350,53 +350,63 @@ public class OperationsImpl implements Operations {
             }
         }
 
-        /*Mat ndlAverage = new Mat(1, density.cols(), CvType.CV_32F);
-
-        for (int j = 0; j < density.cols(); j++) {
-            double intensity = 0.0;
-
-            for (int i = 0; i < density.rows(); i++) {
-                intensity += density.get(i, j)[0];
-            }
-
-            intensity /= (double) density.rows();
-            ndlAverage.put(0, j, intensity);
-        }*/
-
         double ndlAverage = 1.0 / (double) density.rows();
 
         layerBounds = new Mat(6, density.cols(), CvType.CV_32F);
-        double k1 = -0.56E-4;
-        double k2 = -0.54E-4;
+        double k1 = 0.56E-4;
+        double k2 = 0.59E-4;
 
         astrocytesCenters = new ArrayList<Point>();
 
         float[] data = new float[density.rows() * (int) density.elemSize()];
         density.get(0, 10, data);
 
+        Mat upperBoundExact = new Mat(1, density.cols(), CvType.CV_32F);
+        Mat lowerBoundExact = new Mat(1, density.cols(), CvType.CV_32F);
+
         for (int j = 0; j < density.cols(); j++) {
             int upperBound = 0;
             int lowerBound = 0;
 
             for (int i = 0; i < density.rows(); i++) {
-                if (density.get(i, j)[0] < ndlAverage/*.get(0, j)[0]*/ + k1) {
+                if (density.get(i, j)[0] > ndlAverage + k1) {
                     upperBound = i;
                     break;
                 }
             }
             for (int i = density.rows() - 1; i >= 0; i--) {
-                if (density.get(i, j)[0] < ndlAverage/*.get(0, j)[0]*/ + k2) {
+                if (density.get(i, j)[0] > ndlAverage + k2) {
                     lowerBound = i;
                     break;
                 }
             }
 
-            layerBounds.put(0, j, upperBound);
-            int columnHeight = lowerBound - upperBound;
-            for (int h = 1; h < 5; h++) {
-                layerBounds.put(h, j, upperBound + BRODMANN_COEFFS[h - 1] * columnHeight);
+            upperBoundExact.put(0, j, upperBound);
+            lowerBoundExact.put(0, j, lowerBound);
+        }
+
+        //moving average for bounds
+        int movingAverage = 200;
+        for (int i = 0; i < upperBoundExact.cols(); i++) {
+            int leftBoundInterval = Math.max(i - movingAverage, 0);
+            int rightBoundInterval = Math.min(density.cols() - 1, i + movingAverage);
+            int intervalLength = rightBoundInterval - leftBoundInterval + 1;
+            int upperBoundAverage = 0;
+            int lowerBoundAverage = 0;
+
+            for (int j = leftBoundInterval; j <= rightBoundInterval; j++) {
+                upperBoundAverage += upperBoundExact.get(0, j)[0];
+                lowerBoundAverage += lowerBoundExact.get(0, j)[0];
             }
-            layerBounds.put(5, j, lowerBound);
+
+            upperBoundAverage /= intervalLength;
+            lowerBoundAverage /= intervalLength;
+            int columnHeight = lowerBoundAverage - upperBoundAverage;
+            layerBounds.put(0, i, upperBoundAverage);
+            for (int h = 1; h < 5; h++) {
+                layerBounds.put(h, i, upperBoundAverage + BRODMANN_COEFFS[h - 1] * columnHeight);
+            }
+            layerBounds.put(5, i, lowerBoundAverage);
         }
 
         return drawLayerBounds();
