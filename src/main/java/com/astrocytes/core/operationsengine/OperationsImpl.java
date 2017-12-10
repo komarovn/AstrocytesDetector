@@ -205,7 +205,7 @@ public class OperationsImpl implements Operations {
             }
 
             for (int j = 0; j < layerBounds.cols(); j++) {
-                Imgproc.circle(result, new Point(j, layerBounds.get(i, j)[0]), 1, color);
+                Imgproc.circle(result, new Point(j, layerBounds.get(i, j)[0]), 1, color, -1);
             }
         }
 
@@ -304,8 +304,8 @@ public class OperationsImpl implements Operations {
         result = CoreOperations.and(sourceImage, result);
 
         // TODO: remove it later
-        if (false) {
-            findNeurons(result);
+        if (true) {
+            result = findNeurons(result);
             result = drawNeuronsCenters();
         } else {
             result = detectLayers();
@@ -412,21 +412,36 @@ public class OperationsImpl implements Operations {
         return drawLayerBounds();
     }
 
-    private void findNeurons(Mat preparedImage) {
+    private Mat findNeurons(Mat preparedImage) {
         neurons = new ArrayList<Neuron>();
-        int minNeuronRadius = 6;
+        int minNeuronRadius = 12 /*7*/;
         int maxNeuronRadius = 27;
         int stepSize = 3;
 
+        Mat stepImage = null;
         for (int step = maxNeuronRadius; step >= minNeuronRadius; step -= stepSize) {
-            List<Neuron> neuronsInStep = findNeuronsInStep(CoreOperations.erode(preparedImage, step), step);
+            stepImage = CoreOperations.erode(preparedImage, step);
+            //Mat mask = new Mat(preparedImage.rows(), preparedImage.cols(), CvType.CV_8UC3);
 
+            for (Neuron neuron : neurons) {
+                Imgproc.circle(stepImage, neuron.getCenter(), (int) (1.8f * neuron.getRadius()), new Scalar(0, 0, 0), -1);
+            }
+
+            //mask = CoreOperations.invert(mask);
+            //stepImage = CoreOperations.xor(stepImage, mask);
+
+            //TODO:apply mask;
+            List<Neuron> neuronsInStep = findNeuronsInStep(stepImage, step);
+            //stepImage = mask;
+
+            //neurons.addAll(neuronsInStep);
             for (Neuron neuron : neuronsInStep) {
                 if (!neurons.contains(neuron)) {
                     neurons.add(neuron);
                 }
             }
         }
+        return stepImage;
     }
 
     private List<Neuron> findNeuronsInStep(Mat source, int stepRadius) {
