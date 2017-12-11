@@ -24,8 +24,6 @@ import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.opencv.imgproc.Imgproc.*;
@@ -155,35 +153,7 @@ public class CoreOperations {
      */
     public static Mat equalize(Mat src) {
         Mat dest = new Mat();
-        /*Mat ycrcb = new Mat();
-
-        cvtColor(src, ycrcb, Imgproc.COLOR_BGR2YCrCb);
-
-        List<Mat> channels = new ArrayList<Mat>();
-        Core.split(ycrcb, channels);
-
-        Imgproc.equalizeHist(channels.get(0), channels.get(0));
-
-        Core.merge(channels, ycrcb);
-        cvtColor(ycrcb, dest, Imgproc.COLOR_YCrCb2BGR);*/
-
-        /*Mat histogram = new Mat();
-        MatOfInt size = new MatOfInt(256);
-        MatOfFloat range = new MatOfFloat(0, 256);
-        Mat graySrc = grayscale(src);
-        graySrc.convertTo(graySrc, CvType.CV_32F);
-        Imgproc.calcHist(Arrays.asList(graySrc), new MatOfInt(0), new Mat(), histogram, size, range);
-
-        histogram = histogram.reshape(1, 1);
-
-        Core.normalize(histogram, histogram, 0, histogram.rows(), Core.NORM_MINMAX);
-
-        float[] data = new float[histogram.cols() * histogram.rows() * (int) histogram.elemSize()];
-        histogram.get(0, 0, data);
-        histogram.convertTo(histogram, CvType.CV_8UC1);*/
-
         Imgproc.equalizeHist(grayscale(src), dest);
-
         return dest;
     }
 
@@ -275,9 +245,54 @@ public class CoreOperations {
         return (int) (0.11 * pixel[2] + 0.53 * pixel[1] + 0.36 * pixel[0]);
     }
 
+    /**
+     * Apply Gaussian blur on source image.
+     *
+     * @param src - source image.
+     * @param size - kernel's size (must be odd).
+     * @return image with applied Gaussian blur.
+     */
     public static Mat gaussianBlur(Mat src, int size) {
         Mat dest = new Mat();
         GaussianBlur(src, dest, new Size(size, size), 1.4, 1.4);
         return dest;
+    }
+
+    /**
+     * Apply Canny edge detector for image with given min and max thresholds.
+     *
+     * @param src - source image for applying filter.
+     * @param minThresh - minimal threshold for filter.
+     * @param maxThresh - maximum threshold for filter.
+     * @return output image after applying Canny filter for {@param src} image.
+     */
+    public static Mat cannyFilter(Mat src, int minThresh, int maxThresh) {
+        Mat result = new Mat();
+
+        minThresh = Math.min(Math.max(minThresh, 0), 255);
+        maxThresh = Math.max(Math.min(maxThresh, 255), 0);
+
+        Mat blurredImage = gaussianBlur(grayscale(src), 9);
+        Canny(blurredImage, result, minThresh, maxThresh, 3, true);
+
+        return result;
+    }
+
+    /**
+     * Draw all contours of source image.
+     *
+     * @param src - source image.
+     * @return binary image with black background and white contours.
+     */
+    public static Mat drawAllContours(Mat src) {
+        Mat result = new Mat(src.rows(), src.cols(), CvType.CV_8UC1);
+        List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+
+        findContours(grayscale(src), contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_TC89_L1);
+        for (int i = 0; i < contours.size(); i++) {
+            drawContours(result, contours, i, new Scalar(255));
+        }
+
+        return result;
     }
 }

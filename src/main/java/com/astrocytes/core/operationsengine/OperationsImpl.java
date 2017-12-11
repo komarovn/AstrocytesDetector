@@ -67,24 +67,7 @@ public class OperationsImpl implements Operations {
 
     @Override
     public void applyCannyEdgeDetection(Mat image, Integer minThreshold, Integer maxThreshold) {
-        if (minThreshold == null) {
-            minThreshold = 0;
-        }
-
-        if (maxThreshold == null) {
-            maxThreshold = 255;
-        }
-
-        Mat grayscaled = CoreOperations.grayscale(image);
-        Mat blurred = new Mat();
-        Mat edged = new Mat();
-
-        //double th2 = threshold(dest, new Mat(), 0, 255, THRESH_OTSU);
-
-        blurred = CoreOperations.gaussianBlur(grayscaled, 9);
-        Canny(blurred, edged, minThreshold, maxThreshold, 3, true);
-
-        edged.copyTo(getOutputImage());
+        CoreOperations.cannyFilter(sourceImage, minThreshold, maxThreshold).copyTo(getOutputImage());
     }
 
     @Override
@@ -304,11 +287,12 @@ public class OperationsImpl implements Operations {
         result = CoreOperations.and(sourceImage, result);
 
         // TODO: remove it later
-        if (true) {
-            result = findNeurons(result);
+        if (false) {
+            findNeurons(result);
             result = drawNeuronsCenters();
         } else {
-            result = detectLayers();
+            //result = detectLayers();
+            result = applyRayCastingSegmentation(result);
         }
 
         result.copyTo(getOutputImage());
@@ -412,36 +396,28 @@ public class OperationsImpl implements Operations {
         return drawLayerBounds();
     }
 
-    private Mat findNeurons(Mat preparedImage) {
+    private void findNeurons(Mat preparedImage) {
         neurons = new ArrayList<Neuron>();
-        int minNeuronRadius = 12 /*7*/;
+        int minNeuronRadius = 12;
         int maxNeuronRadius = 27;
         int stepSize = 3;
 
-        Mat stepImage = null;
         for (int step = maxNeuronRadius; step >= minNeuronRadius; step -= stepSize) {
-            stepImage = CoreOperations.erode(preparedImage, step);
-            //Mat mask = new Mat(preparedImage.rows(), preparedImage.cols(), CvType.CV_8UC3);
+            Mat stepImage = CoreOperations.erode(preparedImage, step);
 
             for (Neuron neuron : neurons) {
-                Imgproc.circle(stepImage, neuron.getCenter(), (int) (1.8f * neuron.getRadius()), new Scalar(0, 0, 0), -1);
+                Scalar blackColor = new Scalar(0);
+                Imgproc.circle(stepImage, neuron.getCenter(), (int) (1.8f * neuron.getRadius()), blackColor, Core.FILLED);
             }
 
-            //mask = CoreOperations.invert(mask);
-            //stepImage = CoreOperations.xor(stepImage, mask);
-
-            //TODO:apply mask;
             List<Neuron> neuronsInStep = findNeuronsInStep(stepImage, step);
-            //stepImage = mask;
 
-            //neurons.addAll(neuronsInStep);
             for (Neuron neuron : neuronsInStep) {
                 if (!neurons.contains(neuron)) {
                     neurons.add(neuron);
                 }
             }
         }
-        return stepImage;
     }
 
     private List<Neuron> findNeuronsInStep(Mat source, int stepRadius) {
@@ -493,5 +469,15 @@ public class OperationsImpl implements Operations {
                 astrocytesCenters.add(new Point(xCenter, yCenter));
             }
         }
+    }
+
+    private Mat applyRayCastingSegmentation(Mat preparedImage) {
+        Mat cannyEdges = CoreOperations.cannyFilter(sourceImage, 26, 58);
+        Mat contours = CoreOperations.drawAllContours(CoreOperations.erode(preparedImage, 5));
+        Mat result = CoreOperations.or(CoreOperations.and(cannyEdges, CoreOperations.grayscale(preparedImage)), contours);
+        cannyEdges.release();
+        contours.release();
+
+        return result;
     }
 }
