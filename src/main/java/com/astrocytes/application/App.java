@@ -234,7 +234,7 @@ public class App {
         }
     }
 
-    public void executePrepareImage() {
+    public void executeFindNeurons() {
         if (image != null) {
             image = operationsExecutor.getPreparedImage();
             updateCurrentView();

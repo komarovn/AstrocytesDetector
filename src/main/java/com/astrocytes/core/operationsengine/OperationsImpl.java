@@ -25,10 +25,7 @@ import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.lang.Math.PI;
 import static org.opencv.imgproc.Imgproc.*;
@@ -292,6 +289,7 @@ public class OperationsImpl implements Operations {
             result = drawNeuronsCenters();
         } else {
             //result = detectLayers();
+            findNeurons(result);
             result = applyRayCastingSegmentation(result);
         }
 
@@ -338,12 +336,12 @@ public class OperationsImpl implements Operations {
 
         layerBounds = new Mat(6, density.cols(), CvType.CV_32F);
         double k1 = 0.56E-4;
-        double k2 = 0.59E-4;
+        double k2 = 1.3E-4;
 
         astrocytesCenters = new ArrayList<Point>();
 
-        float[] data = new float[density.rows() * (int) density.elemSize()];
-        density.get(0, 10, data);
+        /*float[] data = new float[density.rows() * (int) density.elemSize()];
+        density.get(0, 10, data);*/
 
         Mat upperBoundExact = new Mat(1, density.cols(), CvType.CV_32F);
         Mat lowerBoundExact = new Mat(1, density.cols(), CvType.CV_32F);
@@ -370,7 +368,7 @@ public class OperationsImpl implements Operations {
         }
 
         //moving average for bounds
-        int movingAverage = 200;
+        int movingAverage = 300;
         for (int i = 0; i < upperBoundExact.cols(); i++) {
             int leftBoundInterval = Math.max(i - movingAverage, 0);
             int rightBoundInterval = Math.min(density.cols() - 1, i + movingAverage);
@@ -435,7 +433,7 @@ public class OperationsImpl implements Operations {
             int yCenter = boundingRectangle.y + boundingRectangle.height / 2;
             neurons.add(new Neuron(new Point(xCenter, yCenter), stepRadius));
         }
-        //TODO: find contours, its centers (with bounding rectangle)
+
         return neurons;
     }
 
@@ -472,12 +470,51 @@ public class OperationsImpl implements Operations {
     }
 
     private Mat applyRayCastingSegmentation(Mat preparedImage) {
-        Mat cannyEdges = CoreOperations.cannyFilter(sourceImage, 26, 58);
-        Mat contours = CoreOperations.drawAllContours(CoreOperations.erode(preparedImage, 5));
-        Mat result = CoreOperations.or(CoreOperations.and(cannyEdges, CoreOperations.grayscale(preparedImage)), contours);
-        cannyEdges.release();
-        contours.release();
+        //Mat cannyEdges = CoreOperations.cannyFilter(sourceImage, 26, 58);
+        Mat contours = new Mat(preparedImage.rows(), preparedImage.cols(), CvType.CV_32S);
+        int contoursCount = /*neurons.size();*/ CoreOperations.drawAllContours(CoreOperations.erode(preparedImage, 5), contours);
+        Mat result = new Mat(preparedImage.rows(), preparedImage.cols(), preparedImage.type());//CoreOperations.or(CoreOperations.and(cannyEdges, CoreOperations.grayscale(preparedImage)), contours);
+        //cannyEdges.release();
 
+        //Mat markers = new Mat(contours.rows(), contours.cols(), CvType.CV_32S);
+        //contours.copyTo(markers);
+        contours.convertTo(contours, CvType.CV_32S);
+
+        for (Neuron neuron : neurons) {
+            int x = (int) neuron.getCenter().x;
+            int y = (int) neuron.getCenter().y;
+            int color = (int) preparedImage.get(y, x)[0];
+            /*contours.put(y, x, color);
+            contours.put(y - 2, x, color);
+            contours.put(y + 2, x, color);
+            contours.put(y, x - 2, color);
+            contours.put(y, x + 2, color);*/
+            Imgproc.circle(contours, neuron.getCenter(), (int) (0.4f * neuron.getRadius()), new Scalar(color), -1);
+        }
+
+        Imgproc.watershed(sourceImage, contours);
+
+        for (int i = 0; i < contours.rows(); i++ ) {
+            for (int j = 0; j < contours.cols(); j++) {
+                int index = (int) contours.get(i, j)[0];
+                if (index == -1) {
+                    result.put(i, j, 0, 0, 0);
+                } else if (index <= 0 || index > contoursCount) {
+                    result.put(i, j, 0, 0, 0);
+                } else {
+                    if (index == 255) {
+                        result.put(i, j, 0, 0, 0/*sourceImage.get(i, j)*/);
+                    } else {
+                        result.put(i, j, index, index, index);
+                    }
+                }
+            }
+        }
+
+        result = CoreOperations.erode(result, 2);
+        result = CoreOperations.dilate(result, 3);
+
+        contours.release();
         return result;
     }
 }

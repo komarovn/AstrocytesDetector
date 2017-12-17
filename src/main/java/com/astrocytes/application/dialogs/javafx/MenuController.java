@@ -63,7 +63,7 @@ public class MenuController extends AbstractController {
     private MenuItem exit;
 
     @FXML
-    private MenuItem prepareImageMenuItem;
+    private MenuItem findNeuronsMenuItem;
 
     @FXML
     private MenuItem cannyEdDet;
@@ -79,9 +79,6 @@ public class MenuController extends AbstractController {
 
     @FXML
     private MenuItem findAstrocytesAutoMenuItem;
-
-    @FXML
-    private MenuItem kmeans;
 
     @FXML
     private MenuItem layersStatistics;
@@ -126,10 +123,10 @@ public class MenuController extends AbstractController {
         });
 
         /* --- Operations --- */
-        prepareImageMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+        findNeuronsMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                mainApp.executePrepareImage();
+                mainApp.executeFindNeurons();
             }
         });
         cannyEdDet.setOnAction(new EventHandler<ActionEvent>() {
@@ -162,12 +159,6 @@ public class MenuController extends AbstractController {
                 mainApp.executeFindAstrocytesAuto();
             }
         });
-        kmeans.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                mainApp.executeKmeans();
-            }
-        });
 
         /* ---Statistics --- */
         layersStatistics.setOnAction(new EventHandler<ActionEvent>() {
@@ -181,7 +172,7 @@ public class MenuController extends AbstractController {
     public void setAvailability(boolean isEmpty) {
         saveProjectAs.setDisable(isEmpty);
         exportImage.setDisable(isEmpty);
-        prepareImageMenuItem.setDisable(isEmpty);
+        findNeuronsMenuItem.setDisable(isEmpty);
         cannyEdDet.setDisable(isEmpty);
         dilErode.setDisable(isEmpty);
         grayscale.setDisable(isEmpty);

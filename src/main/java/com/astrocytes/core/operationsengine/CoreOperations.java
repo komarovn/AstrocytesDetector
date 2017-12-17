@@ -284,7 +284,7 @@ public class CoreOperations {
      * @param src - source image.
      * @return binary image with black background and white contours.
      */
-    public static Mat drawAllContours(Mat src) {
+    public static int drawAllContours(Mat src, Mat dest) {
         Mat result = new Mat(src.rows(), src.cols(), CvType.CV_8UC1);
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 
@@ -293,6 +293,7 @@ public class CoreOperations {
             drawContours(result, contours, i, new Scalar(255));
         }
 
-        return result;
+        result.copyTo(dest);
+        return contours.size();
     }
 }
