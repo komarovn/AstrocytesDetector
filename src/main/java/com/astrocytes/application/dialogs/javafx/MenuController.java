@@ -169,16 +169,16 @@ public class MenuController extends AbstractController {
         });
     }
 
-    public void setAvailability(boolean isEmpty) {
-        saveProjectAs.setDisable(isEmpty);
-        exportImage.setDisable(isEmpty);
-        findNeuronsMenuItem.setDisable(isEmpty);
-        cannyEdDet.setDisable(isEmpty);
-        dilErode.setDisable(isEmpty);
-        grayscale.setDisable(isEmpty);
-        findAstrocytes.setDisable(isEmpty);
-        findAstrocytesAutoMenuItem.setDisable(isEmpty);
-        layersStatistics.setDisable(true);
+    public void setAvailability(boolean isAvailable) {
+        saveProjectAs.setDisable(!isAvailable);
+        exportImage.setDisable(!isAvailable);
+        findNeuronsMenuItem.setDisable(!isAvailable);
+        cannyEdDet.setDisable(!isAvailable);
+        dilErode.setDisable(!isAvailable);
+        grayscale.setDisable(!isAvailable);
+        findAstrocytes.setDisable(!isAvailable);
+        findAstrocytesAutoMenuItem.setDisable(!isAvailable);
+        layersStatistics.setDisable(true); //TODO: why constant value?
     }
 
     public void setLayerStatisticsEnabled(boolean isEnabled) {

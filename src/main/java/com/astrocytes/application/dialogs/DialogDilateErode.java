@@ -136,9 +136,10 @@ public class DialogDilateErode extends AbstractDialog {
     private void processPreview() {
         BufferedImage currentView = preview.getCurrentView();
         Operations operations = new OperationsImpl();
-        operations.applyMathMorphology(ImageHelper.convertBufferedImageToMat(currentView), getInstrumentRadius());
-        BufferedImage newCurrentView = ImageHelper.convertMatToBufferedImage(operations.getOutputImage()) ;
-        preview.updatePreview(newCurrentView);
+        operations.setSourceImage(ImageHelper.convertBufferedImageToMat(currentView));
+        BufferedImage resultPreview = ImageHelper.convertMatToBufferedImage(
+                operations.applyMathMorphology(getInstrumentRadius()));
+        preview.updatePreview(resultPreview);
     }
 
 }

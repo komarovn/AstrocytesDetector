@@ -43,38 +43,48 @@ public interface Operations {
     public Mat getSourceImage();
 
     /**
-     * Get current working image in Operations Engine.
-     * @return current working image.
+     * Convert color image to grayscale image.
+     *
+     * @return grayscale image of original one.
      */
-    public Mat getOutputImage();
-
-    public void prepareImage();
+    public Mat convertGrayscale();
 
     /**
      * Apply Canny edge detection algorythm for working image.
      *
-     * @param image - a working image for applying Canny edge detection
      * @param minThreshold - minimal thresh
      * @param maxThreshold - maximal thresh
      */
-    public void applyCannyEdgeDetection(Mat image, Integer minThreshold, Integer maxThreshold);
+    public Mat applyCannyEdgeDetection(Integer minThreshold, Integer maxThreshold);
 
     /**
      * Make closing operation (dilation and erosion) for contours after applying Canny edge detection operation.
      *
-     * @param source - binary image after applying Canny edge detection operation
      * @param radius - radius of structuring element; must be &gt; 0
      * @return a working image with applyed closing operation.
      */
-    public Mat applyMathMorphology(Mat source, Integer radius);
+    public Mat applyMathMorphology(Integer radius);
 
     /**
-     * Convert color image to grayscale image.
+     * Detect layers on source image.
      *
-     * @param source - source color image.
-     * @return grayscale image of original one.
+     * @return list of splines presented layer delimiters.
      */
-    public Mat convertGrayscale(Mat source);
+    public Mat getLayerDelimiters();
+
+    /**
+     * Get a list of all astrocytes centers finded on source image.
+     *
+     * @return list of points presented astrocytes centers.
+     */
+    public List<Point> getAstrocytesCenters();
+
+    /**
+     * Get a list of all neurons centers finded on source image.
+     *
+     * @return list of points presented neurons centers.
+     */
+    public List<Point> getNeuronsCenters();
 
     /**
      * Fill an array of astrocytes' centers which are placed on original working image.
@@ -85,24 +95,12 @@ public interface Operations {
      *   4) check circularity of the contour's form;
      *   5) check average intensity within each contour.
      *
-     * @param source - working image after applying Canny edge detection and math morphology operations
      * @param widthRectangle - width of bounding rectangle
      * @param heightRectangle - height of bounding rectangle
      * @param centerX - x-coordinate of center of bounding rectangle by absolute value
      * @param centerY - y-coordinate of center of bounding rectangle by absolute value
      * @return original working image with colored astrocytes' centers.
      */
-    public Mat findAstrocytes(Mat source, Integer widthRectangle, Integer heightRectangle, Integer centerX, Integer centerY);
-
-    public Mat detectAstrocytes();
-
-    /**
-     * Get a list of all astrocytes' centers finded by <code>findAstrocytes</code> operation.
-     * @return a list of all astrocytes' centers or an empty list if <code>findAstrocytes</code> operation
-     *     wasn't been applyed.
-     */
-    public List<Point> getAstrocytesCenters();
-
-    public Mat applyKmeans(Mat source);
+    public Mat findAstrocytes(Integer widthRectangle, Integer heightRectangle, Integer centerX, Integer centerY);
 
 }

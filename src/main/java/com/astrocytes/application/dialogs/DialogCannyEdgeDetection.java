@@ -176,10 +176,10 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
     private void processPreview() {
         BufferedImage currentView = preview.getCurrentView();
         Operations operations = new OperationsImpl();
-        operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(currentView),
-                minThreshold.getValue(), maxThreshold.getValue());
-        BufferedImage newCurrentView = ImageHelper.convertMatToBufferedImage(operations.getOutputImage()) ;
-        preview.updatePreview(newCurrentView);
+        operations.setSourceImage(ImageHelper.convertBufferedImageToMat(currentView));
+        BufferedImage resultPreview = ImageHelper.convertMatToBufferedImage(
+                operations.applyCannyEdgeDetection(minThreshold.getValue(), maxThreshold.getValue()));
+        preview.updatePreview(resultPreview);
     }
 
 }

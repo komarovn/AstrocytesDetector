@@ -97,7 +97,7 @@ public class App {
 
         menuController = (MenuController) SwingJavaFXHelper.initFX(menuFromFxml, getClass().getResource("/fxml/MenuBar.fxml"));
         menuController.setMainApp(this);
-        menuController.setAvailability(true);
+        menuController.setAvailability(false);
 
         toolbarController = (ToolbarController) SwingJavaFXHelper.initFX(toolbar, getClass().getResource("/fxml/Toolbar.fxml"));
         toolbarController.setMainApp(this);
@@ -177,12 +177,15 @@ public class App {
     @Deprecated
     public void executeCreateNewProject() {
         final NativeJFileChooser openFileDialog = new NativeJFileChooser();
+
         openFileDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
         openFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("All Images", "jpg", "jpeg", "png", "bmp"));
         openFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("JPEG Images", "jpg", "jpeg"));
         openFileDialog.addChoosableFileFilter(new FileNameExtensionFilter("PNG Images", "png"));
         openFileDialog.setAcceptAllFileFilterUsed(false);
+
         int result = openFileDialog.showOpenDialog(frame);
+
         if (result == JFileChooser.APPROVE_OPTION) {
             File file = openFileDialog.getSelectedFile();
             BufferedImage bufferedImage = ImageHelper.loadImage(file);
@@ -191,7 +194,7 @@ public class App {
             updateWindowSize();
             updateCurrentView();
             updateGrahicalWidget();
-            menuController.setAvailability(false);
+            menuController.setAvailability(true);
         }
     }
 
@@ -208,7 +211,7 @@ public class App {
             updateWindowSize();
             updateCurrentView();
             updateGrahicalWidget();
-            menuController.setAvailability(false);
+            menuController.setAvailability(true);
         }
     }
 
@@ -224,8 +227,7 @@ public class App {
             int result = saveFileDialog.showSaveDialog(frame);
             if (result == JFileChooser.APPROVE_OPTION) {
                 File fileToSave = saveFileDialog.getSelectedFile();
-                BufferedImage bufferedImage = operationsExecutor.getCurrentImage();
-                ImageHelper.saveImage(bufferedImage, fileToSave);
+                ImageHelper.saveImage(image, fileToSave);
             }
         }
         else {
@@ -234,9 +236,23 @@ public class App {
         }
     }
 
+    /**
+     * Process operation of grayscale for the current image.
+     */
+    public void executeGrayscale() {
+        if (image != null) {
+            image = operationsExecutor.applyGrayscale();
+            updateCurrentView();
+        }
+    }
+
+    public void executeDrawLayers() {
+
+    }
+
     public void executeFindNeurons() {
         if (image != null) {
-            image = operationsExecutor.getPreparedImage();
+            //image = operationsExecutor.getPreparedImage();
             updateCurrentView();
         }
     }
@@ -248,7 +264,7 @@ public class App {
         if (image != null) {
             DialogCannyEdgeDetection dialog = new DialogCannyEdgeDetection(this, graphicalWidget.getImage());
             if (dialog.isApplied()) {
-                image = operationsExecutor.applyCannyEdgeDetection(image);
+                image = operationsExecutor.applyCannyEdgeDetection();
                 updateCurrentView();
             }
         }
@@ -261,19 +277,9 @@ public class App {
         if (image != null) {
             DialogDilateErode dialog = new DialogDilateErode(this, graphicalWidget.getImage());
             if (dialog.isApplied()) {
-                image = operationsExecutor.applyDilateAndErode(image);
+                image = operationsExecutor.applyDilateAndErode();
                 updateCurrentView();
             }
-        }
-    }
-
-    /**
-     * Process operation of grayscale for the current image.
-     */
-    public void executeGrayscale() {
-        if (image != null) {
-            image = operationsExecutor.applyGrayscale(image);
-            updateCurrentView();
         }
     }
 
@@ -284,7 +290,7 @@ public class App {
         if (image != null) {
             DialogFindAstrocytes dialog = new DialogFindAstrocytes(this, graphicalWidget.getImage());
             if (dialog.isApplied()) {
-                image = operationsExecutor.applyFindAstocytes(image);
+                image = operationsExecutor.applyFindAstocytes();
                 updateCurrentView();
                 menuController.setLayerStatisticsEnabled(true);
             }
@@ -293,17 +299,17 @@ public class App {
 
     public void executeFindAstrocytesAuto() {
         if (image != null) {
-            image = operationsExecutor.applyDetectAstrocytes();
+            //image = operationsExecutor.applyDetectAstrocytes();
             updateCurrentView();
         }
     }
 
-    public void executeKmeans() {
+    /*public void executeKmeans() {
         if (image != null) {
             image = operationsExecutor.applyKmeans(image);
             updateCurrentView();
         }
-    }
+    }*/
 
     /**
      * Process closing of the application form and exiting the program.
@@ -318,11 +324,11 @@ public class App {
     public void processLoadedProject() {
         operationsExecutor = new OperationsExecutor();
         operationsExecutor.setOriginalImage(dataProvider.getWorkingImage());
-        image = operationsExecutor.getCurrentImage();
-        image = operationsExecutor.applyCannyEdgeDetection(image);
+        image = dataProvider.getWorkingImage();
+        image = operationsExecutor.applyCannyEdgeDetection();
         //image = operationsExecutor.applyDilateAndErode(image);
         //image = operationsExecutor.applyFindAstocytes(image);
-        menuController.setAvailability(false);
+        menuController.setAvailability(true);
         graphicalWidget.destroy();
         updateWindowSize();
         updateCurrentView();

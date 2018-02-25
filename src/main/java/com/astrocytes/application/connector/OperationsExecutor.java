@@ -41,50 +41,38 @@ public class OperationsExecutor {
         return ImageHelper.convertMatToBufferedImage(operations.getSourceImage());
     }
 
-    public BufferedImage getPreparedImage() {
-        operations.prepareImage();
-        return getCurrentImage();
-    }
-
-    public BufferedImage applyCannyEdgeDetection(BufferedImage in) {
-        operations.applyCannyEdgeDetection(ImageHelper.convertBufferedImageToMat(in),
-                dataProvider.getCannyMinThreshold(),
-                dataProvider.getCannyMaxThreshold());
-        return ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
-    }
-
-    public BufferedImage applyDilateAndErode(BufferedImage in) {
-        operations.applyMathMorphology(ImageHelper.convertBufferedImageToMat(in),
-                dataProvider.getRadiusMathMorphology());
-        return ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
-    }
-
-    public BufferedImage applyGrayscale(BufferedImage in) {
-        Mat converted = operations.convertGrayscale(ImageHelper.convertBufferedImageToMat(in));
+    public BufferedImage applyGrayscale() {
+        Mat converted = operations.convertGrayscale();
         return ImageHelper.convertMatToBufferedImage(converted);
     }
 
-    public BufferedImage applyFindAstocytes(BufferedImage in) {
-        operations.findAstrocytes(ImageHelper.convertBufferedImageToMat(in),
-                dataProvider.getBoundingRectangleWidth(),
+    public BufferedImage applyCannyEdgeDetection() {
+        Mat result = operations.applyCannyEdgeDetection(dataProvider.getCannyMinThreshold(),
+                dataProvider.getCannyMaxThreshold());
+        return ImageHelper.convertMatToBufferedImage(result);
+    }
+
+    public BufferedImage applyDilateAndErode() {
+        Mat result = operations.applyMathMorphology(dataProvider.getRadiusMathMorphology());
+        return ImageHelper.convertMatToBufferedImage(result);
+    }
+
+    public BufferedImage applyFindAstocytes() {
+        Mat result = operations.findAstrocytes(dataProvider.getBoundingRectangleWidth(),
                 dataProvider.getBoundingRectangleHeight(),
                 dataProvider.getBoundingRectangleCenterX(),
                 dataProvider.getBoundingRectangleCenterY());
-        return ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
+        return ImageHelper.convertMatToBufferedImage(result);
     }
 
     public BufferedImage applyDetectAstrocytes() {
-        return ImageHelper.convertMatToBufferedImage(operations.detectAstrocytes());
+        return null;
     }
 
-    public BufferedImage applyKmeans(BufferedImage in) {
+    /*public BufferedImage applyKmeans(BufferedImage in) {
         operations.applyKmeans(ImageHelper.convertBufferedImageToMat(in));
         return ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
-    }
-
-    public BufferedImage getCurrentImage() {
-        return ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
-    }
+    }*/
 
     public Operations getOperations() {
         return operations;

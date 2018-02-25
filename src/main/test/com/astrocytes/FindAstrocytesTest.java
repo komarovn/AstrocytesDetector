@@ -54,9 +54,8 @@ public class FindAstrocytesTest {
 
     private void executeFindAstrocytes() {
         //testImage = operationsExecutor.applyCannyEdgeDetection(testImage);
-        testImage = operationsExecutor.applyDilateAndErode(testImage);
-        testImage = operationsExecutor.applyFindAstocytes(testImage);
-        testImage = operationsExecutor.getCurrentImage();
+        testImage = operationsExecutor.applyDilateAndErode();
+        testImage = operationsExecutor.applyFindAstocytes();
     }
 
     private void testCanny() {
@@ -66,15 +65,7 @@ public class FindAstrocytesTest {
         dataProvider.setBoundingRectangleWidth(20);
         dataProvider.setBoundingRectangleCenterX(10);
         dataProvider.setBoundingRectangleCenterY(10);
-        testImage = operationsExecutor.applyCannyEdgeDetection(testImage);
-    }
-
-    private void executeKmeans() {
-        testImage = operationsExecutor.applyKmeans(testImage);
-    }
-
-    private void executePrepareImage() {
-        testImage = operationsExecutor.getPreparedImage();
+        testImage = operationsExecutor.applyCannyEdgeDetection();
     }
 
     private void run() {
@@ -96,7 +87,6 @@ public class FindAstrocytesTest {
     public static void main(String[] args) {
         FindAstrocytesTest test = new FindAstrocytesTest();
         test.prepare();
-        test.executePrepareImage();
         //test.executeFindAstrocytes();
         //test.executeKmeans();
         //test.testCanny();
@@ -109,7 +99,7 @@ public class FindAstrocytesTest {
             super();
             image = testImage;
             updateCurrentView();
-            menuController.setAvailability(false);
+            menuController.setAvailability(true);
             getFrame().setSize(new Dimension(1000, 640));
         }
     }

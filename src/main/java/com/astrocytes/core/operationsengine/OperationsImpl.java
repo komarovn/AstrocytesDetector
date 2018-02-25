@@ -33,8 +33,17 @@ import static org.opencv.imgproc.Imgproc.*;
 public class OperationsImpl implements Operations {
     public static final float[] BRODMANN_COEFFS = {0.09f, 0.34f, 0.42f, 0.64f, 1.0f};
 
+    /**
+     * Original image. Can not be modified.
+     */
     private Mat sourceImage = new Mat();
-    private Mat outputImage;
+    /**
+     * Current raster image. Can be modified due to applying raster operations only.
+     */
+    private Mat currentImage;
+    /**
+     * Internal image used in some calculations.
+     */
     private Mat preparedImage;
 
     private List<Point> astrocytesCenters;
@@ -46,6 +55,10 @@ public class OperationsImpl implements Operations {
     @Override
     public void setSourceImage(Mat sourceImage) {
         this.sourceImage = sourceImage;
+        this.currentImage = sourceImage.clone();
+        this.astrocytesCenters = null;
+        this.neurons = null;
+        this.layerBounds = null;
     }
 
     @Override
@@ -53,58 +66,52 @@ public class OperationsImpl implements Operations {
         return sourceImage;
     }
 
-    @Override
-    public Mat getOutputImage() {
-        if (outputImage == null) {
-            outputImage = new Mat();
-            sourceImage.copyTo(outputImage);
-        }
-        return outputImage;
+    public void resetCurrentImage() {
+        this.currentImage = sourceImage.clone();
     }
 
     @Override
-    public void applyCannyEdgeDetection(Mat image, Integer minThreshold, Integer maxThreshold) {
-        CoreOperations.cannyFilter(sourceImage, minThreshold, maxThreshold).copyTo(getOutputImage());
+    public Mat applyCannyEdgeDetection(Integer minThreshold, Integer maxThreshold) {
+        CoreOperations.cannyFilter(currentImage, minThreshold, maxThreshold).copyTo(currentImage);
+        return currentImage;
     }
 
     @Override
-    public Mat applyMathMorphology(Mat source, Integer radius) {
+    public Mat applyMathMorphology(Integer radius) {
         Mat dest = new Mat();
         int instrumentSize = radius * 2 + 1;
         Mat kernel = getStructuringElement(Imgproc.CV_SHAPE_ELLIPSE, new Size(instrumentSize, instrumentSize), new Point(radius, radius));
 
-        Imgproc.morphologyEx(source, dest, MORPH_CLOSE, kernel, new Point(-1, -1), 1);
+        Imgproc.morphologyEx(currentImage, dest, MORPH_CLOSE, kernel, new Point(-1, -1), 1);
 
-        dest.copyTo(getOutputImage());
-        return dest;
+        dest.copyTo(currentImage);
+        dest.release();
+        return currentImage;
     }
 
     @Override
-    public Mat convertGrayscale(Mat source) {
-        Mat result = CoreOperations.grayscale(source);
-        result.copyTo(getOutputImage());
-        return getOutputImage();
+    public Mat convertGrayscale() {
+        this.currentImage = CoreOperations.grayscale(this.currentImage);
+        return this.currentImage;
     }
 
     @Override
-    public Mat findAstrocytes(Mat source, Integer widthRectangle, Integer heightRectangle, Integer centerX, Integer centerY) {
-        detectAstrocytes(source,
+    public Mat findAstrocytes(Integer widthRectangle, Integer heightRectangle, Integer centerX, Integer centerY) {
+        detectAstrocytesOld(sourceImage.clone(),
                 (widthRectangle + heightRectangle) / 2,
                 widthRectangle * heightRectangle * PI / 4,
                 CoreOperations.intensity(sourceImage, centerX, centerY));
         return drawAstrocyteCenters();
         //drawBoundingRectangles();
-        //return getOutputImage();
     }
 
-    @Deprecated
-    private void detectAstrocytes(Mat source, Integer averageRectSize, Double averageArea, int intensity) {
+    private void detectAstrocytesOld(Mat source, Integer averageRectSize, Double averageArea, int intensity) {
         if (source.channels() == 3) {
-            return;
+            source = CoreOperations.grayscale(source);
         }
 
-        astrocytesCenters = new ArrayList<>();
         //boundingRectangles = new ArrayList<>();
+        astrocytesCenters = new ArrayList<>();
         List<MatOfPoint> contoursAfterFirstIteration = new ArrayList<>();
         Mat hierarchy = new Mat();
 
@@ -140,6 +147,7 @@ public class OperationsImpl implements Operations {
         }
     }
 
+    //TODO: remove it
     private Mat drawAstrocyteCenters() {
         if (astrocytesCenters == null) {
             return sourceImage;
@@ -153,15 +161,18 @@ public class OperationsImpl implements Operations {
         }
 
         return result;
-        //dest.copyTo(getOutputImage());
     }
 
-    private Mat drawNeuronsCenters() {
+    //TODO: remove it
+    private Mat drawNeuronsCenters(Mat src) {
+        if (src == null) {
+            src = sourceImage.clone();
+        }
         if (neurons == null) {
-            return sourceImage;
+            return src;
         }
 
-        Mat result = sourceImage.clone();
+        Mat result = src.clone();
         Scalar color = new Scalar(250, 10, 19);
 
         for (Neuron neuron : neurons) {
@@ -171,6 +182,7 @@ public class OperationsImpl implements Operations {
         return result;
     }
 
+    //TODO: remove it
     private Mat drawLayerBounds() {
         if (layerBounds == null) {
             return sourceImage;
@@ -205,7 +217,7 @@ public class OperationsImpl implements Operations {
     @Override
     public List<com.astrocytes.core.primitives.Point> getAstrocytesCenters() {
         if (astrocytesCenters == null) {
-            return new ArrayList<com.astrocytes.core.primitives.Point>();
+            detectAstrocytes();
         }
         List<com.astrocytes.core.primitives.Point> result = new ArrayList<com.astrocytes.core.primitives.Point>();
 
@@ -218,86 +230,32 @@ public class OperationsImpl implements Operations {
     }
 
     @Override
-    public Mat applyKmeans(Mat source) {
-        Mat dest = new Mat();
+    public List<com.astrocytes.core.primitives.Point> getNeuronsCenters() {
+        if (neurons == null) {
+            findNeurons();
+        }
+        List<com.astrocytes.core.primitives.Point> result = new ArrayList<com.astrocytes.core.primitives.Point>();
 
-        source.convertTo(source, CvType.CV_32F, 1.0 / 255.0);
-
-        Mat centers = new Mat();
-        Mat labels = new Mat();
-        TermCriteria criteria = new TermCriteria(TermCriteria.COUNT, 20, 0.1);
-        Core.kmeans(source, 4, labels, criteria, 10, Core.KMEANS_PP_CENTERS, centers);
-
-        List<Mat> mats = showClusters(source, labels, centers);
-        //mats.get(0).convertTo(dest, CvType.CV_8UC3);
-        Core.merge(mats, dest);
-        //centers.convertTo(dest, CvType.CV_8UC3);
-        dest.copyTo(getOutputImage());
-        return dest;
-    }
-
-    private List<Mat> showClusters(Mat cutout, Mat labels, Mat centers) {
-        centers.convertTo(centers, CvType.CV_8UC1, 255.0);
-        centers.reshape(3);
-
-        List<Mat> clusters = new ArrayList<Mat>();
-        for (int i = 0; i < centers.rows(); i++) {
-            clusters.add(Mat.zeros(cutout.size(), cutout.type()));
+        for (Neuron neuron : neurons) {
+            com.astrocytes.core.primitives.Point point =
+                    new com.astrocytes.core.primitives.Point((int) neuron.getCenter().x, (int) neuron.getCenter().y);
+            result.add(point);
         }
 
-        Map<Integer, Integer> counts = new HashMap<Integer, Integer>();
-        for (int i = 0; i < centers.rows(); i++) {
-            counts.put(i, 0);
-        }
-
-        for (int y = 0; y < cutout.rows(); y++) {
-            int rows = 0;
-            for (int x = 0; x < cutout.cols(); x++) {
-                int label = (int) labels.get(rows, 0)[0];
-                int r = (int) centers.get(label, 2)[0];
-                int g = (int) centers.get(label, 1)[0];
-                int b = (int) centers.get(label, 0)[0];
-                counts.put(label, counts.get(label) + 1);
-                clusters.get(label).put(y, x, b, g, r);
-                rows++;
-            }
-        }
-        System.out.println(counts);
-        return clusters;
+        return result;
     }
 
     @Override
-    public void prepareImage() {
-        Mat result = //CoreOperations.equalize(sourceImage);
-                //CoreOperations.grayscale(sourceImage);
-                CoreOperations.gaussianBlur(sourceImage, 5);
-        result = CoreOperations.grayscale(result);
-        result = CoreOperations.threshold(result, 195);
-        result = CoreOperations.erode(result, 2);
-        result = CoreOperations.invert(result);
-        result = CoreOperations.clearContours(result, 190);
-
-        Mat bigErode = CoreOperations.erode(result, 30);
-        result = CoreOperations.xor(result, bigErode);
-
-        cvtColor(result, result, Imgproc.COLOR_GRAY2BGR);
-        result = CoreOperations.and(sourceImage, result);
-
-        // TODO: remove it later
-        if (false) {
-            findNeurons(result);
-            result = drawNeuronsCenters();
-        } else {
-            //result = detectLayers();
-            findNeurons(result);
-            result = applyRayCastingSegmentation(result);
+    public Mat getLayerDelimiters() {
+        if (this.layerBounds == null) {
+            detectLayers();
         }
-
-        result.copyTo(getOutputImage());
-        this.preparedImage = result;
+        //TODO: transform into List of splines.
+        return this.layerBounds;
     }
 
-    public Mat detectLayers() {
+    // fills layerBounds with data
+    private void detectLayers() {
         Mat equalizedImage = CoreOperations.invert(CoreOperations.equalize(sourceImage));
 
         int halfColumnWidth = 50;
@@ -390,18 +348,44 @@ public class OperationsImpl implements Operations {
             }
             layerBounds.put(5, i, lowerBoundAverage);
         }
-
-        return drawLayerBounds();
     }
 
-    private void findNeurons(Mat preparedImage) {
-        neurons = new ArrayList<Neuron>();
+    private void makePreparedImage() {
+        Mat result = //CoreOperations.equalize(sourceImage);
+                //CoreOperations.grayscale(sourceImage);
+                CoreOperations.gaussianBlur(sourceImage, 5);
+        result = CoreOperations.grayscale(result);
+        result = CoreOperations.threshold(result, 195);
+        result = CoreOperations.erode(result, 2);
+        result = CoreOperations.invert(result);
+        result = CoreOperations.clearContours(result, 190);
+
+        Mat bigErode = CoreOperations.erode(result, 30);
+        result = CoreOperations.xor(result, bigErode);
+
+        cvtColor(result, result, Imgproc.COLOR_GRAY2BGR);
+        result = CoreOperations.and(sourceImage, result);
+
+        this.preparedImage = result;
+
+        //TODO: remove
+        //result = applyRayCastingSegmentation(result);
+        //result = drawNeuronsCenters(result);
+    }
+
+    private void findNeurons() {
+        if (this.preparedImage == null) {
+            makePreparedImage();
+        }
+
         int minNeuronRadius = 12;
         int maxNeuronRadius = 27;
         int stepSize = 3;
 
+        neurons = new ArrayList<Neuron>();
+
         for (int step = maxNeuronRadius; step >= minNeuronRadius; step -= stepSize) {
-            Mat stepImage = CoreOperations.erode(preparedImage, step);
+            Mat stepImage = CoreOperations.erode(this.preparedImage, step);
 
             for (Neuron neuron : neurons) {
                 Scalar blackColor = new Scalar(0);
@@ -411,6 +395,7 @@ public class OperationsImpl implements Operations {
             List<Neuron> neuronsInStep = findNeuronsInStep(stepImage, step);
 
             for (Neuron neuron : neuronsInStep) {
+                //TODO: check for astrocyte collision
                 if (!neurons.contains(neuron)) {
                     neurons.add(neuron);
                 }
@@ -437,14 +422,13 @@ public class OperationsImpl implements Operations {
         return neurons;
     }
 
-    @Override
-    public Mat detectAstrocytes() {
-        if (preparedImage == null) return sourceImage;
+    private void detectAstrocytes() {
+        if (preparedImage == null) {
+            makePreparedImage();
+        }
 
         Mat thresholdedImage = CoreOperations.threshold(preparedImage, 200, 80, 200);
         findAstrocytes(thresholdedImage);
-        return drawAstrocyteCenters();
-        //return getOutputImage();
     }
 
     private void findAstrocytes(Mat src) {
@@ -515,6 +499,59 @@ public class OperationsImpl implements Operations {
         result = CoreOperations.dilate(result, 3);
 
         contours.release();
-        return result;
+
+        contours = sourceImage.clone();
+        CoreOperations.drawAllContours(result, contours);
+
+        return contours;
+    }
+
+    //---to be deleted
+
+    private Mat applyKmeans(Mat source) {
+        Mat dest = new Mat();
+
+        source.convertTo(source, CvType.CV_32F, 1.0 / 255.0);
+
+        Mat centers = new Mat();
+        Mat labels = new Mat();
+        TermCriteria criteria = new TermCriteria(TermCriteria.COUNT, 20, 0.1);
+        Core.kmeans(source, 4, labels, criteria, 10, Core.KMEANS_PP_CENTERS, centers);
+
+        List<Mat> mats = showClusters(source, labels, centers);
+        //mats.get(0).convertTo(dest, CvType.CV_8UC3);
+        Core.merge(mats, dest);
+        //centers.convertTo(dest, CvType.CV_8UC3);
+        return dest;
+    }
+
+    private List<Mat> showClusters(Mat cutout, Mat labels, Mat centers) {
+        centers.convertTo(centers, CvType.CV_8UC1, 255.0);
+        centers.reshape(3);
+
+        List<Mat> clusters = new ArrayList<Mat>();
+        for (int i = 0; i < centers.rows(); i++) {
+            clusters.add(Mat.zeros(cutout.size(), cutout.type()));
+        }
+
+        Map<Integer, Integer> counts = new HashMap<Integer, Integer>();
+        for (int i = 0; i < centers.rows(); i++) {
+            counts.put(i, 0);
+        }
+
+        for (int y = 0; y < cutout.rows(); y++) {
+            int rows = 0;
+            for (int x = 0; x < cutout.cols(); x++) {
+                int label = (int) labels.get(rows, 0)[0];
+                int r = (int) centers.get(label, 2)[0];
+                int g = (int) centers.get(label, 1)[0];
+                int b = (int) centers.get(label, 0)[0];
+                counts.put(label, counts.get(label) + 1);
+                clusters.get(label).put(y, x, b, g, r);
+                rows++;
+            }
+        }
+        System.out.println(counts);
+        return clusters;
     }
 }

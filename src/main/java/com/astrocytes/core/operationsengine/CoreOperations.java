@@ -285,15 +285,13 @@ public class CoreOperations {
      * @return binary image with black background and white contours.
      */
     public static int drawAllContours(Mat src, Mat dest) {
-        Mat result = new Mat(src.rows(), src.cols(), CvType.CV_8UC1);
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
 
         findContours(grayscale(src), contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_TC89_L1);
         for (int i = 0; i < contours.size(); i++) {
-            drawContours(result, contours, i, new Scalar(255));
+            drawContours(dest, contours, i, new Scalar(255));
         }
 
-        result.copyTo(dest);
         return contours.size();
     }
 }
