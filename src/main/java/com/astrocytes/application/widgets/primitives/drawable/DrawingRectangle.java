@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Lobachevsky University, 2017. All rights reserved.
+ * Copyright (c) Lobachevsky University, 2018. All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal with the Software without restriction, including without limitation
@@ -18,10 +18,44 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes.application.widgets.primitives;
+package com.astrocytes.application.widgets.primitives.drawable;
 
-public abstract class AbstractPrimitive {
+import com.astrocytes.application.widgets.primitives.SimpleRectangle;
 
-    public abstract boolean isFull();
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
+public class DrawingRectangle extends SimpleRectangle implements Paintable {
+
+    private double zoomLevel = 1.0;
+    private Color drawingColor = Color.BLUE;
+
+    @Override
+    public void paint(BufferedImage target, Graphics2D graphics) {
+        if (isFull()) {
+            graphics.setPaint(drawingColor);
+            graphics.setStroke(new BasicStroke(1));
+            graphics.draw(new Rectangle2D.Float(getLeftX(), getTopY(), getWidth(), getHeight()));
+        }
+    }
+
+    @Override
+    public void move(int deltaX, int deltaY) {
+        if (isFull()) {
+            xStart += deltaX;
+            xEnd += deltaX;
+            yStart += deltaY;
+            yEnd += deltaY;
+        }
+    }
+
+    @Override
+    public void updateZoom(double zoomLevel) {
+        this.zoomLevel = zoomLevel;
+
+        if (isFull()) {
+
+        }
+    }
 }

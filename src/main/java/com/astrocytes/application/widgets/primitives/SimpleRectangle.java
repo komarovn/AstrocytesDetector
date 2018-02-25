@@ -22,8 +22,8 @@ package com.astrocytes.application.widgets.primitives;
 
 public class SimpleRectangle extends AbstractPrimitive {
 
-    private Integer xStart, yStart;
-    private Integer xEnd, yEnd;
+    protected Integer xStart, yStart;
+    protected Integer xEnd, yEnd;
 
     public SimpleRectangle() { }
 
@@ -96,15 +96,5 @@ public class SimpleRectangle extends AbstractPrimitive {
     @Override
     public boolean isFull() {
         return xStart != null && yStart != null && xEnd != null && yEnd != null && getHeight() > 0 && getWidth() > 0;
-    }
-
-    @Override
-    public void move(int deltaX, int deltaY) {
-        if (isFull()) {
-            xStart += deltaX;
-            xEnd += deltaX;
-            yStart += deltaY;
-            yEnd += deltaY;
-        }
     }
 }

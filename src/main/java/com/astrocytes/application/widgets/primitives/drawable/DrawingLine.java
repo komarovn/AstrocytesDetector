@@ -18,11 +18,20 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes.application.widgets.primitives;
+package com.astrocytes.application.widgets.primitives.drawable;
 
-public class DrawingLine extends SimpleLine {
+import com.astrocytes.application.widgets.primitives.SimpleLine;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
+import java.awt.image.BufferedImage;
+
+public class DrawingLine extends SimpleLine implements Paintable {
 
     private boolean drawing = true;
+    private double zoomLevel = 1.0;
+    private Color objectColor = Color.MAGENTA;
+    private Color drawingColor = Color.ORANGE;
 
     public DrawingLine() {
         super();
@@ -40,4 +49,39 @@ public class DrawingLine extends SimpleLine {
         return drawing;
     }
 
+    @Override
+    public void paint(BufferedImage target, Graphics2D graphics) {
+        if (isFull()) {
+            graphics.setPaint(isDrawing() ? drawingColor : objectColor);
+            graphics.setStroke(new BasicStroke(2));
+
+            //setxEnd((double) (getImage().getWidth() < currentView.getWidth() ?
+            //       Math.max(getImage().getWidth(), getWidth()) : currentView.getWidth() - 1));
+
+            graphics.draw(new Line2D.Float(getxStart().floatValue(), getyStart().floatValue(),
+                    getxEnd().floatValue(), getyEnd().floatValue()));
+        }
+    }
+
+    @Override
+    public void move(int deltaX, int deltaY) {
+        if (isFull()) {
+            xStart += deltaX;
+            xEnd += deltaX;
+            yStart += deltaY;
+            yEnd += deltaY;
+        }
+    }
+
+    @Override
+    public void updateZoom(double zoomLevel) {
+        double zoomDelta = zoomLevel / this.zoomLevel;
+        this.zoomLevel = zoomLevel;
+
+        if (isFull()) {
+            //double yNew = zoomDelta * (getyEnd() + currentYOld) - currentY;
+            //setyEnd(yNew);
+            //setyStart(yNew);
+        }
+    }
 }

@@ -20,23 +20,26 @@
  */
 package com.astrocytes.application.widgets;
 
-import com.astrocytes.application.widgets.primitives.DrawingLine;
+import com.astrocytes.application.widgets.primitives.drawable.DrawingLine;
+import com.astrocytes.application.widgets.primitives.drawable.Paintable;
 import com.astrocytes.application.widgets.primitives.SimpleLine;
 import com.astrocytes.application.widgets.primitives.SimpleRectangle;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 import java.util.*;
 import java.util.List;
 
 public class ImageEditor extends GraphicalWidget {
 
     private InstrumentState state;
+
+    //TODO: delete
     protected SimpleRectangle rectangle = new SimpleRectangle();
     protected java.util.List<DrawingLine> horizontalLines = new ArrayList<DrawingLine>();
+
+    protected List<Paintable> paintableObjects = new ArrayList<Paintable>();
 
     public ImageEditor() {
         this(null, null);
@@ -74,6 +77,10 @@ public class ImageEditor extends GraphicalWidget {
         updateWidget();
     }
 
+    public List<Paintable> getPaintableObjects() {
+        return paintableObjects;
+    }
+
     public SimpleRectangle getRectangle() {
         SimpleRectangle absoluteRectangle = new SimpleRectangle();
         if (rectangle.isFull()) {
@@ -83,7 +90,7 @@ public class ImageEditor extends GraphicalWidget {
         return absoluteRectangle;
     }
 
-    private void paintRectangle(Graphics g) {
+    /*private void paintRectangle(Graphics g) {
         Graphics2D graphics = (Graphics2D) g;
         graphics.setPaint(Color.BLUE);
         graphics.setStroke(new BasicStroke(1));
@@ -106,23 +113,22 @@ public class ImageEditor extends GraphicalWidget {
                         line.getxEnd().floatValue(), line.getyEnd().floatValue()));
             }
         }
-    }
+    }*/
 
     @Override
     public void destroy() {
         super.destroy();
         state = InstrumentState.ZOOM_AND_PAN;
-        horizontalLines.clear();
-        rectangle = new SimpleRectangle();
+        paintableObjects.clear();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (rectangle.isFull()) {
-            paintRectangle(g);
+
+        for (Paintable obj : paintableObjects) {
+            obj.paint(getImage(), (Graphics2D) g);
         }
-        paintHorizontalLines(g);
     }
 
     public List<SimpleLine> getHorizontalLines() {
@@ -187,13 +193,13 @@ public class ImageEditor extends GraphicalWidget {
                         isDrawing = false;
                         break;
                     case LINE_HORIZONTAL:
-                        horizontalLines.remove(creationLine);
+                        paintableObjects.remove(creationLine);
                         if (isInOfImageBoundary(e.getX(), e.getY())) {
                             creationLine.setStartPoint(0.0, (double) e.getY());
                             creationLine.setEndPoint((double) getZoomedImage().getWidth(), (double) e.getY());
                         }
                         creationLine.setDrawing(false);
-                        horizontalLines.add(creationLine);
+                        paintableObjects.add(creationLine);
                         repaint();
                         isDrawing = false;
                         break;
@@ -219,10 +225,10 @@ public class ImageEditor extends GraphicalWidget {
                         break;
                     case LINE_HORIZONTAL:
                         if (isDrawing && isInOfImageBoundary(e.getX(), e.getY())) {
-                            horizontalLines.remove(creationLine);
+                            paintableObjects.remove(creationLine);
                             creationLine.setStartPoint(0.0, (double) e.getY());
                             creationLine.setEndPoint((double) getZoomedImage().getWidth(), (double) e.getY());
-                            horizontalLines.add(creationLine);
+                            paintableObjects.add(creationLine);
                             repaint();
                         }
                         break;
@@ -245,26 +251,15 @@ public class ImageEditor extends GraphicalWidget {
         private void moveObjects() {
             int dX = currentX > 0 && currentView.getWidth() + currentX < getImage().getWidth() * zoomLevel ? -deltaX : 0;
             int dY = currentY > 0 && currentView.getHeight() + currentY < getImage().getHeight() * zoomLevel ? -deltaY : 0;
-            if (rectangle.isFull()) {
-                rectangle.move(dX, dY);
-            }
-            for (DrawingLine line : horizontalLines) {
-                if (line.isFull()) {
-                    line.move(0, dY);
-                }
+
+            for (Paintable obj : paintableObjects) {
+                obj.move(dX, dY);
             }
         }
 
         private void zoomObjects() {
-            for (DrawingLine line : horizontalLines) {
-                if (line.isFull()) {
-                    double yNew = 2 * (line.getyEnd() + currentYOld) - currentY;
-                    if (!isZoomIn) {
-                        yNew = (line.getyEnd() + currentYOld) / 2 - currentY;
-                    }
-                    line.setyEnd(yNew);
-                    line.setyStart(yNew);
-                }
+            for (Paintable obj : paintableObjects) {
+                obj.updateZoom(zoomLevel);
             }
         }
 

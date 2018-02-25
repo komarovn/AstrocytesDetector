@@ -84,10 +84,6 @@ public abstract class PreviewImageEditor extends ImageEditor {
         return originalImageViewCropped;
     }
 
-    public SimpleRectangle getRectangle() {
-        return rectangle;
-    }
-
     private class PreviewImageEditorListener extends ImageEditorListener {
         @Override
         public void mouseReleased(MouseEvent e) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Lobachevsky University, 2017. All rights reserved.
+ * Copyright (c) Lobachevsky University, 2018. All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal with the Software without restriction, including without limitation
@@ -18,10 +18,17 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes.application.widgets.primitives;
+package com.astrocytes.application.widgets.primitives.drawable;
 
-public abstract class AbstractPrimitive {
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
-    public abstract boolean isFull();
+public interface Paintable {
+
+    public void paint(BufferedImage target, Graphics2D graphics);
+
+    public void move(int deltaX, int deltaY);
+
+    public void updateZoom(double zoomLevel);
 
 }

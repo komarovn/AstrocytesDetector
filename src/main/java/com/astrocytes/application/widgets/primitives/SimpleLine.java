@@ -22,8 +22,8 @@ package com.astrocytes.application.widgets.primitives;
 
 public class SimpleLine extends AbstractPrimitive {
 
-    private Double xStart, yStart;
-    private Double xEnd, yEnd;
+    protected Double xStart, yStart;
+    protected Double xEnd, yEnd;
 
     public SimpleLine() { }
 
@@ -79,15 +79,5 @@ public class SimpleLine extends AbstractPrimitive {
 
     public void setyEnd(Double yEnd) {
         this.yEnd = yEnd;
-    }
-
-    @Override
-    public void move(int deltaX, int deltaY) {
-        if (isFull()) {
-            xStart += deltaX;
-            xEnd += deltaX;
-            yStart += deltaY;
-            yEnd += deltaY;
-        }
     }
 }

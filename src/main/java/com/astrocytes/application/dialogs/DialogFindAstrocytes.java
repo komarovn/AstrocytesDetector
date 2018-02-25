@@ -21,6 +21,7 @@
 package com.astrocytes.application.dialogs;
 
 import com.astrocytes.application.App;
+import com.astrocytes.application.widgets.primitives.drawable.DrawingRectangle;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.application.widgets.InstrumentState;
 import com.astrocytes.application.resources.StringResources;
@@ -139,7 +140,7 @@ public class DialogFindAstrocytes extends AbstractDialog {
 
     private void processPreview() {
         //BufferedImage currentView = preview.getCurrentView();
-        boundingRectangle = preview.getRectangle();
+        boundingRectangle = (DrawingRectangle) preview.getPaintableObjects().get(0);
         Operations operations = new OperationsImpl();
         operations.setSourceImage(ImageHelper.convertBufferedImageToMat(preview.getOriginalImageView()));
         if (boundingRectangle.isFull()) {

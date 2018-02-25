@@ -184,6 +184,7 @@ public class GraphicalWidget extends JPanel {
         currentY = currentY >= 0 ? currentY : 0;
         currentX = zoomedImage.getWidth() - currentX > widthImage ? currentX : zoomedImage.getWidth() - widthImage;
         currentY = zoomedImage.getHeight() - currentY > heightImage ? currentY : zoomedImage.getHeight() - heightImage;
+        System.out.println("currentX = " + currentX + "; currentY = " + currentY);
         currentView = zoomedImage.getSubimage(currentX, currentY, widthImage, heightImage);
     }
 
