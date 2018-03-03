@@ -84,8 +84,8 @@ public class ImageEditor extends GraphicalWidget {
     public SimpleRectangle getRectangle() {
         SimpleRectangle absoluteRectangle = new SimpleRectangle();
         if (rectangle.isFull()) {
-            absoluteRectangle.setStartPoint(rectangle.getLeftX() + currentX, rectangle.getTopY() + currentY);
-            absoluteRectangle.setEndPoint(rectangle.getRightX() + currentX, rectangle.getBottomY() + currentY);
+            absoluteRectangle.setStartPoint(rectangle.getLeftX() + getOffsetX(), rectangle.getTopY() + getOffsetY());
+            absoluteRectangle.setEndPoint(rectangle.getRightX() + getOffsetX(), rectangle.getBottomY() + getOffsetY());
         }
         return absoluteRectangle;
     }
@@ -140,8 +140,8 @@ public class ImageEditor extends GraphicalWidget {
             }
         });
         for (DrawingLine line : horizontalLines) {
-            SimpleLine absoluteLine = new SimpleLine(line.getxStart(), 1 / getZoomValue() * (line.getyStart() + currentY),
-                    line.getxEnd(), 1 / getZoomValue() * (line.getyEnd() + currentY));
+            SimpleLine absoluteLine = new SimpleLine(line.getxStart(), 1 / getZoomValue() * (line.getyStart() + getOffsetY()),
+                    line.getxEnd(), 1 / getZoomValue() * (line.getyEnd() + getOffsetY()));
             result.add(absoluteLine);
         }
         return result;
@@ -249,8 +249,8 @@ public class ImageEditor extends GraphicalWidget {
         }
 
         private void moveObjects() {
-            int dX = currentX > 0 && currentView.getWidth() + currentX < getImage().getWidth() * getZoomValue() ? -deltaX : 0;
-            int dY = currentY > 0 && currentView.getHeight() + currentY < getImage().getHeight() * getZoomValue() ? -deltaY : 0;
+            int dX = getOffsetX() > 0 && currentView.getWidth() + getOffsetX() < getImage().getWidth() * getZoomValue() ? -deltaX : 0;
+            int dY = getOffsetY() > 0 && currentView.getHeight() + getOffsetY() < getImage().getHeight() * getZoomValue() ? -deltaY : 0;
 
             for (Paintable obj : paintableObjects) {
                 obj.move(dX, dY);

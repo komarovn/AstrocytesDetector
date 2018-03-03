@@ -20,8 +20,6 @@
  */
 package com.astrocytes.application.widgets;
 
-import com.astrocytes.application.resources.ApplicationConstants;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -29,26 +27,15 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public abstract class PreviewImageEditor extends ImageEditor {
-
     private BufferedImage originalImage;
-    private Integer widthWidget;
-    private Integer heightWidget;
 
     private MouseAdapter mouseAdapter;
 
     public PreviewImageEditor(Integer width, Integer height) {
         super(width, height);
-        widthWidget = width == null ? ApplicationConstants.PREVIEW_WINDOW_WIDTH : width;
-        heightWidget = height == null ? ApplicationConstants.PREVIEW_WINDOW_HEIGHT : height;
-        //updateWidget(width, height);
         setZoomEnabled(false);
         setBorder(BorderFactory.createLineBorder(Color.darkGray));
         addListenerForPreview();
-    }
-
-    public PreviewImageEditor(Integer width, Integer height, BufferedImage originalImage) {
-        this(width, height);
-        this.originalImage = originalImage;
     }
 
     private void addListenerForPreview() {
@@ -74,7 +61,7 @@ public abstract class PreviewImageEditor extends ImageEditor {
     }
 
     public BufferedImage getOriginalImageView() {
-        BufferedImage originalImageView = originalImage.getSubimage(currentX, currentY, imageWidth, imageHeight);
+        BufferedImage originalImageView = originalImage.getSubimage(getOffsetX(), getOffsetY(), imageWidth, imageHeight);
         BufferedImage originalImageViewCropped = new BufferedImage(originalImageView.getColorModel(),
                 originalImageView.getRaster().createCompatibleWritableRaster(originalImageView.getWidth(),
                         originalImageView.getHeight()),
@@ -91,14 +78,6 @@ public abstract class PreviewImageEditor extends ImageEditor {
                 processPreviewImage();
             }
         }
-    }
-
-    public Integer getOffsetX() {
-        return currentX;
-    }
-
-    public Integer getOffsetY() {
-        return currentY;
     }
 
 }

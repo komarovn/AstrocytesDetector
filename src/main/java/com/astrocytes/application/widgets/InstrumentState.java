@@ -24,6 +24,5 @@ public enum InstrumentState {
     POINTER,
     ZOOM_AND_PAN,
     RECTANGLE,
-    LINE_HORIZONTAL,
-    LINE_VERTICAL
+    LINE_HORIZONTAL
 }
