@@ -124,7 +124,7 @@ public class App {
     private void updateGrahicalWidget() {
         int h = mainPanelBlock.getHeight();
         int w = mainPanelBlock.getWidth();
-        graphicalWidget.updateWidget(w, h);
+        graphicalWidget.setWidgetSize(w, h);
     }
 
     protected void updateCurrentView() {
@@ -329,7 +329,7 @@ public class App {
         //image = operationsExecutor.applyDilateAndErode(image);
         //image = operationsExecutor.applyFindAstocytes(image);
         menuController.setAvailability(true);
-        graphicalWidget.destroy();
+        graphicalWidget.reset();
         updateWindowSize();
         updateCurrentView();
         updateGrahicalWidget();

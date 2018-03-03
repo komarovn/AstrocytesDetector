@@ -48,10 +48,10 @@ public class ImageEditor extends GraphicalWidget {
     public ImageEditor(Integer width, Integer height) {
         super(width, height);
         state = InstrumentState.ZOOM_AND_PAN;
-        addInstrumentListemers();
+        initInstrumentListeners();
     }
 
-    private void addInstrumentListemers() {
+    private void initInstrumentListeners() {
         removeMouseListener(getMouseListeners()[0]);
         removeMouseMotionListener(getMouseMotionListeners()[0]);
         removeMouseWheelListener(getMouseWheelListeners()[0]);
@@ -116,8 +116,8 @@ public class ImageEditor extends GraphicalWidget {
     }*/
 
     @Override
-    public void destroy() {
-        super.destroy();
+    public void reset() {
+        super.reset();
         state = InstrumentState.ZOOM_AND_PAN;
         paintableObjects.clear();
     }
@@ -140,8 +140,8 @@ public class ImageEditor extends GraphicalWidget {
             }
         });
         for (DrawingLine line : horizontalLines) {
-            SimpleLine absoluteLine = new SimpleLine(line.getxStart(), 1 / getZoomScale() * (line.getyStart() + currentY),
-                    line.getxEnd(), 1 / getZoomScale() * (line.getyEnd() + currentY));
+            SimpleLine absoluteLine = new SimpleLine(line.getxStart(), 1 / getZoomValue() * (line.getyStart() + currentY),
+                    line.getxEnd(), 1 / getZoomValue() * (line.getyEnd() + currentY));
             result.add(absoluteLine);
         }
         return result;
@@ -249,8 +249,8 @@ public class ImageEditor extends GraphicalWidget {
         }
 
         private void moveObjects() {
-            int dX = currentX > 0 && currentView.getWidth() + currentX < getImage().getWidth() * getZoomScale() ? -deltaX : 0;
-            int dY = currentY > 0 && currentView.getHeight() + currentY < getImage().getHeight() * getZoomScale() ? -deltaY : 0;
+            int dX = currentX > 0 && currentView.getWidth() + currentX < getImage().getWidth() * getZoomValue() ? -deltaX : 0;
+            int dY = currentY > 0 && currentView.getHeight() + currentY < getImage().getHeight() * getZoomValue() ? -deltaY : 0;
 
             for (Paintable obj : paintableObjects) {
                 obj.move(dX, dY);
@@ -259,7 +259,7 @@ public class ImageEditor extends GraphicalWidget {
 
         private void zoomObjects() {
             for (Paintable obj : paintableObjects) {
-                obj.updateZoom(getZoomScale());
+                obj.updateZoom(getZoomValue());
             }
         }
 

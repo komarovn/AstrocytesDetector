@@ -21,7 +21,6 @@
 package com.astrocytes.application.widgets;
 
 import com.astrocytes.application.resources.ApplicationConstants;
-import com.astrocytes.application.widgets.primitives.SimpleRectangle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,7 +40,7 @@ public abstract class PreviewImageEditor extends ImageEditor {
         super(width, height);
         widthWidget = width == null ? ApplicationConstants.PREVIEW_WINDOW_WIDTH : width;
         heightWidget = height == null ? ApplicationConstants.PREVIEW_WINDOW_HEIGHT : height;
-        updateWidget(width, height);
+        //updateWidget(width, height);
         setZoomEnabled(false);
         setBorder(BorderFactory.createLineBorder(Color.darkGray));
         addListenerForPreview();
@@ -75,7 +74,7 @@ public abstract class PreviewImageEditor extends ImageEditor {
     }
 
     public BufferedImage getOriginalImageView() {
-        BufferedImage originalImageView = originalImage.getSubimage(currentX, currentY, widthImage, heightImage);
+        BufferedImage originalImageView = originalImage.getSubimage(currentX, currentY, imageWidth, imageHeight);
         BufferedImage originalImageViewCropped = new BufferedImage(originalImageView.getColorModel(),
                 originalImageView.getRaster().createCompatibleWritableRaster(originalImageView.getWidth(),
                         originalImageView.getHeight()),

@@ -59,7 +59,7 @@ public class StatusBarController extends AbstractController {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                setScaleValue((int) (mainApp.getGraphicalWidget().getZoomScale() * 100));
+                                setScaleValue((int) (mainApp.getGraphicalWidget().getZoomValue() * 100));
                                 setScaleBarValue();
                             }
                         });
@@ -75,8 +75,8 @@ public class StatusBarController extends AbstractController {
 
     private void setScaleBarValue() {
         int scaleCoeff = dataProvider.getScale() * 2;
-        scaleBar.setPrefWidth((int) (mainApp.getGraphicalWidget().getZoomScale() * scaleCoeff));
-        scaleBarLabel.setText(mainApp.getGraphicalWidget().getZoomScale() * scaleCoeff + " μm");
+        scaleBar.setPrefWidth((int) (mainApp.getGraphicalWidget().getZoomValue() * scaleCoeff));
+        scaleBarLabel.setText(mainApp.getGraphicalWidget().getZoomValue() * scaleCoeff + " μm");
     }
 
 }
