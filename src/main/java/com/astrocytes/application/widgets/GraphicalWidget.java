@@ -228,6 +228,7 @@ public class GraphicalWidget extends JPanel {
         this.image = null;
         this.zoomedImage = null;
         this.currentView = null;
+        this.cachedImages.clear();
         this.currentX = this.currentY = 0;
         resetZoom();
     }
