@@ -293,31 +293,32 @@ public class GraphicalWidget extends JPanel {
                 if (notches > 0) {
                     if (zoomLevel != 0) {
                         zoomLevel--;
-                        changeZoomedImage(getZoomValue() / zoomLevels.get(previousZoomLevel));
                     }
                 }
 
                 if (notches < 0) {
                     if (zoomLevel != zoomLevels.size() - 1) {
                         zoomLevel++;
-                        changeZoomedImage(getZoomValue() / zoomLevels.get(previousZoomLevel));
                     }
                 }
+
+                if (notches != 0) {
+                    double zoomCoeff = getZoomValue() / zoomLevels.get(previousZoomLevel);
+                    int shiftX = Math.min(imageWidth, e.getX());
+                    int shiftY = Math.min(imageHeight, e.getY());
+                    int xBefore = currentX + shiftX;
+                    int yBefore = currentY + shiftY;
+
+                    calculateZoomedImage();
+                    invalidateImageSize();
+
+                    int deltaX = (int) (xBefore * zoomCoeff - shiftX) - currentX;
+                    int deltaY = (int) (yBefore * zoomCoeff - shiftY) - currentY;
+
+                    updateCurrentView(deltaX, deltaY);
+                    repaint();
+                }
             }
-        }
-
-        private void changeZoomedImage(double zoomCoeff) {
-            int centerXBefore = currentX + imageWidth / 2;
-            int centerYBefore = currentY + imageHeight / 2;
-
-            calculateZoomedImage();
-            invalidateImageSize();
-
-            int deltaX = (int) (centerXBefore * zoomCoeff - imageWidth / 2) - currentX;
-            int deltaY = (int) (centerYBefore * zoomCoeff - imageHeight / 2) - currentY;
-
-            updateCurrentView(deltaX, deltaY);
-            repaint();
         }
     }
 
