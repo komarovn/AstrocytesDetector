@@ -22,7 +22,6 @@ package com.astrocytes.application.widgets;
 
 import com.astrocytes.application.resources.ApplicationConstants;
 import com.astrocytes.core.ImageHelper;
-import com.astrocytes.core.CoreConstants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,6 +34,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 
 public class GraphicalWidget extends JPanel {
+    private final int DEFAULT_ZOOM_LEVEL = 3;
 
     private BufferedImage image;
     protected BufferedImage currentView;
@@ -47,9 +47,9 @@ public class GraphicalWidget extends JPanel {
 
     private Boolean panEnabled = true;
     private Boolean zoomEnabled = true;
-    protected Double zoomLevel;
-    protected java.util.List<Double> zoomLevels = new ArrayList<>(Arrays.asList(new Double[]
-            {0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0}));
+    protected int zoomLevel;
+    private java.util.List<Double> zoomLevels =
+            new ArrayList<Double>(Arrays.asList(0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0));
     private BufferedImage zoomedImage;
 
     /**
@@ -70,7 +70,7 @@ public class GraphicalWidget extends JPanel {
         currentY = 0;
         widthWidget = width == null ? ApplicationConstants.DEFAULT_GRAPHICAL_WIDGET_WIDTH : width;
         heightWidget = height == null ? ApplicationConstants.DEFAULT_GRAPHICAL_WIDGET_HEIGHT : height;
-        resetZoomScale();
+        resetZoom();
         setSize(new Dimension(widthWidget, heightWidget));
         setPreferredSize(new Dimension(widthWidget, heightWidget));
         addListeners();
@@ -91,8 +91,8 @@ public class GraphicalWidget extends JPanel {
         }
     }
 
-    private void resetZoomScale() {
-        zoomLevel = zoomLevels.get(3);
+    private void resetZoom() {
+        zoomLevel = DEFAULT_ZOOM_LEVEL;
     }
 
     public void setImage(BufferedImage image) {
@@ -100,17 +100,13 @@ public class GraphicalWidget extends JPanel {
         if (image != null) {
             if (widthWidget >= image.getWidth()) {
                 widthImage = image.getWidth();
-            } else {
-                widthImage = widthWidget;
             }
 
             if (heightWidget >= image.getHeight()) {
                 heightImage = image.getHeight();
-            } else {
-                heightImage = heightWidget;
             }
 
-            resetZoomScale();
+            resetZoom();
             zoomedImage = ImageHelper.cloneBufferedImage(this.image);
             updateCurrentView(0, 0);
         }
@@ -198,7 +194,7 @@ public class GraphicalWidget extends JPanel {
     }
 
     public Double getZoomScale() {
-        return zoomLevel;
+        return zoomLevels.get(zoomLevel);
     }
 
     public void lockZoomAndPan() {
@@ -220,7 +216,7 @@ public class GraphicalWidget extends JPanel {
         zoomedImage = null;
         currentView = null;
         currentX = currentY = 0;
-        resetZoomScale();
+        resetZoom();
     }
 
     protected class GraphicalWidgetListener extends MouseAdapter {
@@ -229,7 +225,7 @@ public class GraphicalWidget extends JPanel {
         protected int deltaX, deltaY;
         protected Boolean isZoomIn;
         protected Integer currentXOld, currentYOld;
-        protected Double previousZoomLevel;
+        protected int previousZoomLevel;
 
         @Override
         public void mousePressed(MouseEvent e) {
@@ -275,19 +271,19 @@ public class GraphicalWidget extends JPanel {
             super.mouseWheelMoved(e);
             if (zoomEnabled && image != null) {
                 int notches = e.getWheelRotation();
-                previousZoomLevel = new Double(zoomLevel);
+                previousZoomLevel = zoomLevel;
 
                 if (notches > 0) {
-                    if (!previousZoomLevel.equals(zoomLevels.get(0))) {
-                        zoomLevel = zoomLevels.get(zoomLevels.indexOf(previousZoomLevel) - 1);
+                    if (previousZoomLevel != 0) {
+                        zoomLevel--;
                         isZoomIn = false;
                         changeZoomedImage();
                     }
                 }
 
                 if (notches < 0) {
-                    if (!previousZoomLevel.equals(zoomLevels.get(zoomLevels.size() - 1))) {
-                        zoomLevel = zoomLevels.get(zoomLevels.indexOf(previousZoomLevel) + 1);
+                    if (previousZoomLevel != zoomLevels.size() - 1) {
+                        zoomLevel++;
                         isZoomIn = true;
                         changeZoomedImage();
                     }
@@ -297,11 +293,11 @@ public class GraphicalWidget extends JPanel {
 
         private void changeZoomedImage() {
             AffineTransform affineTransform = new AffineTransform();
-            affineTransform.scale(zoomLevel, zoomLevel);
+            affineTransform.scale(getZoomScale(), getZoomScale());
             AffineTransformOp affineTransformOp = new AffineTransformOp(affineTransform,
                     AffineTransformOp.TYPE_NEAREST_NEIGHBOR/*AffineTransformOp.TYPE_BICUBIC*/);
-            int w = (int) (image.getWidth() * zoomLevel);
-            int h = (int) (image.getHeight() * zoomLevel);
+            int w = (int) (image.getWidth() * getZoomScale());
+            int h = (int) (image.getHeight() * getZoomScale());
             int centerXBefore = currentX + widthImage / 2;
             int centerYBefore = currentY + heightImage / 2;
             zoomedImage = new BufferedImage(w, h, image.getType());

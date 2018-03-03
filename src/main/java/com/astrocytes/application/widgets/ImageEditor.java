@@ -140,8 +140,8 @@ public class ImageEditor extends GraphicalWidget {
             }
         });
         for (DrawingLine line : horizontalLines) {
-            SimpleLine absoluteLine = new SimpleLine(line.getxStart(), 1 / zoomLevel * (line.getyStart() + currentY),
-                    line.getxEnd(), 1 / zoomLevel * (line.getyEnd() + currentY));
+            SimpleLine absoluteLine = new SimpleLine(line.getxStart(), 1 / getZoomScale() * (line.getyStart() + currentY),
+                    line.getxEnd(), 1 / getZoomScale() * (line.getyEnd() + currentY));
             result.add(absoluteLine);
         }
         return result;
@@ -239,7 +239,7 @@ public class ImageEditor extends GraphicalWidget {
         @Override
         public void mouseWheelMoved(MouseWheelEvent e) {
             super.mouseWheelMoved(e);
-            if (currentView != null && !previousZoomLevel.equals(zoomLevel)) {
+            if (currentView != null && previousZoomLevel != zoomLevel) {
                 switch (state) {
                     case ZOOM_AND_PAN:
                         zoomObjects();
@@ -249,8 +249,8 @@ public class ImageEditor extends GraphicalWidget {
         }
 
         private void moveObjects() {
-            int dX = currentX > 0 && currentView.getWidth() + currentX < getImage().getWidth() * zoomLevel ? -deltaX : 0;
-            int dY = currentY > 0 && currentView.getHeight() + currentY < getImage().getHeight() * zoomLevel ? -deltaY : 0;
+            int dX = currentX > 0 && currentView.getWidth() + currentX < getImage().getWidth() * getZoomScale() ? -deltaX : 0;
+            int dY = currentY > 0 && currentView.getHeight() + currentY < getImage().getHeight() * getZoomScale() ? -deltaY : 0;
 
             for (Paintable obj : paintableObjects) {
                 obj.move(dX, dY);
@@ -259,7 +259,7 @@ public class ImageEditor extends GraphicalWidget {
 
         private void zoomObjects() {
             for (Paintable obj : paintableObjects) {
-                obj.updateZoom(zoomLevel);
+                obj.updateZoom(getZoomScale());
             }
         }
 
