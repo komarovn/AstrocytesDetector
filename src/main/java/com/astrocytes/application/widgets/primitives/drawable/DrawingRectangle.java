@@ -24,38 +24,22 @@ import com.astrocytes.application.widgets.primitives.SimpleRectangle;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 
 public class DrawingRectangle extends SimpleRectangle implements Paintable {
-
-    private double zoomLevel = 1.0;
     private Color drawingColor = Color.BLUE;
 
     @Override
-    public void paint(BufferedImage target, Graphics2D graphics) {
+    public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom) {
         if (isFull()) {
             graphics.setPaint(drawingColor);
             graphics.setStroke(new BasicStroke(1));
-            graphics.draw(new Rectangle2D.Float(getLeftX(), getTopY(), getWidth(), getHeight()));
-        }
-    }
 
-    @Override
-    public void move(int deltaX, int deltaY) {
-        if (isFull()) {
-            xStart += deltaX;
-            xEnd += deltaX;
-            yStart += deltaY;
-            yEnd += deltaY;
-        }
-    }
+            float x = (float) (zoom * getLeftX() - shiftX);
+            float y = (float) (zoom * getTopY() - shiftY);
+            float width = (float) (zoom * getWidth());
+            float height = (float) (zoom * getHeight());
 
-    @Override
-    public void updateZoom(double zoomLevel) {
-        this.zoomLevel = zoomLevel;
-
-        if (isFull()) {
-
+            graphics.draw(new Rectangle2D.Float(x, y, width, height));
         }
     }
 }

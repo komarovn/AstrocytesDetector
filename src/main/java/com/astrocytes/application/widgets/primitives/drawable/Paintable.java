@@ -21,14 +21,9 @@
 package com.astrocytes.application.widgets.primitives.drawable;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public interface Paintable {
 
-    public void paint(BufferedImage target, Graphics2D graphics);
-
-    public void move(int deltaX, int deltaY);
-
-    public void updateZoom(double zoomLevel);
+    public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom);
 
 }

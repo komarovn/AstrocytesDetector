@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Lobachevsky University, 2017. All rights reserved.
+ * Copyright (c) Lobachevsky University, 2018. All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal with the Software without restriction, including without limitation
@@ -20,45 +20,29 @@
  */
 package com.astrocytes.application.widgets.primitives.drawable;
 
-import com.astrocytes.application.widgets.primitives.SimpleLine;
+import com.astrocytes.application.widgets.primitives.SimpleCircle;
 
 import java.awt.*;
-import java.awt.geom.Line2D;
+import java.awt.geom.Ellipse2D;
 
-public class DrawingLine extends SimpleLine implements Paintable {
+public class DrawingCircle extends SimpleCircle implements Paintable {
+    private Color objectColor = Color.YELLOW;
 
-    private boolean drawing = true;
-    private Color objectColor = Color.MAGENTA;
-    private Color drawingColor = Color.ORANGE;
-
-    public DrawingLine() {
-        super();
-    }
-
-    public DrawingLine(Double xStart, Double yStart, Double xEnd, Double yEnd) {
-        super(xStart, yStart, xEnd, yEnd);
-    }
-
-    public void setDrawing(boolean isDrawng) {
-        drawing = isDrawng;
-    }
-
-    public boolean isDrawing() {
-        return drawing;
+    public DrawingCircle(Double xCenter, Double yCenter, Double radius) {
+        super(xCenter, yCenter, radius);
     }
 
     @Override
-    public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoomScale) {
+    public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom) {
         if (isFull()) {
-            graphics.setPaint(isDrawing() ? drawingColor : objectColor);
+            graphics.setPaint(objectColor);
             graphics.setStroke(new BasicStroke(2));
 
-            float xStart = (float) (zoomScale * getxStart() - shiftX);
-            float yStart = (float) (zoomScale * getyStart() - shiftY);
-            float xEnd = (float) (zoomScale * getxEnd() - shiftX);
-            float yEnd = (float) (zoomScale * getyEnd() - shiftY);
+            float radius = (float) (zoom * getRadius());
+            float xStart = (float) (zoom * getxCenter() - shiftX - radius / 2);
+            float yStart = (float) (zoom * getyCenter() - shiftY - radius / 2);
 
-            graphics.draw(new Line2D.Float(xStart, yStart, xEnd, yEnd));
+            graphics.draw(new Ellipse2D.Float(xStart, yStart, radius, radius));
         }
     }
 }

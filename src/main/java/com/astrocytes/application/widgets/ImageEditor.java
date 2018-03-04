@@ -27,7 +27,6 @@ import com.astrocytes.application.widgets.primitives.SimpleRectangle;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
 import java.util.*;
 import java.util.List;
 
@@ -81,40 +80,6 @@ public class ImageEditor extends GraphicalWidget {
         return paintableObjects;
     }
 
-    public SimpleRectangle getRectangle() {
-        SimpleRectangle absoluteRectangle = new SimpleRectangle();
-        if (rectangle.isFull()) {
-            absoluteRectangle.setStartPoint(rectangle.getLeftX() + getOffsetX(), rectangle.getTopY() + getOffsetY());
-            absoluteRectangle.setEndPoint(rectangle.getRightX() + getOffsetX(), rectangle.getBottomY() + getOffsetY());
-        }
-        return absoluteRectangle;
-    }
-
-    /*private void paintRectangle(Graphics g) {
-        Graphics2D graphics = (Graphics2D) g;
-        graphics.setPaint(Color.BLUE);
-        graphics.setStroke(new BasicStroke(1));
-        graphics.draw(new Rectangle2D.Float(rectangle.getLeftX(), rectangle.getTopY(),
-                rectangle.getWidth(), rectangle.getHeight()));
-    }
-
-    private void paintHorizontalLines(Graphics g) {
-        Graphics2D graphics = (Graphics2D) g;
-        graphics.setPaint(Color.MAGENTA);
-        graphics.setStroke(new BasicStroke(2));
-        for (DrawingLine line : horizontalLines) {
-            if (line.isFull()) {
-                line.setxEnd((double) (getImage().getWidth() < currentView.getWidth() ?
-                        Math.max(getImage().getWidth(), getWidth()) : currentView.getWidth() - 1));
-                if (line.isDrawing()) {
-                    graphics.setPaint(Color.ORANGE);
-                }
-                graphics.draw(new Line2D.Float(line.getxStart().floatValue(), line.getyStart().floatValue(),
-                        line.getxEnd().floatValue(), line.getyEnd().floatValue()));
-            }
-        }
-    }*/
-
     @Override
     public void reset() {
         super.reset();
@@ -127,7 +92,7 @@ public class ImageEditor extends GraphicalWidget {
         super.paintComponent(g);
 
         for (Paintable obj : paintableObjects) {
-            obj.paint(getImage(), (Graphics2D) g);
+            obj.paint((Graphics2D) g, getOffsetX(), getOffsetY(), getZoomValue());
         }
     }
 
@@ -168,8 +133,8 @@ public class ImageEditor extends GraphicalWidget {
                     case LINE_HORIZONTAL:
                         super.mousePressed(e);
                         creationLine = new DrawingLine();
-                        creationLine.setStartPoint(0.0, (double) e.getY());
-                        creationLine.setEndPoint((double) getZoomedImage().getWidth(), (double) e.getY());
+                        creationLine.setStartPoint(0.0, (e.getY() + getOffsetY()) / getZoomValue());
+                        creationLine.setEndPoint((double) getImage().getWidth(), (e.getY() + getOffsetY()) / getZoomValue());
                         repaint();
                         isDrawing = true;
                         break;
@@ -185,7 +150,6 @@ public class ImageEditor extends GraphicalWidget {
                     case POINTER:
                         break;
                     case ZOOM_AND_PAN:
-                        moveObjects();
                         break;
                     case RECTANGLE:
                         rectangle.setEndPoint(e.getX(), e.getY());
@@ -195,8 +159,8 @@ public class ImageEditor extends GraphicalWidget {
                     case LINE_HORIZONTAL:
                         paintableObjects.remove(creationLine);
                         if (isInOfImageBoundary(e.getX(), e.getY())) {
-                            creationLine.setStartPoint(0.0, (double) e.getY());
-                            creationLine.setEndPoint((double) getZoomedImage().getWidth(), (double) e.getY());
+                            creationLine.setStartPoint(0.0, (e.getY() + getOffsetY()) / getZoomValue());
+                            creationLine.setEndPoint((double) getImage().getWidth(), (e.getY() + getOffsetY()) / getZoomValue());
                         }
                         creationLine.setDrawing(false);
                         paintableObjects.add(creationLine);
@@ -215,7 +179,6 @@ public class ImageEditor extends GraphicalWidget {
                     case POINTER:
                         break;
                     case ZOOM_AND_PAN:
-                        moveObjects();
                         break;
                     case RECTANGLE:
                         if (isDrawing && isInOfImageBoundary(e.getX(), e.getY())) {
@@ -226,40 +189,13 @@ public class ImageEditor extends GraphicalWidget {
                     case LINE_HORIZONTAL:
                         if (isDrawing && isInOfImageBoundary(e.getX(), e.getY())) {
                             paintableObjects.remove(creationLine);
-                            creationLine.setStartPoint(0.0, (double) e.getY());
-                            creationLine.setEndPoint((double) getZoomedImage().getWidth(), (double) e.getY());
+                            creationLine.setStartPoint(0.0, (e.getY() + getOffsetY()) / getZoomValue());
+                            creationLine.setEndPoint((double) getImage().getWidth(), (e.getY() + getOffsetY()) / getZoomValue());
                             paintableObjects.add(creationLine);
                             repaint();
                         }
                         break;
                 }
-            }
-        }
-
-        @Override
-        public void mouseWheelMoved(MouseWheelEvent e) {
-            super.mouseWheelMoved(e);
-            if (currentView != null && previousZoomLevel != zoomLevel) {
-                switch (state) {
-                    case ZOOM_AND_PAN:
-                        zoomObjects();
-                        break;
-                }
-            }
-        }
-
-        private void moveObjects() {
-            int dX = getOffsetX() > 0 && currentView.getWidth() + getOffsetX() < getImage().getWidth() * getZoomValue() ? -deltaX : 0;
-            int dY = getOffsetY() > 0 && currentView.getHeight() + getOffsetY() < getImage().getHeight() * getZoomValue() ? -deltaY : 0;
-
-            for (Paintable obj : paintableObjects) {
-                obj.move(dX, dY);
-            }
-        }
-
-        private void zoomObjects() {
-            for (Paintable obj : paintableObjects) {
-                obj.updateZoom(getZoomValue());
             }
         }
 

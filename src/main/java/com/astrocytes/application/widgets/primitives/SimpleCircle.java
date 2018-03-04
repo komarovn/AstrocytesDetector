@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Lobachevsky University, 2017. All rights reserved.
+ * Copyright (c) Lobachevsky University, 2018. All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal with the Software without restriction, including without limitation
@@ -18,47 +18,50 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes.application.widgets.primitives.drawable;
+package com.astrocytes.application.widgets.primitives;
 
-import com.astrocytes.application.widgets.primitives.SimpleLine;
+public class SimpleCircle extends AbstractPrimitive {
+    private Double xCenter;
+    private Double yCenter;
+    private Double radius;
 
-import java.awt.*;
-import java.awt.geom.Line2D;
-
-public class DrawingLine extends SimpleLine implements Paintable {
-
-    private boolean drawing = true;
-    private Color objectColor = Color.MAGENTA;
-    private Color drawingColor = Color.ORANGE;
-
-    public DrawingLine() {
-        super();
+    public SimpleCircle(Double xCenter, Double yCenter, Double radius) {
+        this.xCenter = xCenter;
+        this.yCenter = yCenter;
+        this.radius = radius;
     }
 
-    public DrawingLine(Double xStart, Double yStart, Double xEnd, Double yEnd) {
-        super(xStart, yStart, xEnd, yEnd);
+    public Double getxCenter() {
+        return xCenter;
     }
 
-    public void setDrawing(boolean isDrawng) {
-        drawing = isDrawng;
+    public void setxCenter(Double xCenter) {
+        this.xCenter = xCenter;
     }
 
-    public boolean isDrawing() {
-        return drawing;
+    public Double getyCenter() {
+        return yCenter;
+    }
+
+    public void setyCenter(Double yCenter) {
+        this.yCenter = yCenter;
+    }
+
+    public void setCenterPoint(Double centerX, Double centerY) {
+        this.xCenter = centerX;
+        this.yCenter = centerY;
+    }
+
+    public Double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(Double radius) {
+        this.radius = radius;
     }
 
     @Override
-    public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoomScale) {
-        if (isFull()) {
-            graphics.setPaint(isDrawing() ? drawingColor : objectColor);
-            graphics.setStroke(new BasicStroke(2));
-
-            float xStart = (float) (zoomScale * getxStart() - shiftX);
-            float yStart = (float) (zoomScale * getyStart() - shiftY);
-            float xEnd = (float) (zoomScale * getxEnd() - shiftX);
-            float yEnd = (float) (zoomScale * getyEnd() - shiftY);
-
-            graphics.draw(new Line2D.Float(xStart, yStart, xEnd, yEnd));
-        }
+    public boolean isFull() {
+        return this.radius != null && this.xCenter != null && this.yCenter != null;
     }
 }
