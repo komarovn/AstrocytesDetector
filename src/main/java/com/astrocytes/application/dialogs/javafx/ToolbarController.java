@@ -20,7 +20,7 @@
  */
 package com.astrocytes.application.dialogs.javafx;
 
-import com.astrocytes.application.widgets.InstrumentState;
+import com.astrocytes.application.widgets.instrument.InstrumentType;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -64,21 +64,21 @@ public class ToolbarController extends AbstractController {
             @Override
             public void handle(ActionEvent event) {
                 selectButton(cursorButton);
-                mainApp.getGraphicalWidget().setState(InstrumentState.POINTER);
+                mainApp.getGraphicalWidget().selectInstrument(InstrumentType.POINTER);
             }
         });
         zoomAndPanButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 selectButton(zoomAndPanButton);
-                mainApp.getGraphicalWidget().setState(InstrumentState.ZOOM_AND_PAN);
+                mainApp.getGraphicalWidget().selectInstrument(InstrumentType.ZOOM_AND_PAN);
             }
         });
         horizontalLineButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 selectButton(horizontalLineButton);
-                mainApp.getGraphicalWidget().setState(InstrumentState.LINE_HORIZONTAL);
+                mainApp.getGraphicalWidget().selectInstrument(InstrumentType.LINE_HORIZONTAL);
             }
         });
     }

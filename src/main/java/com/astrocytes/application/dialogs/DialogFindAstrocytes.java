@@ -21,9 +21,11 @@
 package com.astrocytes.application.dialogs;
 
 import com.astrocytes.application.App;
+import com.astrocytes.application.widgets.instrument.DrawRectangleInstrument;
+import com.astrocytes.application.widgets.instrument.ZoomPanInstrument;
 import com.astrocytes.application.widgets.primitives.drawable.DrawingRectangle;
 import com.astrocytes.core.ImageHelper;
-import com.astrocytes.application.widgets.InstrumentState;
+import com.astrocytes.application.widgets.instrument.InstrumentType;
 import com.astrocytes.application.resources.StringResources;
 import com.astrocytes.application.widgets.PreviewImageEditor;
 import com.astrocytes.application.widgets.primitives.SimpleRectangle;
@@ -39,17 +41,18 @@ import java.awt.image.BufferedImage;
 public class DialogFindAstrocytes extends AbstractDialog {
     private App owner;
     private PreviewImageEditor preview;
-    private InstrumentState state;
     private SimpleRectangle boundingRectangle;
 
     public DialogFindAstrocytes(App owner, BufferedImage image) {
         super(owner.getFrame(), StringResources.FIND_ASTROCYTES);
         this.owner = owner;
+        preview.addInstrument(new ZoomPanInstrument());
+        preview.addInstrument(new DrawRectangleInstrument());
         preview.setImage(image);
         preview.setOriginalImage(ImageHelper.convertMatToBufferedImage(
                 owner.getOperationsExecutor().getOperations().getSourceImage()));
         preview.processPreviewImage();
-        state = InstrumentState.ZOOM_AND_PAN;
+        preview.selectInstrument(InstrumentType.ZOOM_AND_PAN);
         setVisible(true);
     }
 
@@ -107,15 +110,13 @@ public class DialogFindAstrocytes extends AbstractDialog {
             drawRectangle.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    state = InstrumentState.RECTANGLE;
-                    preview.setState(state);
+                    preview.selectInstrument(InstrumentType.RECTANGLE);
                 }
             });
             pan.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    state = InstrumentState.ZOOM_AND_PAN;
-                    preview.setState(state);
+                    preview.selectInstrument(InstrumentType.ZOOM_AND_PAN);
                 }
             });
         }

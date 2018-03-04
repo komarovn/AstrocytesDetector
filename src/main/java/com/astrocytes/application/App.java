@@ -22,6 +22,9 @@ package com.astrocytes.application;
 
 import com.astrocytes.application.connector.OperationsExecutor;
 import com.astrocytes.application.resources.ApplicationConstants;
+import com.astrocytes.application.widgets.instrument.DrawHorizontalLineInstrument;
+import com.astrocytes.application.widgets.instrument.PointerInstrument;
+import com.astrocytes.application.widgets.instrument.ZoomPanInstrument;
 import com.astrocytes.application.widgets.message.WarningMessage;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.application.dialogs.DialogCannyEdgeDetection;
@@ -34,7 +37,6 @@ import com.astrocytes.application.dialogs.javafx.ToolbarController;
 import com.astrocytes.application.resources.StringResources;
 import com.astrocytes.application.widgets.ImageEditor;
 import com.astrocytes.core.data.DataProvider;
-import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
 import javax.swing.*;
@@ -73,12 +75,8 @@ public class App {
         frame.setVisible(true);
         frame.setSize(new Dimension(ApplicationConstants.DEFAULT_WINDOW_WIDTH,
                 ApplicationConstants.DEFAULT_WINDOW_HEIGHT));
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                addResizeListener();
-            }
-        });
+        initListeners();
+        initInstruments();
     }
 
     private void initComponents() {
@@ -109,7 +107,7 @@ public class App {
         dataProvider.setWindowHeight(ApplicationConstants.DEFAULT_WINDOW_HEIGHT);
     }
 
-    private void addResizeListener() {
+    private void initListeners() {
         mainPanel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -119,6 +117,12 @@ public class App {
                 dataProvider.setWindowHeight((int) frame.getSize().getHeight());
             }
         });
+    }
+
+    private void initInstruments() {
+        this.graphicalWidget.addInstrument(new PointerInstrument());
+        this.graphicalWidget.addInstrument(new ZoomPanInstrument());
+        this.graphicalWidget.addInstrument(new DrawHorizontalLineInstrument());
     }
 
     private void updateGrahicalWidget() {
@@ -299,7 +303,7 @@ public class App {
 
     public void executeFindAstrocytesAuto() {
         if (image != null) {
-            //image = operationsExecutor.applyDetectAstrocytes();
+            graphicalWidget.getPaintableObjects().addAll(operationsExecutor.getAstrocytes());
             updateCurrentView();
         }
     }

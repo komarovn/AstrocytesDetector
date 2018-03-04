@@ -22,6 +22,8 @@ package com.astrocytes.application.dialogs;
 
 import com.astrocytes.application.App;
 import com.astrocytes.application.resources.ApplicationConstants;
+import com.astrocytes.application.widgets.instrument.InstrumentType;
+import com.astrocytes.application.widgets.instrument.ZoomPanInstrument;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.application.resources.StringResources;
 import com.astrocytes.application.widgets.PreviewImageEditor;
@@ -45,8 +47,10 @@ public class DialogDilateErode extends AbstractDialog {
 
     public DialogDilateErode(App owner, BufferedImage image) {
         super(owner.getFrame(), StringResources.DILATE_AND_ERODE);
+        preview.addInstrument(new ZoomPanInstrument());
         preview.setImage(image);
         preview.processPreviewImage();
+        preview.selectInstrument(InstrumentType.ZOOM_AND_PAN);
         setVisible(true);
     }
 

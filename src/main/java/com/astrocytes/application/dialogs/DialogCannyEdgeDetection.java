@@ -22,6 +22,8 @@ package com.astrocytes.application.dialogs;
 
 import com.astrocytes.application.App;
 import com.astrocytes.application.resources.ApplicationConstants;
+import com.astrocytes.application.widgets.instrument.InstrumentType;
+import com.astrocytes.application.widgets.instrument.ZoomPanInstrument;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.application.widgets.PreviewImageEditor;
 import com.astrocytes.core.operationsengine.OperationsImpl;
@@ -48,8 +50,10 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
 
     public DialogCannyEdgeDetection(App owner, BufferedImage image) {
         super(owner.getFrame(), StringResources.CANNY_EDGE_DETECTION);
+        preview.addInstrument(new ZoomPanInstrument());
         preview.setImage(image);
         preview.processPreviewImage();
+        preview.selectInstrument(InstrumentType.ZOOM_AND_PAN);
         setVisible(true);
     }
 

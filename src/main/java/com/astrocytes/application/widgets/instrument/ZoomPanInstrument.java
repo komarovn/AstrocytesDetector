@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Lobachevsky University, 2017. All rights reserved.
+ * Copyright (c) Lobachevsky University, 2018. All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal with the Software without restriction, including without limitation
@@ -18,11 +18,34 @@
  *
  * Developed by: Komarov Nikolay.
  */
-package com.astrocytes.application.widgets;
+package com.astrocytes.application.widgets.instrument;
 
-public enum InstrumentState {
-    POINTER,
-    ZOOM_AND_PAN,
-    RECTANGLE,
-    LINE_HORIZONTAL
+import java.awt.event.MouseEvent;
+
+public class ZoomPanInstrument extends Instrument {
+
+    @Override
+    public InstrumentType getType() {
+        return InstrumentType.ZOOM_AND_PAN;
+    }
+
+    @Override
+    public void activate() {
+        getEditor().unlockZoomAndPan();
+    }
+
+    @Override
+    public void onMouseDown(MouseEvent e) {
+
+    }
+
+    @Override
+    public void onMouseDrag(MouseEvent e) {
+
+    }
+
+    @Override
+    public void onMouseUp(MouseEvent e) {
+
+    }
 }

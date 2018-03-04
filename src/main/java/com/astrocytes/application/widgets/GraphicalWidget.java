@@ -204,8 +204,18 @@ public class GraphicalWidget extends JPanel {
         return currentY;
     }
 
-    protected BufferedImage getZoomedImage() {
-        return zoomedImage;
+    /**
+     * Test is given point inside the image.
+     *
+     * @param x - horizontal axis coordinate.
+     * @param y - vertical axis coordinate.
+     * @return {@code true} if given point is inside the image and {@code false} otherwise.
+     */
+    public boolean testPoint(int x, int y) {
+        int width = this.zoomedImage.getWidth();
+        int height = this.zoomedImage.getHeight();
+        return (0 <= getOffsetX() + x && getOffsetX() + x < width) &&
+                (0 <= getOffsetY() + y && getOffsetY() + y < height);
     }
 
     private void calculateZoomedImage() {

@@ -20,10 +20,11 @@
  */
 package com.astrocytes.application.widgets;
 
+import com.astrocytes.application.widgets.instrument.Instrument;
+import com.astrocytes.application.widgets.instrument.InstrumentType;
 import com.astrocytes.application.widgets.primitives.drawable.DrawingLine;
 import com.astrocytes.application.widgets.primitives.drawable.Paintable;
 import com.astrocytes.application.widgets.primitives.SimpleLine;
-import com.astrocytes.application.widgets.primitives.SimpleRectangle;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -32,13 +33,12 @@ import java.util.List;
 
 public class ImageEditor extends GraphicalWidget {
 
-    private InstrumentState state;
+    private InstrumentType activeInstrument;
+    private List<Instrument> instruments = new ArrayList<Instrument>();
+    protected List<Paintable> paintableObjects = new ArrayList<Paintable>();
 
     //TODO: delete
-    protected SimpleRectangle rectangle = new SimpleRectangle();
     protected java.util.List<DrawingLine> horizontalLines = new ArrayList<DrawingLine>();
-
-    protected List<Paintable> paintableObjects = new ArrayList<Paintable>();
 
     public ImageEditor() {
         this(null, null);
@@ -46,7 +46,6 @@ public class ImageEditor extends GraphicalWidget {
 
     public ImageEditor(Integer width, Integer height) {
         super(width, height);
-        state = InstrumentState.ZOOM_AND_PAN;
         initInstrumentListeners();
     }
 
@@ -60,31 +59,49 @@ public class ImageEditor extends GraphicalWidget {
         addMouseWheelListener(listener);
     }
 
-    public InstrumentState getState() {
-        return state;
+    public void addInstrument(Instrument instrument) {
+        instrument.setEditor(this);
+        this.instruments.add(instrument);
     }
 
-    public void setState(InstrumentState state) {
-        this.state = state;
-        switch (state) {
-            case ZOOM_AND_PAN:
-                unlockZoomAndPan();
-                break;
-            default:
-                lockZoomAndPan();
+    public void removeInstrument(InstrumentType type) {
+        for (Instrument instrument : instruments) {
+            if (instrument.getType() == type) {
+                this.instruments.remove(instrument);
+                return;
+            }
         }
-        updateWidget();
+    }
+
+    public void selectInstrument(InstrumentType type) {
+        for (Instrument instrument : instruments) {
+            if (instrument.getType() == type) {
+                this.activeInstrument = type;
+                instrument.activate();
+                updateWidget();
+                return;
+            }
+        }
+    }
+
+    private Instrument getActiveInstrument() {
+        for (Instrument instrument : instruments) {
+            if (instrument.getType() == this.activeInstrument) {
+                return instrument;
+            }
+        }
+        return null;
     }
 
     public List<Paintable> getPaintableObjects() {
-        return paintableObjects;
+        return this.paintableObjects;
     }
 
     @Override
     public void reset() {
         super.reset();
-        state = InstrumentState.ZOOM_AND_PAN;
-        paintableObjects.clear();
+        this.activeInstrument = InstrumentType.DEFAULT;
+        this.paintableObjects.clear();
     }
 
     @Override
@@ -97,47 +114,23 @@ public class ImageEditor extends GraphicalWidget {
     }
 
     public List<SimpleLine> getHorizontalLines() {
-        List<SimpleLine> result = new ArrayList<SimpleLine>();
         Collections.sort(horizontalLines, new Comparator<DrawingLine>() {
             @Override
             public int compare(DrawingLine o1, DrawingLine o2) {
                 return o1.getyEnd().intValue() - o2.getyEnd().intValue();
             }
         });
-        for (DrawingLine line : horizontalLines) {
-            SimpleLine absoluteLine = new SimpleLine(line.getxStart(), 1 / getZoomValue() * (line.getyStart() + getOffsetY()),
-                    line.getxEnd(), 1 / getZoomValue() * (line.getyEnd() + getOffsetY()));
-            result.add(absoluteLine);
-        }
-        return result;
+        return null;
     }
 
     protected class ImageEditorListener extends GraphicalWidgetListener {
-        private boolean isDrawing = false;
-        private DrawingLine creationLine;
-
         @Override
         public void mousePressed(MouseEvent e) {
+            super.mousePressed(e);
             if (currentView != null) {
-                switch (state) {
-                    case POINTER:
-                        break;
-                    case ZOOM_AND_PAN:
-                        super.mousePressed(e);
-                        break;
-                    case RECTANGLE:
-                        super.mousePressed(e);
-                        rectangle.setStartPoint(e.getX(), e.getY());
-                        isDrawing = true;
-                        break;
-                    case LINE_HORIZONTAL:
-                        super.mousePressed(e);
-                        creationLine = new DrawingLine();
-                        creationLine.setStartPoint(0.0, (e.getY() + getOffsetY()) / getZoomValue());
-                        creationLine.setEndPoint((double) getImage().getWidth(), (e.getY() + getOffsetY()) / getZoomValue());
-                        repaint();
-                        isDrawing = true;
-                        break;
+                Instrument instrument = getActiveInstrument();
+                if (instrument != null) {
+                    instrument.onMouseDown(e);
                 }
             }
         }
@@ -146,27 +139,9 @@ public class ImageEditor extends GraphicalWidget {
         public void mouseReleased(MouseEvent e) {
             super.mouseReleased(e);
             if (currentView != null) {
-                switch (state) {
-                    case POINTER:
-                        break;
-                    case ZOOM_AND_PAN:
-                        break;
-                    case RECTANGLE:
-                        rectangle.setEndPoint(e.getX(), e.getY());
-                        repaint();
-                        isDrawing = false;
-                        break;
-                    case LINE_HORIZONTAL:
-                        paintableObjects.remove(creationLine);
-                        if (isInOfImageBoundary(e.getX(), e.getY())) {
-                            creationLine.setStartPoint(0.0, (e.getY() + getOffsetY()) / getZoomValue());
-                            creationLine.setEndPoint((double) getImage().getWidth(), (e.getY() + getOffsetY()) / getZoomValue());
-                        }
-                        creationLine.setDrawing(false);
-                        paintableObjects.add(creationLine);
-                        repaint();
-                        isDrawing = false;
-                        break;
+                Instrument instrument = getActiveInstrument();
+                if (instrument != null) {
+                    instrument.onMouseUp(e);
                 }
             }
         }
@@ -175,32 +150,11 @@ public class ImageEditor extends GraphicalWidget {
         public void mouseDragged(MouseEvent e) {
             super.mouseDragged(e);
             if (currentView != null) {
-                switch (state) {
-                    case POINTER:
-                        break;
-                    case ZOOM_AND_PAN:
-                        break;
-                    case RECTANGLE:
-                        if (isDrawing && isInOfImageBoundary(e.getX(), e.getY())) {
-                            rectangle.setEndPoint(e.getX(), e.getY());
-                            repaint();
-                        }
-                        break;
-                    case LINE_HORIZONTAL:
-                        if (isDrawing && isInOfImageBoundary(e.getX(), e.getY())) {
-                            paintableObjects.remove(creationLine);
-                            creationLine.setStartPoint(0.0, (e.getY() + getOffsetY()) / getZoomValue());
-                            creationLine.setEndPoint((double) getImage().getWidth(), (e.getY() + getOffsetY()) / getZoomValue());
-                            paintableObjects.add(creationLine);
-                            repaint();
-                        }
-                        break;
+                Instrument instrument = getActiveInstrument();
+                if (instrument != null) {
+                    instrument.onMouseDrag(e);
                 }
             }
-        }
-
-        private boolean isInOfImageBoundary(int x, int y) {
-            return y <= getZoomedImage().getHeight() && x <= getZoomedImage().getWidth();
         }
     }
 
