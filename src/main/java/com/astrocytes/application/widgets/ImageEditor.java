@@ -107,6 +107,8 @@ public class ImageEditor extends GraphicalWidget {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        ((Graphics2D) g).setRenderingHints(new RenderingHints(
+                RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
 
         for (Paintable obj : paintableObjects) {
             obj.paint((Graphics2D) g, getOffsetX(), getOffsetY(), getZoomValue());
