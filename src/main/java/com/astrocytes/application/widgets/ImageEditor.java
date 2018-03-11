@@ -35,7 +35,7 @@ public class ImageEditor extends GraphicalWidget {
 
     private InstrumentType activeInstrument;
     private List<Instrument> instruments = new ArrayList<Instrument>();
-    protected List<Paintable> paintableObjects = new ArrayList<Paintable>();
+    private ObjectManager objManager = new ObjectManager();
 
     //TODO: delete
     protected java.util.List<DrawingLine> horizontalLines = new ArrayList<DrawingLine>();
@@ -84,7 +84,7 @@ public class ImageEditor extends GraphicalWidget {
         }
     }
 
-    private Instrument getActiveInstrument() {
+    public Instrument getActiveInstrument() {
         for (Instrument instrument : instruments) {
             if (instrument.getType() == this.activeInstrument) {
                 return instrument;
@@ -93,21 +93,21 @@ public class ImageEditor extends GraphicalWidget {
         return null;
     }
 
-    public List<Paintable> getPaintableObjects() {
-        return this.paintableObjects;
+    public ObjectManager getObjectManager() {
+        return this.objManager;
     }
 
     @Override
     public void reset() {
         super.reset();
         this.activeInstrument = InstrumentType.DEFAULT;
-        this.paintableObjects.clear();
+        this.objManager.clearAll();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        for (Paintable obj : paintableObjects) {
+        for (Paintable obj : this.objManager.getAllPaintables()) {
             obj.paint((Graphics2D) g, getOffsetX(), getOffsetY(), getZoomValue());
         }
     }

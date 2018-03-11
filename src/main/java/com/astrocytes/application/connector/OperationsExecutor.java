@@ -61,12 +61,18 @@ public class OperationsExecutor {
         return ImageHelper.convertMatToBufferedImage(result);
     }
 
-    public BufferedImage applyFindAstocytes() {
-        Mat result = operations.findAstrocytes(dataProvider.getBoundingRectangleWidth(),
+    public List<DrawingCircle> applyFindAstocytes() {
+        List<DrawingCircle> result = new ArrayList<DrawingCircle>();
+        List<Point> centers = operations.findAstrocytes(dataProvider.getBoundingRectangleWidth(),
                 dataProvider.getBoundingRectangleHeight(),
                 dataProvider.getBoundingRectangleCenterX(),
                 dataProvider.getBoundingRectangleCenterY());
-        return ImageHelper.convertMatToBufferedImage(result);
+
+        for(Point astrocyte : centers) {
+            result.add(new DrawingCircle(astrocyte.getX().doubleValue(), astrocyte.getY().doubleValue(), 6.0));
+        }
+
+        return result;
     }
 
     public BufferedImage applyDetectAstrocytes() {

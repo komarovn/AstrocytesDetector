@@ -23,7 +23,8 @@ package com.astrocytes.application.dialogs;
 import com.astrocytes.application.App;
 import com.astrocytes.application.widgets.instrument.DrawRectangleInstrument;
 import com.astrocytes.application.widgets.instrument.ZoomPanInstrument;
-import com.astrocytes.application.widgets.primitives.drawable.DrawingRectangle;
+import com.astrocytes.application.widgets.primitives.drawable.DrawingCircle;
+import com.astrocytes.application.widgets.primitives.drawable.Paintable;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.application.widgets.instrument.InstrumentType;
 import com.astrocytes.application.resources.StringResources;
@@ -31,17 +32,21 @@ import com.astrocytes.application.widgets.PreviewImageEditor;
 import com.astrocytes.application.widgets.primitives.SimpleRectangle;
 import com.astrocytes.core.operationsengine.OperationsImpl;
 import com.astrocytes.core.operationsengine.Operations;
+import com.astrocytes.core.primitives.Point;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class DialogFindAstrocytes extends AbstractDialog {
     private App owner;
     private PreviewImageEditor preview;
     private SimpleRectangle boundingRectangle;
+    private String boundingRectangleKey;
+    private String astrocytesKey;
 
     public DialogFindAstrocytes(App owner, BufferedImage image) {
         super(owner.getFrame(), StringResources.FIND_ASTROCYTES);
@@ -51,6 +56,8 @@ public class DialogFindAstrocytes extends AbstractDialog {
         preview.setImage(image);
         preview.setOriginalImage(ImageHelper.convertMatToBufferedImage(
                 owner.getOperationsExecutor().getOperations().getSourceImage()));
+        this.boundingRectangleKey = preview.getObjectManager().createGroup();
+        this.astrocytesKey = preview.getObjectManager().createGroup();
         preview.processPreviewImage();
         preview.selectInstrument(InstrumentType.ZOOM_AND_PAN);
         setVisible(true);
@@ -111,6 +118,7 @@ public class DialogFindAstrocytes extends AbstractDialog {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     preview.selectInstrument(InstrumentType.RECTANGLE);
+                    ((DrawRectangleInstrument) preview.getActiveInstrument()).setDrawingKey(boundingRectangleKey);
                 }
             });
             pan.addActionListener(new ActionListener() {
@@ -140,17 +148,25 @@ public class DialogFindAstrocytes extends AbstractDialog {
     }
 
     private void processPreview() {
-        //BufferedImage currentView = preview.getCurrentView();
-        boundingRectangle = (DrawingRectangle) preview.getPaintableObjects().get(0);
+        java.util.List<Paintable> rectangles = preview.getObjectManager().getGroup(this.boundingRectangleKey);
+        if (rectangles.size() > 0) {
+            boundingRectangle = (SimpleRectangle) rectangles.get(0);
+        }
         Operations operations = new OperationsImpl();
         operations.setSourceImage(ImageHelper.convertBufferedImageToMat(preview.getOriginalImageView()));
-        if (boundingRectangle.isFull()) {
-            BufferedImage updatedPreview = ImageHelper.convertMatToBufferedImage(
-                    operations.findAstrocytes(boundingRectangle.getWidth(),
-                            boundingRectangle.getHeight(),
-                            boundingRectangle.getCenterX(),
-                            boundingRectangle.getCenterY()));
-            preview.updatePreview(updatedPreview);
+        if (boundingRectangle != null && boundingRectangle.isFull()) {
+            preview.getObjectManager().getGroup(astrocytesKey).clear();
+            java.util.List<Point> centers = operations.findAstrocytes(boundingRectangle.getWidth(),
+                    boundingRectangle.getHeight(),
+                    boundingRectangle.getCenterX(),
+                    boundingRectangle.getCenterY());
+            java.util.List<DrawingCircle> astrocytes = new ArrayList<DrawingCircle>();
+
+            for (Point center : centers) {
+                astrocytes.add(new DrawingCircle((double) center.getX(), (double) center.getY(), 4.0));
+            }
+
+            preview.getObjectManager().getGroup(astrocytesKey).addAll(astrocytes);
         }
         else {
             preview.updatePreview(preview.getOriginalImageView());

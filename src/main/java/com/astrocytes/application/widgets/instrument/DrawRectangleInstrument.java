@@ -27,6 +27,7 @@ import java.awt.event.MouseEvent;
 public class DrawRectangleInstrument extends Instrument {
     private boolean isDrawingState;
     private DrawingRectangle rectangle;
+    private String rectangleKey;
 
     @Override
     public InstrumentType getType() {
@@ -41,8 +42,12 @@ public class DrawRectangleInstrument extends Instrument {
     @Override
     public void onMouseDown(MouseEvent e) {
         this.rectangle = new DrawingRectangle();
-        this.rectangle.setStartPoint(e.getX(), e.getY());
-        getEditor().getPaintableObjects().add(rectangle);
+        int startX = (int) ((e.getX() + getEditor().getOffsetX()) / getEditor().getZoomValue());
+        int startY = (int) ((e.getY() + getEditor().getOffsetY()) / getEditor().getZoomValue());
+        this.rectangle.setStartPoint(startX, startY);
+        this.rectangle.setEndPoint(startX, startY);
+        getEditor().getObjectManager().getGroup(getRectanglesKey()).clear();
+        getEditor().getObjectManager().getGroup(getRectanglesKey()).add(this.rectangle);
         this.isDrawingState = true;
     }
 
@@ -61,9 +66,22 @@ public class DrawRectangleInstrument extends Instrument {
         getEditor().repaint();
     }
 
-    private void updateRectangle(int x, int y) {
-        if (getEditor().testPoint(x, y)) {
-            this.rectangle.setEndPoint(x, y);
+    private void updateRectangle(int endX, int endY) {
+        if (getEditor().testPoint(endX, endY)) {
+            endX = (int) ((endX + getEditor().getOffsetX()) / getEditor().getZoomValue());
+            endY = (int) ((endY + getEditor().getOffsetY()) / getEditor().getZoomValue());
+            this.rectangle.setEndPoint(endX, endY);
         }
+    }
+
+    private String getRectanglesKey() {
+        if (this.rectangleKey == null) {
+            this.rectangleKey = getEditor().getObjectManager().createGroup();
+        }
+        return this.rectangleKey;
+    }
+
+    public void setDrawingKey(String key) {
+        this.rectangleKey = key;
     }
 }

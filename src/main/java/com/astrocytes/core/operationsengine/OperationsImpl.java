@@ -50,8 +50,6 @@ public class OperationsImpl implements Operations {
     private List<Neuron> neurons;
     private Mat layerBounds;
 
-    //private List<Rect> boundingRectangles;
-
     @Override
     public void setSourceImage(Mat sourceImage) {
         this.sourceImage = sourceImage;
@@ -96,13 +94,12 @@ public class OperationsImpl implements Operations {
     }
 
     @Override
-    public Mat findAstrocytes(Integer widthRectangle, Integer heightRectangle, Integer centerX, Integer centerY) {
+    public List<com.astrocytes.core.primitives.Point> findAstrocytes(Integer widthRectangle, Integer heightRectangle, Integer centerX, Integer centerY) {
         detectAstrocytesOld(sourceImage.clone(),
                 (widthRectangle + heightRectangle) / 2,
                 widthRectangle * heightRectangle * PI / 4,
                 CoreOperations.intensity(sourceImage, centerX, centerY));
-        return drawAstrocyteCenters();
-        //drawBoundingRectangles();
+        return getAstrocytesCenters();
     }
 
     private void detectAstrocytesOld(Mat source, Integer averageRectSize, Double averageArea, int intensity) {
@@ -110,7 +107,6 @@ public class OperationsImpl implements Operations {
             source = CoreOperations.grayscale(source);
         }
 
-        //boundingRectangles = new ArrayList<>();
         astrocytesCenters = new ArrayList<>();
         List<MatOfPoint> contoursAfterFirstIteration = new ArrayList<>();
         Mat hierarchy = new Mat();
@@ -122,8 +118,6 @@ public class OperationsImpl implements Operations {
             Rect boundingRectangle = boundingRect(contour);
             Double contourArea = contourArea(contour);
             Double contourPerimeter = arcLength(new MatOfPoint2f(contour.toArray()), true);
-
-            //boundingRectangles.add(boundingRectangle);
 
             /* Step 2 */
             if (averageArea - 160 <= contourArea /*&& contourArea <= averageArea + 10*/) {
@@ -147,7 +141,7 @@ public class OperationsImpl implements Operations {
         }
     }
 
-    //TODO: remove it
+    @Deprecated
     private Mat drawAstrocyteCenters() {
         if (astrocytesCenters == null) {
             return sourceImage;
@@ -163,7 +157,7 @@ public class OperationsImpl implements Operations {
         return result;
     }
 
-    //TODO: remove it
+    @Deprecated
     private Mat drawNeuronsCenters(Mat src) {
         if (src == null) {
             src = sourceImage.clone();
@@ -182,7 +176,7 @@ public class OperationsImpl implements Operations {
         return result;
     }
 
-    //TODO: remove it
+    @Deprecated
     private Mat drawLayerBounds() {
         if (layerBounds == null) {
             return sourceImage;
@@ -203,16 +197,6 @@ public class OperationsImpl implements Operations {
 
         return result;
     }
-
-    /*private void drawBoundingRectangles() {
-        Mat dest = sourceImage.clone();
-
-        for (Rect rect : boundingRectangles) {
-            Imgproc.rectangle(dest, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0.3, 0.5, 0.6), 1);
-        }
-
-        dest.copyTo(getOutputImage());
-    }*/
 
     @Override
     public List<com.astrocytes.core.primitives.Point> getAstrocytesCenters() {

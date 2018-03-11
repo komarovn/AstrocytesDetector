@@ -99,8 +99,8 @@ public interface Operations {
      * @param heightRectangle - height of bounding rectangle
      * @param centerX - x-coordinate of center of bounding rectangle by absolute value
      * @param centerY - y-coordinate of center of bounding rectangle by absolute value
-     * @return original working image with colored astrocytes' centers.
+     * @return List of points presented astrocytes centers.
      */
-    public Mat findAstrocytes(Integer widthRectangle, Integer heightRectangle, Integer centerX, Integer centerY);
+    public List<Point> findAstrocytes(Integer widthRectangle, Integer heightRectangle, Integer centerX, Integer centerY);
 
 }

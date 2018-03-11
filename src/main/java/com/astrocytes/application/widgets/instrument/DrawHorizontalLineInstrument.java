@@ -27,6 +27,7 @@ import java.awt.event.MouseEvent;
 public class DrawHorizontalLineInstrument extends Instrument {
     private boolean isDrawingState = false;
     private DrawingLine line;
+    private String linesKey;
 
     @Override
     public InstrumentType getType() {
@@ -42,7 +43,7 @@ public class DrawHorizontalLineInstrument extends Instrument {
     public void onMouseDown(MouseEvent e) {
         this.line = new DrawingLine();
         updateLine(e.getX(), e.getY());
-        getEditor().getPaintableObjects().add(this.line);
+        getEditor().getObjectManager().getGroup(getLinesKey()).add(this.line);
         getEditor().repaint();
         this.isDrawingState = true;
     }
@@ -70,5 +71,12 @@ public class DrawHorizontalLineInstrument extends Instrument {
             this.line.setEndPoint((double) getEditor().getImage().getWidth(),
                     (y + getEditor().getOffsetY()) / getEditor().getZoomValue());
         }
+    }
+
+    private String getLinesKey() {
+        if (this.linesKey == null) {
+            this.linesKey = getEditor().getObjectManager().createGroup();
+        }
+        return this.linesKey;
     }
 }

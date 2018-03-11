@@ -52,12 +52,6 @@ public class FindAstrocytesTest {
         }
     }
 
-    private void executeFindAstrocytes() {
-        //testImage = operationsExecutor.applyCannyEdgeDetection(testImage);
-        testImage = operationsExecutor.applyDilateAndErode();
-        testImage = operationsExecutor.applyFindAstocytes();
-    }
-
     private void testCanny() {
         dataProvider.setCannyMinThreshold(26);
         dataProvider.setCannyMaxThreshold(58);
