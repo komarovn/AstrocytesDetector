@@ -84,6 +84,11 @@ public class GraphicalWidget extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
+        Map<RenderingHints.Key, Object> hints = new HashMap<>();
+        hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        hints.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        ((Graphics2D) g).setRenderingHints(new RenderingHints(hints));
         super.paintComponent(g);
         if (currentView != null) {
             g.drawImage(currentView, 0, 0, this);
@@ -224,7 +229,7 @@ public class GraphicalWidget extends JPanel {
             int height = (int) (this.image.getHeight() * getZoomValue());
             AffineTransform affineTransform = new AffineTransform();
             affineTransform.scale(getZoomValue(), getZoomValue());
-            AffineTransformOp affineTransformOp = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_BILINEAR);
+            AffineTransformOp affineTransformOp = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
             BufferedImage img = affineTransformOp.filter(this.image,
                     new BufferedImage(width, height, this.image.getType()));
             this.cachedImages.put(zoomLevel, img);
