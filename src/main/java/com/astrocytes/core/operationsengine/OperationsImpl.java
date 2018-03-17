@@ -230,12 +230,27 @@ public class OperationsImpl implements Operations {
     }
 
     @Override
-    public Mat getLayerDelimiters() {
+    public Map<Integer, List<com.astrocytes.core.primitives.Point>> getLayerDelimiters() {
         if (this.layerBounds == null) {
             detectLayers();
         }
-        //TODO: transform into List of splines.
-        return this.layerBounds;
+
+        Map<Integer, List<com.astrocytes.core.primitives.Point>> result =
+                new HashMap<Integer, List<com.astrocytes.core.primitives.Point>>();
+        int stepSize = 10;
+
+        for (int row = 0; row < this.layerBounds.rows(); row++) {
+            List<com.astrocytes.core.primitives.Point> layer = new ArrayList<com.astrocytes.core.primitives.Point>();
+
+            for (int col = 0; col < this.layerBounds.cols() - 1; col = Math.min(this.layerBounds.cols() - 1, col + stepSize)) {
+                int y = (int) this.layerBounds.get(row, col)[0];
+                layer.add(new com.astrocytes.core.primitives.Point(col, y));
+            }
+
+            result.put(row, layer);
+        }
+
+        return result;
     }
 
     // fills layerBounds with data
@@ -244,13 +259,18 @@ public class OperationsImpl implements Operations {
 
         int halfColumnWidth = 50;
         Mat density = new Mat(equalizedImage.rows(), equalizedImage.cols(), CvType.CV_32F);
+        int rows = density.rows();
+        int cols = density.cols();
 
-        for (int i = 0; i < density.rows(); i++) {
-            for (int j = 0; j < density.cols(); j++) {
-                double p = 0.0;
-                int leftBoundInterval = Math.max(j - halfColumnWidth, 0);
-                int rightBoundInterval = Math.min(density.cols() - 1, j + halfColumnWidth);
-                int intervalLength = rightBoundInterval - leftBoundInterval + 1;
+        // > 1 min
+        for (int i = 0; i < rows; i++) {
+            double p;
+            int leftBoundInterval, rightBoundInterval, intervalLength;
+            for (int j = 0; j < cols; j++) {
+                p = 0.0;
+                leftBoundInterval = Math.max(j - halfColumnWidth, 0);
+                rightBoundInterval = Math.min(cols - 1, j + halfColumnWidth);
+                intervalLength = rightBoundInterval - leftBoundInterval + 1;
 
                 for (int s = leftBoundInterval; s <= rightBoundInterval; s++) {
                     p += equalizedImage.get(i, s)[0];
@@ -259,24 +279,23 @@ public class OperationsImpl implements Operations {
                 density.put(i, j, p / intervalLength);
             }
         }
-        /*density.convertTo(density, CvType.CV_8UC1);
-        return density;*/
 
-        for (int j = 0; j < density.cols(); j++) {
+        //3 seconds
+        for (int j = 0; j < cols; j++) {
             double intensity = 0.0;
 
-            for (int i = 0; i < density.rows(); i++) {
+            for (int i = 0; i < rows; i++) {
                 intensity += density.get(i, j)[0];
             }
 
-            for (int i = 0; i < density.rows(); i++) {
+            for (int i = 0; i < rows; i++) {
                 density.put(i, j, density.get(i, j)[0] / intensity);
             }
         }
 
-        double ndlAverage = 1.0 / (double) density.rows();
+        double ndlAverage = 1.0 / (double) rows;
 
-        layerBounds = new Mat(6, density.cols(), CvType.CV_32F);
+        layerBounds = new Mat(6, cols, CvType.CV_32F);
         double k1 = 0.56E-4;
         double k2 = 1.3E-4;
 
@@ -285,20 +304,20 @@ public class OperationsImpl implements Operations {
         /*float[] data = new float[density.rows() * (int) density.elemSize()];
         density.get(0, 10, data);*/
 
-        Mat upperBoundExact = new Mat(1, density.cols(), CvType.CV_32F);
-        Mat lowerBoundExact = new Mat(1, density.cols(), CvType.CV_32F);
+        Mat upperBoundExact = new Mat(1, cols, CvType.CV_32F);
+        Mat lowerBoundExact = new Mat(1, cols, CvType.CV_32F);
 
-        for (int j = 0; j < density.cols(); j++) {
+        for (int j = 0; j < cols; j++) {
             int upperBound = 0;
             int lowerBound = 0;
 
-            for (int i = 0; i < density.rows(); i++) {
+            for (int i = 0; i < rows; i++) {
                 if (density.get(i, j)[0] > ndlAverage + k1) {
                     upperBound = i;
                     break;
                 }
             }
-            for (int i = density.rows() - 1; i >= 0; i--) {
+            for (int i = rows - 1; i >= 0; i--) {
                 if (density.get(i, j)[0] > ndlAverage + k2) {
                     lowerBound = i;
                     break;
@@ -313,7 +332,7 @@ public class OperationsImpl implements Operations {
         int movingAverage = 300;
         for (int i = 0; i < upperBoundExact.cols(); i++) {
             int leftBoundInterval = Math.max(i - movingAverage, 0);
-            int rightBoundInterval = Math.min(density.cols() - 1, i + movingAverage);
+            int rightBoundInterval = Math.min(cols - 1, i + movingAverage);
             int intervalLength = rightBoundInterval - leftBoundInterval + 1;
             int upperBoundAverage = 0;
             int lowerBoundAverage = 0;

@@ -23,6 +23,8 @@ package com.astrocytes.application.data;
 public class AppData {
     private String astrocytesKey;
     private String neuronsKey;
+    private String mainLayersKey;
+    private String layersKey;
 
     public String getAstrocytesKey() {
         return astrocytesKey;
@@ -38,5 +40,21 @@ public class AppData {
 
     public void setNeuronsKey(String neuronsKey) {
         this.neuronsKey = neuronsKey;
+    }
+
+    public String getMainLayersKey() {
+        return mainLayersKey;
+    }
+
+    public void setMainLayersKey(String mainLayersKey) {
+        this.mainLayersKey = mainLayersKey;
+    }
+
+    public String getLayersKey() {
+        return layersKey;
+    }
+
+    public void setLayersKey(String layersKey) {
+        this.layersKey = layersKey;
     }
 }

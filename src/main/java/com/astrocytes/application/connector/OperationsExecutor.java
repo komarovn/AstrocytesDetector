@@ -21,6 +21,8 @@
 package com.astrocytes.application.connector;
 
 import com.astrocytes.application.widgets.primitives.drawable.DrawingCircle;
+import com.astrocytes.application.widgets.primitives.drawable.DrawingLine;
+import com.astrocytes.application.widgets.primitives.drawable.DrawingPolygonalChain;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.core.operationsengine.OperationsImpl;
 import com.astrocytes.core.operationsengine.Operations;
@@ -28,9 +30,11 @@ import com.astrocytes.core.data.DataProvider;
 import com.astrocytes.core.primitives.Point;
 import org.opencv.core.Mat;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class OperationsExecutor {
     private Operations operations = new OperationsImpl();
@@ -68,31 +72,51 @@ public class OperationsExecutor {
                 dataProvider.getBoundingRectangleCenterX(),
                 dataProvider.getBoundingRectangleCenterY());
 
-        for(Point astrocyte : centers) {
+        for (Point astrocyte : centers) {
             result.add(new DrawingCircle(astrocyte.getX().doubleValue(), astrocyte.getY().doubleValue(), 6.0));
         }
 
         return result;
-    }
-
-    public BufferedImage applyDetectAstrocytes() {
-        return null;
     }
 
     public List<DrawingCircle> getAstrocytes() {
         List<DrawingCircle> result = new ArrayList<DrawingCircle>();
 
-        for(Point astrocyte : operations.getAstrocytesCenters()) {
+        for (Point astrocyte : operations.getAstrocytesCenters()) {
             result.add(new DrawingCircle(astrocyte.getX().doubleValue(), astrocyte.getY().doubleValue(), 6.0));
         }
 
         return result;
     }
 
-    /*public BufferedImage applyKmeans(BufferedImage in) {
-        operations.applyKmeans(ImageHelper.convertBufferedImageToMat(in));
-        return ImageHelper.convertMatToBufferedImage(operations.getOutputImage());
-    }*/
+    public List<DrawingCircle> getNeurons() {
+        List<DrawingCircle> result = new ArrayList<DrawingCircle>();
+
+        for (Point neuron : operations.getNeuronsCenters()) {
+            result.add(new DrawingCircle(neuron.getX().doubleValue(), neuron.getY().doubleValue(), 8.0, Color.orange));
+        }
+
+        return result;
+    }
+
+    public List<DrawingPolygonalChain> getLayers() {
+        List<DrawingPolygonalChain> result = new ArrayList<DrawingPolygonalChain>();
+
+        for (Map.Entry<Integer, List<Point>> delimiter : operations.getLayerDelimiters().entrySet()) {
+            DrawingPolygonalChain chain = new DrawingPolygonalChain(Color.RED);
+
+            for (int i = 0; i < delimiter.getValue().size() - 2; i++) {
+                Point startPoint = delimiter.getValue().get(i);
+                Point endPoint = delimiter.getValue().get(i + 1);
+                chain.addChainPart(new DrawingLine((double) startPoint.getX(), (double) startPoint.getY(),
+                        (double) endPoint.getX(), (double) endPoint.getY()));
+            }
+
+            result.add(chain);
+        }
+
+        return result;
+    }
 
     public Operations getOperations() {
         return operations;

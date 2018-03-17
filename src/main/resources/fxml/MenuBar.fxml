@@ -59,8 +59,9 @@
             <MenuItem fx:id="dilErode" mnemonicParsing="false" text="Dilate And Erode" />
             <MenuItem fx:id="grayscale" mnemonicParsing="false" text="Grayscale" />
             <MenuItem fx:id="findAstrocytes" mnemonicParsing="false" text="Find Astrocytes" />
-            <MenuItem fx:id="findAstrocytesAutoMenuItem" mnemonicParsing="false" text="Find Astrocytes Auto" />
-            <MenuItem fx:id="findNeuronsMenuItem" mnemonicParsing="false" text="Find Neurons" />
+            <MenuItem fx:id="findAstrocytesAutoMenuItem" mnemonicParsing="false" text="Draw Astrocytes" />
+            <MenuItem fx:id="findNeuronsMenuItem" mnemonicParsing="false" text="Draw Neurons" />
+            <MenuItem fx:id="drawLayersMenuItem" mnemonicParsing="false" text="Draw Layer Delimiters" />
       </items>
     </Menu>
       <Menu mnemonicParsing="false" text="Statistics">

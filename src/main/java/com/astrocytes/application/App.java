@@ -27,6 +27,7 @@ import com.astrocytes.application.widgets.instrument.DrawHorizontalLineInstrumen
 import com.astrocytes.application.widgets.instrument.PointerInstrument;
 import com.astrocytes.application.widgets.instrument.ZoomPanInstrument;
 import com.astrocytes.application.widgets.message.WarningMessage;
+import com.astrocytes.application.widgets.primitives.drawable.DrawingPolygonalChain;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.application.dialogs.DialogCannyEdgeDetection;
 import com.astrocytes.application.dialogs.DialogDilateErode;
@@ -46,6 +47,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.List;
 
 public class App {
     private JFrame frame = new JFrame(StringResources.ASTROCYTES_DETECTOR);
@@ -254,12 +256,34 @@ public class App {
     }
 
     public void executeDrawLayers() {
+        if (image != null) {
+            List<DrawingPolygonalChain> layers = operationsExecutor.getLayers();
+            for (int i = 0; i < layers.size(); i++) {
+                layers.get(i).setColor(i == 0 || i == layers.size() - 1 ? Color.RED : Color.BLUE);
+            }
 
+            if (appData.getMainLayersKey() == null) {
+                appData.setMainLayersKey(graphicalWidget.getObjectManager().createGroup());
+            }
+            if (appData.getLayersKey() == null) {
+                appData.setLayersKey(graphicalWidget.getObjectManager().createGroup());
+            }
+            graphicalWidget.getObjectManager().getGroup(appData.getMainLayersKey()).clear();
+            graphicalWidget.getObjectManager().getGroup(appData.getLayersKey()).clear();
+            graphicalWidget.getObjectManager().getGroup(appData.getMainLayersKey()).add(layers.get(0));
+            graphicalWidget.getObjectManager().getGroup(appData.getMainLayersKey()).add(layers.get(layers.size() - 1));
+            graphicalWidget.getObjectManager().getGroup(appData.getLayersKey()).addAll(layers.subList(1, layers.size() - 2));
+            updateCurrentView();
+        }
     }
 
     public void executeFindNeurons() {
         if (image != null) {
-            //image = operationsExecutor.getPreparedImage();
+            if (appData.getNeuronsKey() == null) {
+                appData.setNeuronsKey(graphicalWidget.getObjectManager().createGroup());
+            }
+            graphicalWidget.getObjectManager().getGroup(appData.getNeuronsKey()).clear();
+            graphicalWidget.getObjectManager().getGroup(appData.getNeuronsKey()).addAll(operationsExecutor.getNeurons());
             updateCurrentView();
         }
     }

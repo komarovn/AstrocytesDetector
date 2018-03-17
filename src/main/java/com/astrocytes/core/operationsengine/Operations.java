@@ -24,6 +24,7 @@ import com.astrocytes.core.primitives.Point;
 import org.opencv.core.Mat;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Instruments of Operations Engine
@@ -68,9 +69,10 @@ public interface Operations {
     /**
      * Detect layers on source image.
      *
-     * @return list of splines presented layer delimiters.
+     * @return map of points' list each of which presents layer delimiter. Key is a number of layer,
+     * layers ordered in top-to-bottom order.
      */
-    public Mat getLayerDelimiters();
+    public Map<Integer, List<Point>> getLayerDelimiters();
 
     /**
      * Get a list of all astrocytes centers finded on source image.

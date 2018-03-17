@@ -63,9 +63,6 @@ public class MenuController extends AbstractController {
     private MenuItem exit;
 
     @FXML
-    private MenuItem findNeuronsMenuItem;
-
-    @FXML
     private MenuItem cannyEdDet;
 
     @FXML
@@ -79,6 +76,12 @@ public class MenuController extends AbstractController {
 
     @FXML
     private MenuItem findAstrocytesAutoMenuItem;
+
+    @FXML
+    private MenuItem findNeuronsMenuItem;
+
+    @FXML
+    private MenuItem drawLayersMenuItem;
 
     @FXML
     private MenuItem layersStatistics;
@@ -123,12 +126,6 @@ public class MenuController extends AbstractController {
         });
 
         /* --- Operations --- */
-        findNeuronsMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                mainApp.executeFindNeurons();
-            }
-        });
         cannyEdDet.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -159,6 +156,18 @@ public class MenuController extends AbstractController {
                 mainApp.executeFindAstrocytesAuto();
             }
         });
+        findNeuronsMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                mainApp.executeFindNeurons();
+            }
+        });
+        drawLayersMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                mainApp.executeDrawLayers();
+            }
+        });
 
         /* ---Statistics --- */
         layersStatistics.setOnAction(new EventHandler<ActionEvent>() {
@@ -178,6 +187,7 @@ public class MenuController extends AbstractController {
         grayscale.setDisable(!isAvailable);
         findAstrocytes.setDisable(!isAvailable);
         findAstrocytesAutoMenuItem.setDisable(!isAvailable);
+        drawLayersMenuItem.setDisable(!isAvailable);
         layersStatistics.setDisable(true); //TODO: why constant value?
     }
 
