@@ -22,6 +22,7 @@ package com.astrocytes.application.widgets.instrument;
 
 import com.astrocytes.application.widgets.primitives.drawable.DrawingRectangle;
 
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class DrawRectangleInstrument extends Instrument {
@@ -41,7 +42,7 @@ public class DrawRectangleInstrument extends Instrument {
 
     @Override
     public void onMouseDown(MouseEvent e) {
-        this.rectangle = new DrawingRectangle();
+        this.rectangle = new DrawingRectangle(Color.ORANGE);
         int startX = (int) ((e.getX() + getEditor().getOffsetX()) / getEditor().getZoomValue());
         int startY = (int) ((e.getY() + getEditor().getOffsetY()) / getEditor().getZoomValue());
         this.rectangle.setStartPoint(startX, startY);
@@ -63,6 +64,7 @@ public class DrawRectangleInstrument extends Instrument {
     public void onMouseUp(MouseEvent e) {
         updateRectangle(e.getX(), e.getY());
         this.isDrawingState = false;
+        this.rectangle.setColor(Color.BLUE);
         getEditor().repaint();
     }
 

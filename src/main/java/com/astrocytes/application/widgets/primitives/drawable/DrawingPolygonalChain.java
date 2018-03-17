@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Lobachevsky University, 2017. All rights reserved.
+ * Copyright (c) Lobachevsky University, 2018. All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal with the Software without restriction, including without limitation
@@ -20,49 +20,52 @@
  */
 package com.astrocytes.application.widgets.primitives.drawable;
 
-import com.astrocytes.application.widgets.primitives.SimpleLine;
+import com.astrocytes.application.widgets.primitives.AbstractPrimitive;
 
 import java.awt.*;
-import java.awt.geom.Line2D;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DrawingLine extends SimpleLine implements Paintable {
+public class DrawingPolygonalChain extends AbstractPrimitive implements Paintable {
+    private List<DrawingLine> chainParts;
     private Color objectColor;
 
-    public DrawingLine() {
-        this(Color.MAGENTA);
+    public DrawingPolygonalChain() {
+        this(Color.BLUE);
     }
 
-    public DrawingLine(Color color) {
-        super();
+    public DrawingPolygonalChain(Color color) {
+        this.chainParts = new ArrayList<DrawingLine>();
         this.objectColor = color;
     }
 
-    public DrawingLine(Double xStart, Double yStart, Double xEnd, Double yEnd) {
-        this(xStart, yStart, xEnd, yEnd, Color.MAGENTA);
-    }
-
-    public DrawingLine(Double xStart, Double yStart, Double xEnd, Double yEnd, Color color) {
-        super(xStart, yStart, xEnd, yEnd);
-        this.objectColor = color;
+    public void addChainPart(DrawingLine part) {
+        part.setColor(this.objectColor);
+        this.chainParts.add(part);
     }
 
     @Override
     public void setColor(Color color) {
         this.objectColor = color;
+        for (DrawingLine part : chainParts) {
+            part.setColor(this.objectColor);
+        }
     }
 
     @Override
-    public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoomScale) {
-        if (isFull()) {
-            graphics.setPaint(objectColor);
-            graphics.setStroke(new BasicStroke(2));
+    public boolean isFull() {
+        for (DrawingLine part : chainParts) {
+            if (!part.isFull()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-            float xStart = (float) (zoomScale * getxStart() - shiftX);
-            float yStart = (float) (zoomScale * getyStart() - shiftY);
-            float xEnd = (float) (zoomScale * getxEnd() - shiftX);
-            float yEnd = (float) (zoomScale * getyEnd() - shiftY);
-
-            graphics.draw(new Line2D.Float(xStart, yStart, xEnd, yEnd));
+    @Override
+    public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom) {
+        for (DrawingLine part : chainParts) {
+            part.paint(graphics, shiftX, shiftY, zoom);
         }
     }
 }

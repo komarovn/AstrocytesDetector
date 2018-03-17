@@ -26,7 +26,21 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class DrawingRectangle extends SimpleRectangle implements Paintable {
-    private Color drawingColor = Color.BLUE;
+    private Color drawingColor;
+
+    public DrawingRectangle() {
+        this(Color.BLUE);
+    }
+
+    public DrawingRectangle(Color color) {
+        super();
+        this.drawingColor = color;
+    }
+
+    @Override
+    public void setColor(Color color) {
+        this.drawingColor = color;
+    }
 
     @Override
     public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom) {

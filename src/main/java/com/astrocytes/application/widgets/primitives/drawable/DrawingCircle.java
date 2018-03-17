@@ -26,10 +26,20 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
 public class DrawingCircle extends SimpleCircle implements Paintable {
-    private Color objectColor = Color.YELLOW;
+    private Color objectColor;
 
     public DrawingCircle(Double xCenter, Double yCenter, Double radius) {
+        this(xCenter, yCenter, radius, Color.YELLOW);
+    }
+
+    public DrawingCircle(Double xCenter, Double yCenter, Double radius, Color color) {
         super(xCenter, yCenter, radius);
+        this.objectColor = color;
+    }
+
+    @Override
+    public void setColor(Color color) {
+        this.objectColor = color;
     }
 
     @Override

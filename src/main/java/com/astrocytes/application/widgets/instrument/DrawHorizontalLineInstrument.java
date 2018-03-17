@@ -22,6 +22,7 @@ package com.astrocytes.application.widgets.instrument;
 
 import com.astrocytes.application.widgets.primitives.drawable.DrawingLine;
 
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class DrawHorizontalLineInstrument extends Instrument {
@@ -41,7 +42,7 @@ public class DrawHorizontalLineInstrument extends Instrument {
 
     @Override
     public void onMouseDown(MouseEvent e) {
-        this.line = new DrawingLine();
+        this.line = new DrawingLine(Color.ORANGE);
         updateLine(e.getX(), e.getY());
         getEditor().getObjectManager().getGroup(getLinesKey()).add(this.line);
         getEditor().repaint();
@@ -59,7 +60,7 @@ public class DrawHorizontalLineInstrument extends Instrument {
     @Override
     public void onMouseUp(MouseEvent e) {
         updateLine(e.getX(), e.getY());
-        this.line.setDrawing(false);
+        this.line.setColor(Color.BLUE);
         getEditor().repaint();
         this.isDrawingState = false;
         this.line = null;
