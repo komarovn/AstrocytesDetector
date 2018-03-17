@@ -70,6 +70,7 @@ public class App {
      */
     public App() {
         mainPanel = new JPanel();
+        frame.setIconImage(new ImageIcon(getClass().getResource("/img/icon/i16.png")).getImage());
         frame.setLayout(new BorderLayout());
         frame.add(mainPanel);
         mainPanel.setLayout(new BorderLayout());

@@ -32,6 +32,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
 import javafx.stage.*;
 
 import javax.swing.*;
@@ -205,6 +206,7 @@ public class MenuController extends AbstractController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.DECORATED);
             stage.setTitle(StringResources.CREATE_NEW_PROJECT);
+            stage.getIcons().add(new Image(getClass().getResource("/img/icon/i16.png").toString()));
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
