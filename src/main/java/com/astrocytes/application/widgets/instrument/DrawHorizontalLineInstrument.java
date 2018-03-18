@@ -69,7 +69,7 @@ public class DrawHorizontalLineInstrument extends Instrument {
     private void updateLine(int x, int y) {
         if (this.line != null && getEditor().testPoint(x, y)) {
             this.line.setStartPoint(0.0, (y + getEditor().getOffsetY()) / getEditor().getZoomValue());
-            this.line.setEndPoint((double) getEditor().getImage().getWidth(),
+            this.line.setEndPoint((double) getEditor().getImage().getWidth() - 1,
                     (y + getEditor().getOffsetY()) / getEditor().getZoomValue());
         }
     }

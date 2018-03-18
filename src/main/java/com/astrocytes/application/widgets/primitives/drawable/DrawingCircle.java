@@ -46,7 +46,7 @@ public class DrawingCircle extends SimpleCircle implements Paintable {
     public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom) {
         if (isFull()) {
             graphics.setPaint(objectColor);
-            graphics.setStroke(new BasicStroke(2));
+            graphics.setStroke(new BasicStroke(zoom < 1.0 ? 1 : (int) (2 * zoom)));
 
             float radius = (float) (zoom * getRadius());
             float xStart = (float) (zoom * getxCenter() - shiftX - radius / 2);

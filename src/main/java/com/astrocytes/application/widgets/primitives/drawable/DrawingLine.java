@@ -55,7 +55,7 @@ public class DrawingLine extends SimpleLine implements Paintable {
     public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoomScale) {
         if (isFull()) {
             graphics.setPaint(objectColor);
-            graphics.setStroke(new BasicStroke(2));
+            graphics.setStroke(new BasicStroke(zoomScale < 1.0 ? 1 : (int) (2 * zoomScale)));
 
             float xStart = (float) (zoomScale * getxStart() - shiftX);
             float yStart = (float) (zoomScale * getyStart() - shiftY);
