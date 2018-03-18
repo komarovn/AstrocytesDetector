@@ -237,7 +237,7 @@ public class App {
             int result = saveFileDialog.showSaveDialog(frame);
             if (result == JFileChooser.APPROVE_OPTION) {
                 File fileToSave = saveFileDialog.getSelectedFile();
-                ImageHelper.saveImage(image, fileToSave);
+                ImageHelper.saveImage(graphicalWidget.renderImage(), fileToSave);
             }
         }
         else {

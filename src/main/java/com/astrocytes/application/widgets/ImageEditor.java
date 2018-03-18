@@ -28,6 +28,7 @@ import com.astrocytes.application.widgets.primitives.SimpleLine;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 
@@ -36,9 +37,6 @@ public class ImageEditor extends GraphicalWidget {
     private InstrumentType activeInstrument;
     private List<Instrument> instruments = new ArrayList<Instrument>();
     private ObjectManager objManager = new ObjectManager();
-
-    //TODO: delete
-    protected java.util.List<DrawingLine> horizontalLines = new ArrayList<DrawingLine>();
 
     public ImageEditor() {
         this(null, null);
@@ -112,8 +110,18 @@ public class ImageEditor extends GraphicalWidget {
         }
     }
 
+    /**
+     * Merge current layers with current image.
+     * @return output image with all painted layers.
+     */
+    public BufferedImage renderImage() {
+        
+        return this.getImage();
+    }
+
+    //TODO: remove!
     public List<SimpleLine> getHorizontalLines() {
-        Collections.sort(horizontalLines, new Comparator<DrawingLine>() {
+        Collections.sort(new ArrayList<DrawingLine>(), new Comparator<DrawingLine>() {
             @Override
             public int compare(DrawingLine o1, DrawingLine o2) {
                 return o1.getyEnd().intValue() - o2.getyEnd().intValue();
