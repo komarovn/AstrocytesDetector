@@ -25,6 +25,7 @@ import com.astrocytes.application.widgets.instrument.InstrumentType;
 import com.astrocytes.application.widgets.primitives.drawable.DrawingLine;
 import com.astrocytes.application.widgets.primitives.drawable.Paintable;
 import com.astrocytes.application.widgets.primitives.SimpleLine;
+import com.astrocytes.core.ImageHelper;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -115,8 +116,17 @@ public class ImageEditor extends GraphicalWidget {
      * @return output image with all painted layers.
      */
     public BufferedImage renderImage() {
-        
-        return this.getImage();
+        if (getImage() != null) {
+            BufferedImage result = ImageHelper.cloneBufferedImage(getImage());
+            Graphics2D g = result.createGraphics();
+            setupRenderHints(g);
+
+            for (Paintable obj : this.objManager.getAllPaintables()) {
+                obj.paint(g, 0, 0, 1.0);
+            }
+            return result;
+        }
+        return null;
     }
 
     //TODO: remove!

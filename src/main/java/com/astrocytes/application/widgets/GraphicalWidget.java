@@ -84,15 +84,19 @@ public class GraphicalWidget extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        Map<RenderingHints.Key, Object> hints = new HashMap<>();
-        hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        hints.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-        hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        ((Graphics2D) g).setRenderingHints(new RenderingHints(hints));
+        setupRenderHints((Graphics2D) g);
         super.paintComponent(g);
         if (currentView != null) {
             g.drawImage(currentView, 0, 0, this);
         }
+    }
+
+    protected void setupRenderHints(Graphics2D g) {
+        Map<RenderingHints.Key, Object> hints = new HashMap<>();
+        hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        hints.put(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g.setRenderingHints(new RenderingHints(hints));
     }
 
     private void resetZoom() {
