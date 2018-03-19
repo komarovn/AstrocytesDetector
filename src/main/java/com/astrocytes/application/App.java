@@ -260,7 +260,7 @@ public class App {
         if (image != null) {
             List<DrawingPolygonalChain> layers = operationsExecutor.getLayers();
             for (int i = 0; i < layers.size(); i++) {
-                layers.get(i).setColor(i == 0 || i == layers.size() - 1 ? Color.RED : Color.BLUE);
+                layers.get(i).setColor(i == 0 || i == layers.size() - 1 ? new Color(212, 52, 64) : new Color(18, 92, 214));
             }
 
             if (appData.getMainLayersKey() == null) {

@@ -83,7 +83,7 @@ public class OperationsExecutor {
         List<DrawingCircle> result = new ArrayList<DrawingCircle>();
 
         for (Point astrocyte : operations.getAstrocytesCenters()) {
-            result.add(new DrawingCircle(astrocyte.getX().doubleValue(), astrocyte.getY().doubleValue(), 6.0));
+            result.add(new DrawingCircle(astrocyte.getX().doubleValue(), astrocyte.getY().doubleValue(), 6.0, Color.BLACK));
         }
 
         return result;
@@ -93,7 +93,7 @@ public class OperationsExecutor {
         List<DrawingCircle> result = new ArrayList<DrawingCircle>();
 
         for (Point neuron : operations.getNeuronsCenters()) {
-            result.add(new DrawingCircle(neuron.getX().doubleValue(), neuron.getY().doubleValue(), 8.0, Color.orange));
+            result.add(new DrawingCircle(neuron.getX().doubleValue(), neuron.getY().doubleValue(), 8.0, new Color(217, 255, 125)));
         }
 
         return result;
