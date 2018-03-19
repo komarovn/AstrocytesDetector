@@ -25,24 +25,24 @@
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="600.0" styleClass="toolbar-pane" stylesheets="@../styles/toolbar.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.astrocytes.application.dialogs.javafx.ToolbarController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="34.0" prefWidth="600.0" styleClass="toolbar-pane" stylesheets="@../styles/toolbar.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.astrocytes.application.dialogs.javafx.ToolbarController">
    <children>
-      <ToggleButton fx:id="cursorButton" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="28.0" styleClass="toolbar-button">
+      <ToggleButton fx:id="cursorButton" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" styleClass="toolbar-button">
          <tooltip>
             <Tooltip text="Pointer" />
          </tooltip>
       </ToggleButton>
-      <ToggleButton fx:id="zoomAndPanButton" graphicTextGap="0.0" layoutX="28.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="28.0" styleClass="toolbar-button">
+      <ToggleButton fx:id="zoomAndPanButton" graphicTextGap="0.0" layoutX="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" styleClass="toolbar-button">
          <tooltip>
             <Tooltip text="Zoom and Pan" />
          </tooltip>
       </ToggleButton>
-      <ToggleButton fx:id="horizontalLineButton" graphicTextGap="0.0" layoutX="56.0" maxHeight="24.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="28.0" styleClass="toolbar-button">
+      <ToggleButton fx:id="horizontalLineButton" graphicTextGap="0.0" layoutX="64.0" maxHeight="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" styleClass="toolbar-button">
          <tooltip>
             <Tooltip text="Draw Layer" />
          </tooltip>
       </ToggleButton>
-      <ToggleButton fx:id="showHideLayersButton" graphicTextGap="0.0" layoutX="84.0" maxHeight="24.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="28.0" styleClass="toolbar-button">
+      <ToggleButton fx:id="showHideLayersButton" graphicTextGap="0.0" layoutX="96.0" maxHeight="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" styleClass="toolbar-button">
          <tooltip>
             <Tooltip text="Show Layers" />
          </tooltip>

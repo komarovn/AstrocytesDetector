@@ -20,21 +20,25 @@
 */
 
 .toolbar-pane {
-    -fx-background-color: #dbdbdb;
-    -fx-border-color: #6a9898;
+    -fx-background-color: #f8f8f9;
+    -fx-border-color: #d8dce2;
     -fx-border-width: 0 0 1 0;
 }
 
 .toolbar-button {
-    -fx-background-color: #dadada;
+    -fx-background-color: #f8f8f9;
     -fx-border-radius: 0;
     -fx-background-radius: 0;
 }
 
 .toolbar-button:hover {
-    -fx-background-color: #b6b6b6;
+    -fx-background-color: #bfc3c9;
 }
 
 .toolbar-button:selected {
-    -fx-background-color: #f5f5f5;
+    -fx-background-color: #d8dce2;
+}
+
+.toolbar-button:focused {
+    -fx-border-width: 0;
 }
