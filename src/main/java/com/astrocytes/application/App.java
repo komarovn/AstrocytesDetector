@@ -184,6 +184,13 @@ public class App {
         return dataProvider;
     }
 
+    public void resetAll() {
+        this.image = null;
+        dataProvider.destroyAllData();
+        appData.clearAll();
+        graphicalWidget.reset();
+    }
+
     @Deprecated
     public void executeCreateNewProject() {
         final NativeJFileChooser openFileDialog = new NativeJFileChooser();
@@ -212,12 +219,18 @@ public class App {
      * Process creation of a new project
      * @param imagePath - path where loaded image is located
      */
-    public void executeCreateNewProject(File imagePath) {
+    public void executeCreateNewProject(String projectName, File imagePath, Integer scale) {
         if (imagePath != null) {
+            resetAll();
+
+            dataProvider.setProjectName(projectName);
+            dataProvider.setScale(scale);
+
             BufferedImage bufferedImage = ImageHelper.loadImage(imagePath);
             this.image = bufferedImage;
             operationsExecutor.setOriginalImage(bufferedImage);
             dataProvider.setWorkingImage(operationsExecutor.getOriginalImage());
+
             updateWindowSize();
             updateCurrentView();
             updateGrahicalWidget();

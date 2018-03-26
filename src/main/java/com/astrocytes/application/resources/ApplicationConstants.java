@@ -30,4 +30,6 @@ public abstract class ApplicationConstants {
     public static final int PREVIEW_WINDOW_WIDTH = 260;
     public static final int PREVIEW_WINDOW_HEIGHT = 260;
 
+    public static final int DEFAULT_SCALE = 10;
+
 }

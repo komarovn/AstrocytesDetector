@@ -57,4 +57,11 @@ public class AppData {
     public void setLayersKey(String layersKey) {
         this.layersKey = layersKey;
     }
+
+    public void clearAll() {
+        this.astrocytesKey = null;
+        this.neuronsKey = null;
+        this.mainLayersKey = null;
+        this.layersKey = null;
+    }
 }

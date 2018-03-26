@@ -20,6 +20,7 @@
  */
 package com.astrocytes.application.dialogs.javafx;
 
+import com.astrocytes.application.resources.ApplicationConstants;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -59,49 +60,70 @@ public class CreateNewProjectController extends AbstractController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initCreateButton();
+        initCancelButton();
+        initOpenButton();
+        initProjectNameField();
+        initImgPathField();
+        initScaleField();
+    }
+
+    private void initCreateButton() {
         createProjectButton.setDisable(true);
         createProjectButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                mainApp.getDataProvider().setProjectName(projectName.getText());
-                mainApp.getDataProvider().setScale(Integer.valueOf(scale.getText()));
                 EventQueue.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        mainApp.executeCreateNewProject(new File(imagePath.getText()));
+                        mainApp.executeCreateNewProject(projectName.getText(),
+                                new File(imagePath.getText()),
+                                Integer.valueOf(scale.getText()));
                     }
                 });
                 closeAction();
             }
         });
+    }
+
+    private void initCancelButton() {
         cancelButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 closeAction();
             }
         });
+    }
+
+    private void initOpenButton() {
         openImageButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 openImageAction();
             }
         });
+    }
+
+    private void initProjectNameField() {
         projectName.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                checkMandatoryFields();
+                validateMandatoryFields();
             }
         });
+    }
+
+    private void initImgPathField() {
         imagePath.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                checkMandatoryFields();
+                validateMandatoryFields();
             }
         });
         imagePath.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                checkMandatoryFields();
+                validateMandatoryFields();
             }
         });
         imagePath.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -112,11 +134,14 @@ public class CreateNewProjectController extends AbstractController {
                 }
             }
         });
-        scale.setText("10");
+    }
+
+    private void initScaleField() {
+        scale.setText(String.valueOf(ApplicationConstants.DEFAULT_SCALE));
         scale.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                checkMandatoryFields();
+                validateMandatoryFields();
             }
         });
     }
@@ -131,11 +156,10 @@ public class CreateNewProjectController extends AbstractController {
     }
 
     private void closeAction() {
-        Stage stage = (Stage) cancelButton.getScene().getWindow();
-        stage.close();
+        ((Stage) cancelButton.getScene().getWindow()).close();
     }
 
-    private void checkMandatoryFields() {
+    private void validateMandatoryFields() {
         createProjectButton.setDisable(imagePath.getText().isEmpty() ||
                 projectName.getText().isEmpty() ||
                 scale.getText().isEmpty());
