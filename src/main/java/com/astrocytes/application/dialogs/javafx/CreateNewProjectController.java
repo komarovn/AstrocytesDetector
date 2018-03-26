@@ -60,12 +60,6 @@ public class CreateNewProjectController extends AbstractController {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createProjectButton.setDisable(true);
-        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                closeAction();
-            }
-        });
         createProjectButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -77,6 +71,12 @@ public class CreateNewProjectController extends AbstractController {
                         mainApp.executeCreateNewProject(new File(imagePath.getText()));
                     }
                 });
+                closeAction();
+            }
+        });
+        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
                 closeAction();
             }
         });
@@ -136,13 +136,8 @@ public class CreateNewProjectController extends AbstractController {
     }
 
     private void checkMandatoryFields() {
-        if (!imagePath.getText().isEmpty() &&
-                !projectName.getText().isEmpty() &&
-                !scale.getText().isEmpty()) {
-            createProjectButton.setDisable(false);
-        }
-        else {
-            createProjectButton.setDisable(true);
-        }
+        createProjectButton.setDisable(imagePath.getText().isEmpty() ||
+                projectName.getText().isEmpty() ||
+                scale.getText().isEmpty());
     }
 }

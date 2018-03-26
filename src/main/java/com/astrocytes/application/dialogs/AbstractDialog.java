@@ -132,7 +132,7 @@ public class AbstractDialog extends JDialog {
     }
 
     protected static void addListeners(final JSlider slider, final JFormattedTextField textField) {
-        KeyListener keyListener = new KeyListener() {
+        textField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
                 if (e.getKeyChar() < '0' || e.getKeyChar() > '9') {
@@ -141,9 +141,7 @@ public class AbstractDialog extends JDialog {
             }
 
             @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
+            public void keyPressed(KeyEvent e) { }
 
             @Override
             public void keyReleased(KeyEvent e) {
@@ -154,7 +152,6 @@ public class AbstractDialog extends JDialog {
                     slider.setValue(slider.getMinimum());
                 }
             }
-        };
-        textField.addKeyListener(keyListener);
+        });
     }
 }

@@ -35,16 +35,14 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class ToolbarController extends AbstractController {
-    @Deprecated
-    private final String BUTTON_ACTIVE = "-fx-background-color: whitesmoke";
-    @Deprecated
-    private final String BUTTON_NORMAL = "-fx-background-color: #dadada";
     private List<ToggleButton> toolbarButtons = new ArrayList<>();
 
     @FXML
     private ToggleButton cursorButton;
+
     @FXML
     private ToggleButton zoomAndPanButton;
+
     @FXML
     private ToggleButton horizontalLineButton;
 

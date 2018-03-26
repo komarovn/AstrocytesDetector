@@ -226,7 +226,7 @@ public class MenuController extends AbstractController {
     private void saveProject(File selectedDirectory) {
         File projectDir = new File(selectedDirectory, mainApp.getDataProvider().getProjectName());
         projectDir.mkdir();
-        mainApp.getDataProvider().setProjectDirectory(projectDir.getPath());;
+        mainApp.getDataProvider().setProjectDirectory(projectDir.getPath());
         try {
             manager.saveProject(projectDir);
         } catch (IOException|SaveProjectException e) {
