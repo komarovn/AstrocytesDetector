@@ -68,4 +68,9 @@ public class DrawingPolygonalChain extends AbstractPrimitive implements Paintabl
             part.paint(graphics, shiftX, shiftY, zoom);
         }
     }
+
+    @Override
+    public boolean testPoint(int x, int y) {
+        return false;
+    }
 }

@@ -22,7 +22,6 @@ package com.astrocytes.application.widgets;
 
 import com.astrocytes.application.widgets.instrument.Instrument;
 import com.astrocytes.application.widgets.instrument.InstrumentType;
-import com.astrocytes.application.widgets.primitives.drawable.DrawingLine;
 import com.astrocytes.application.widgets.primitives.drawable.Paintable;
 import com.astrocytes.application.widgets.primitives.SimpleLine;
 import com.astrocytes.core.ImageHelper;
@@ -131,10 +130,10 @@ public class ImageEditor extends GraphicalWidget {
 
     //TODO: remove!
     public List<SimpleLine> getHorizontalLines() {
-        Collections.sort(new ArrayList<DrawingLine>(), new Comparator<DrawingLine>() {
+        Collections.sort(new ArrayList<Integer>(), new Comparator<Integer>() {
             @Override
-            public int compare(DrawingLine o1, DrawingLine o2) {
-                return o1.getyEnd().intValue() - o2.getyEnd().intValue();
+            public int compare(Integer o1, Integer o2) {
+                return  o1 - o2;
             }
         });
         return null;

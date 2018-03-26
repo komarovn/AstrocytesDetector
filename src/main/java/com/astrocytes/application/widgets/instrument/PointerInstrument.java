@@ -20,6 +20,8 @@
  */
 package com.astrocytes.application.widgets.instrument;
 
+import com.astrocytes.application.widgets.primitives.drawable.Paintable;
+
 import java.awt.event.MouseEvent;
 
 public class PointerInstrument extends Instrument {
@@ -36,7 +38,11 @@ public class PointerInstrument extends Instrument {
 
     @Override
     public void onMouseDown(MouseEvent e) {
-
+        for (Paintable obj : getEditor().getObjectManager().getAllPaintables()) {
+            int globX = e.getX();
+            int globY = e.getY();
+            obj.testPoint(globX, globY);
+        }
     }
 
     @Override

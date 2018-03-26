@@ -119,8 +119,7 @@ public class App {
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
                 updateGrahicalWidget();
-                dataProvider.setWindowWidth((int) frame.getSize().getWidth());
-                dataProvider.setWindowHeight((int) frame.getSize().getHeight());
+                updateSizeSettings();
             }
         });
     }
@@ -145,6 +144,11 @@ public class App {
     private void updateWindowSize() {
         frame.setSize(new Dimension(dataProvider.getWindowWidth(), dataProvider.getWindowHeight()));
         frame.repaint();
+    }
+
+    private void updateSizeSettings() {
+        dataProvider.setWindowWidth((int) frame.getSize().getWidth());
+        dataProvider.setWindowHeight((int) frame.getSize().getHeight());
     }
 
     protected class MainPanelBlock extends JPanel {
@@ -231,6 +235,7 @@ public class App {
             operationsExecutor.setOriginalImage(bufferedImage);
             dataProvider.setWorkingImage(operationsExecutor.getOriginalImage());
 
+            updateSizeSettings();
             updateWindowSize();
             updateCurrentView();
             updateGrahicalWidget();

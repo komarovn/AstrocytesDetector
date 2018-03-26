@@ -56,4 +56,9 @@ public class DrawingRectangle extends SimpleRectangle implements Paintable {
             graphics.draw(new Rectangle2D.Float(x, y, width, height));
         }
     }
+
+    @Override
+    public boolean testPoint(int x, int y) {
+        return false;
+    }
 }

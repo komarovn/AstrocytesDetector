@@ -55,4 +55,9 @@ public class DrawingCircle extends SimpleCircle implements Paintable {
             graphics.draw(new Ellipse2D.Float(xStart, yStart, radius, radius));
         }
     }
+
+    @Override
+    public boolean testPoint(int x, int y) {
+        return false;
+    }
 }

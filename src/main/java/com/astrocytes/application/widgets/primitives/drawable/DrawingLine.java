@@ -65,4 +65,9 @@ public class DrawingLine extends SimpleLine implements Paintable {
             graphics.draw(new Line2D.Float(xStart, yStart, xEnd, yEnd));
         }
     }
+
+    @Override
+    public boolean testPoint(int x, int y) {
+        return false;
+    }
 }
