@@ -25,6 +25,7 @@ import javafx.embed.swing.JFXPanel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.net.URL;
@@ -49,4 +50,19 @@ public abstract class SwingJavaFXHelper {
         return null;
     }
 
+    public static Color convertAwtColor(java.awt.Color color) {
+        int r = color.getRed();
+        int g = color.getGreen();
+        int b = color.getBlue();
+        int a = color.getAlpha();
+        return Color.rgb(r, g, b, a / 255.0f);
+    }
+
+    public static java.awt.Color convertFxColor(Color color) {
+        float r = (float) color.getRed();
+        float g = (float) color.getGreen();
+        float b = (float) color.getBlue();
+        float opacity = (float) color.getOpacity();
+        return new java.awt.Color(r, g, b, opacity);
+    }
 }

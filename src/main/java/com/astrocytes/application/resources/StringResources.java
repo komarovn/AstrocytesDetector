@@ -38,6 +38,8 @@ public abstract class StringResources {
 
     public static final String CREATE_NEW_PROJECT = "Create New Project";
 
+    public static final String SETTINGS = "Settings";
+
     public static final String EXIT = "Exit";
 
     public static final String EDGE_DETECTION = "Edge Detection";
@@ -69,5 +71,7 @@ public abstract class StringResources {
     /* --- Find astrocytes --- */
     public static final String DRAW_RECTANGLE = "Draw Rectangle";
     public static final String PAN = "Pan";
+
+    /* --- Settings --- */
 
 }

@@ -76,6 +76,7 @@ public class App {
         frame.add(mainPanel);
         mainPanel.setLayout(new BorderLayout());
         initComponents();
+        initSettings();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -83,7 +84,6 @@ public class App {
                 ApplicationConstants.DEFAULT_WINDOW_HEIGHT));
         initListeners();
         initInstruments();
-        initSettings();
         this.appData = new LocalStorage();
     }
 
@@ -391,11 +391,9 @@ public class App {
     }*/
 
     /**
-     * Open Settings panel.
+     * Apply new Settings.
      */
     public void executeSettings() {
-        dataProvider.setNeuronsColor(new Color(123, 123, 123));
-
         if (appData.getNeuronsKey() != null) {
             for (Paintable obj : graphicalWidget.getObjectManager().getGroup(appData.getNeuronsKey())) {
                 obj.setColor(dataProvider.getNeuronsColor());

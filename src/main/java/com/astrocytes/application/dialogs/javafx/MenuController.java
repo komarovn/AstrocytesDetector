@@ -125,7 +125,7 @@ public class MenuController extends AbstractController {
         settings.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                mainApp.executeSettings();
+                showSettingsPanel();
             }
         });
         exit.setOnAction(new EventHandler<ActionEvent>() {
@@ -259,6 +259,24 @@ public class MenuController extends AbstractController {
             }
         } catch (LoadProjectException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void showSettingsPanel() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/Settings.fxml"));
+            Parent root = fxmlLoader.load();
+            SettingsController controller = fxmlLoader.getController();
+            controller.setMainApp(mainApp);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.DECORATED);
+            stage.setTitle(StringResources.SETTINGS);
+            stage.getIcons().add(new Image(getClass().getResource("/img/icon/i16.png").toString()));
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
