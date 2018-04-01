@@ -292,6 +292,15 @@ public class App {
             graphicalWidget.getObjectManager().getGroup(appData.getMainLayersKey()).add(layers.get(0));
             graphicalWidget.getObjectManager().getGroup(appData.getMainLayersKey()).add(layers.get(layers.size() - 1));
             graphicalWidget.getObjectManager().getGroup(appData.getLayersKey()).addAll(layers.subList(1, layers.size() - 2));
+
+            if (appData.getNeuronsKey() != null) {
+                executeFindNeurons();
+            }
+
+            if (appData.getAstrocytesKey() != null) {
+                executeFindAstrocytesAuto();
+            }
+
             updateCurrentView();
         }
     }

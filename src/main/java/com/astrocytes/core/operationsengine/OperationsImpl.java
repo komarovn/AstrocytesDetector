@@ -206,8 +206,19 @@ public class OperationsImpl implements Operations {
         List<com.astrocytes.core.primitives.Point> result = new ArrayList<com.astrocytes.core.primitives.Point>();
 
         for (Point center : astrocytesCenters) {
-            com.astrocytes.core.primitives.Point point = new com.astrocytes.core.primitives.Point((int) center.x, (int) center.y);
-            result.add(point);
+            int x = (int) center.x;
+            int y = (int) center.y;
+
+            if (this.layerBounds != null) {
+                int upper = (int) this.layerBounds.get(0, x)[0];
+                int lower = (int) this.layerBounds.get(this.layerBounds.rows() - 1, x)[0];
+
+                if (y < upper || y > lower) {
+                    continue;
+                }
+            }
+
+            result.add(new com.astrocytes.core.primitives.Point(x, y));
         }
 
         return result;
@@ -221,9 +232,19 @@ public class OperationsImpl implements Operations {
         List<com.astrocytes.core.primitives.Point> result = new ArrayList<com.astrocytes.core.primitives.Point>();
 
         for (Neuron neuron : neurons) {
-            com.astrocytes.core.primitives.Point point =
-                    new com.astrocytes.core.primitives.Point((int) neuron.getCenter().x, (int) neuron.getCenter().y);
-            result.add(point);
+            int x = (int) neuron.getCenter().x;
+            int y = (int) neuron.getCenter().y;
+
+            if (this.layerBounds != null) {
+                int upper = (int) this.layerBounds.get(0, x)[0];
+                int lower = (int) this.layerBounds.get(this.layerBounds.rows() - 1, x)[0];
+
+                if (y < upper || y > lower) {
+                    continue;
+                }
+            }
+
+            result.add(new com.astrocytes.core.primitives.Point(x, y));
         }
 
         return result;
