@@ -61,6 +61,9 @@ public class MenuController extends AbstractController {
     private MenuItem exportImage;
 
     @FXML
+    private MenuItem settings;
+
+    @FXML
     private MenuItem exit;
 
     @FXML
@@ -117,6 +120,12 @@ public class MenuController extends AbstractController {
                         mainApp.executeExportImage();
                     }
                 });
+            }
+        });
+        settings.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                mainApp.executeSettings();
             }
         });
         exit.setOnAction(new EventHandler<ActionEvent>() {

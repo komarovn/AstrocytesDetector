@@ -40,6 +40,11 @@ public abstract class CoreConstants {
     public static final String BOUNDING_RECTANGLE_CENTER_X = "boundingRectangleCenterX";
     public static final String BOUNDING_RECTANGLE_CENTER_Y = "boundingRectangleCenterY";
 
+    public static final String ASTROCYTES_COLOR = "astrocytesColor";
+    public static final String NEURONS_COLOR = "neuronsColor";
+    public static final String MAJOR_LAYERS_COLOR = "majorLayersColor";
+    public static final String MINOR_LAYERS_COLOR = "minorLayersColor";
+
     /* File names */
     public static final String FILE_SETTINGS = "settings.xml";
     public static final String FILE_PARAMETERS = "parameters.xml";

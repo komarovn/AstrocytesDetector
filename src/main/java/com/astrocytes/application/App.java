@@ -21,7 +21,7 @@
 package com.astrocytes.application;
 
 import com.astrocytes.application.connector.OperationsExecutor;
-import com.astrocytes.application.data.AppData;
+import com.astrocytes.application.data.LocalStorage;
 import com.astrocytes.application.resources.ApplicationConstants;
 import com.astrocytes.application.widgets.instrument.DrawHorizontalLineInstrument;
 import com.astrocytes.application.widgets.instrument.PointerInstrument;
@@ -63,7 +63,7 @@ public class App {
     private DataProvider dataProvider = new DataProvider();
     private OperationsExecutor operationsExecutor = new OperationsExecutor();
     protected BufferedImage image;
-    private AppData appData;
+    private LocalStorage appData;
 
     /**
      * Create and build an application form.
@@ -82,7 +82,7 @@ public class App {
                 ApplicationConstants.DEFAULT_WINDOW_HEIGHT));
         initListeners();
         initInstruments();
-        this.appData = new AppData();
+        this.appData = new LocalStorage();
     }
 
     private void initComponents() {
@@ -377,6 +377,13 @@ public class App {
             updateCurrentView();
         }
     }*/
+
+    /**
+     * Open Settings panel.
+     */
+    public void executeSettings() {
+
+    }
 
     /**
      * Process closing of the application form and exiting the program.

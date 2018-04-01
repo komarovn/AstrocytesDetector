@@ -47,6 +47,7 @@
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem fx:id="exportImage" mnemonicParsing="false" text="Export Image" />
             <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="settings" mnemonicParsing="false" text="Settings" />
             <MenuItem fx:id="exit" mnemonicParsing="false" text="Exit">
                <accelerator>
                   <KeyCodeCombination alt="UP" code="W" control="DOWN" meta="UP" shift="UP" shortcut="UP" />

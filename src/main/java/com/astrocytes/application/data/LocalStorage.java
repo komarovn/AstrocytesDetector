@@ -20,7 +20,7 @@
  */
 package com.astrocytes.application.data;
 
-public class AppData {
+public class LocalStorage {
     private String astrocytesKey;
     private String neuronsKey;
     private String mainLayersKey;

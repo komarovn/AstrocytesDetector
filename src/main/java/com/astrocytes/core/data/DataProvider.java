@@ -22,6 +22,7 @@ package com.astrocytes.core.data;
 
 import com.astrocytes.core.CoreConstants;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
@@ -75,6 +76,38 @@ public class DataProvider {
 
     public Integer getScale() {
         return (Integer) Data.getParameter(CoreConstants.SCALE);
+    }
+
+    public void setAstrocytesColor(Color color) {
+        Data.setParameter(CoreConstants.ASTROCYTES_COLOR, color);
+    }
+
+    public Color getAstrocytesColor() {
+        return (Color) Data.getParameter(CoreConstants.ASTROCYTES_COLOR);
+    }
+
+    public void setNeuronsColor(Color color) {
+        Data.setParameter(CoreConstants.NEURONS_COLOR, color);
+    }
+
+    public Color getNeuronsColor() {
+        return (Color) Data.getParameter(CoreConstants.NEURONS_COLOR);
+    }
+
+    public void setMajorLayersColor(Color color) {
+        Data.setParameter(CoreConstants.MAJOR_LAYERS_COLOR, color);
+    }
+
+    public Color getMajorLayersColor() {
+        return (Color) Data.getParameter(CoreConstants.MAJOR_LAYERS_COLOR);
+    }
+
+    public void setMinorLayersColor(Color color) {
+        Data.setParameter(CoreConstants.MINOR_LAYERS_COLOR, color);
+    }
+
+    public Color getMinorLayersColor() {
+        return (Color) Data.getParameter(CoreConstants.MINOR_LAYERS_COLOR);
     }
 
     public void setCannyMinThreshold(Integer minThreshold) {
