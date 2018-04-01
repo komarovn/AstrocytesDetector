@@ -30,7 +30,6 @@ import com.astrocytes.core.data.DataProvider;
 import com.astrocytes.core.primitives.Point;
 import org.opencv.core.Mat;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +82,8 @@ public class OperationsExecutor {
         List<DrawingCircle> result = new ArrayList<DrawingCircle>();
 
         for (Point astrocyte : operations.getAstrocytesCenters()) {
-            result.add(new DrawingCircle(astrocyte.getX().doubleValue(), astrocyte.getY().doubleValue(), 6.0, Color.BLACK));
+            result.add(new DrawingCircle(astrocyte.getX().doubleValue(), astrocyte.getY().doubleValue(),
+                    6.0, dataProvider.getAstrocytesColor()));
         }
 
         return result;
@@ -93,7 +93,8 @@ public class OperationsExecutor {
         List<DrawingCircle> result = new ArrayList<DrawingCircle>();
 
         for (Point neuron : operations.getNeuronsCenters()) {
-            result.add(new DrawingCircle(neuron.getX().doubleValue(), neuron.getY().doubleValue(), 8.0, new Color(217, 255, 125)));
+            result.add(new DrawingCircle(neuron.getX().doubleValue(), neuron.getY().doubleValue(),
+                    8.0, dataProvider.getNeuronsColor()));
         }
 
         return result;
@@ -103,7 +104,7 @@ public class OperationsExecutor {
         List<DrawingPolygonalChain> result = new ArrayList<DrawingPolygonalChain>();
 
         for (Map.Entry<Integer, List<Point>> delimiter : operations.getLayerDelimiters().entrySet()) {
-            DrawingPolygonalChain chain = new DrawingPolygonalChain(Color.RED);
+            DrawingPolygonalChain chain = new DrawingPolygonalChain(dataProvider.getMinorLayersColor());
 
             for (int i = 0; i < delimiter.getValue().size() - 2; i++) {
                 Point startPoint = delimiter.getValue().get(i);

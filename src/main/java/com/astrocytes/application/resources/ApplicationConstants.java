@@ -20,6 +20,8 @@
  */
 package com.astrocytes.application.resources;
 
+import java.awt.*;
+
 public abstract class ApplicationConstants {
 
     public static final int DEFAULT_WINDOW_WIDTH = 1000;
@@ -31,5 +33,9 @@ public abstract class ApplicationConstants {
     public static final int PREVIEW_WINDOW_HEIGHT = 260;
 
     public static final int DEFAULT_SCALE = 10;
+    public static final Color DEFAULT_ASTROCYTES_COLOR = new Color(0, 0, 0);
+    public static final Color DEFAULT_NEURONS_COLOR = new Color(217, 255, 125);
+    public static final Color DEFAULT_MAJOR_LAYERS_COLOR = new Color(212, 52, 64);
+    public static final Color DEFAULT_MINOR_LAYERS_COLOR = new Color(18, 92, 214);
 
 }

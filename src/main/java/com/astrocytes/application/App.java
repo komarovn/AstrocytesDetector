@@ -28,6 +28,7 @@ import com.astrocytes.application.widgets.instrument.PointerInstrument;
 import com.astrocytes.application.widgets.instrument.ZoomPanInstrument;
 import com.astrocytes.application.widgets.message.WarningMessage;
 import com.astrocytes.application.widgets.primitives.drawable.DrawingPolygonalChain;
+import com.astrocytes.application.widgets.primitives.drawable.Paintable;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.application.dialogs.DialogCannyEdgeDetection;
 import com.astrocytes.application.dialogs.DialogDilateErode;
@@ -82,6 +83,7 @@ public class App {
                 ApplicationConstants.DEFAULT_WINDOW_HEIGHT));
         initListeners();
         initInstruments();
+        initSettings();
         this.appData = new LocalStorage();
     }
 
@@ -128,6 +130,13 @@ public class App {
         this.graphicalWidget.addInstrument(new PointerInstrument());
         this.graphicalWidget.addInstrument(new ZoomPanInstrument());
         this.graphicalWidget.addInstrument(new DrawHorizontalLineInstrument());
+    }
+
+    private void initSettings() {
+        dataProvider.setAstrocytesColor(ApplicationConstants.DEFAULT_ASTROCYTES_COLOR);
+        dataProvider.setNeuronsColor(ApplicationConstants.DEFAULT_NEURONS_COLOR);
+        dataProvider.setMajorLayersColor(ApplicationConstants.DEFAULT_MAJOR_LAYERS_COLOR);
+        dataProvider.setMinorLayersColor(ApplicationConstants.DEFAULT_MINOR_LAYERS_COLOR);
     }
 
     private void updateGrahicalWidget() {
@@ -193,6 +202,7 @@ public class App {
         dataProvider.destroyAllData();
         appData.clearAll();
         graphicalWidget.reset();
+        initSettings();
     }
 
     @Deprecated
@@ -277,8 +287,10 @@ public class App {
     public void executeDrawLayers() {
         if (image != null) {
             List<DrawingPolygonalChain> layers = operationsExecutor.getLayers();
+
             for (int i = 0; i < layers.size(); i++) {
-                layers.get(i).setColor(i == 0 || i == layers.size() - 1 ? new Color(212, 52, 64) : new Color(18, 92, 214));
+                layers.get(i).setColor(i == 0 || i == layers.size() - 1 ?
+                        dataProvider.getMajorLayersColor() : dataProvider.getMinorLayersColor());
             }
 
             if (appData.getMainLayersKey() == null) {
@@ -382,7 +394,33 @@ public class App {
      * Open Settings panel.
      */
     public void executeSettings() {
+        dataProvider.setNeuronsColor(new Color(123, 123, 123));
 
+        if (appData.getNeuronsKey() != null) {
+            for (Paintable obj : graphicalWidget.getObjectManager().getGroup(appData.getNeuronsKey())) {
+                obj.setColor(dataProvider.getNeuronsColor());
+            }
+        }
+
+        if (appData.getAstrocytesKey() != null) {
+            for (Paintable obj : graphicalWidget.getObjectManager().getGroup(appData.getAstrocytesKey())) {
+                obj.setColor(dataProvider.getAstrocytesColor());
+            }
+        }
+
+        if (appData.getMainLayersKey() != null) {
+            for (Paintable obj : graphicalWidget.getObjectManager().getGroup(appData.getMainLayersKey())) {
+                obj.setColor(dataProvider.getMajorLayersColor());
+            }
+        }
+
+        if (appData.getLayersKey() != null) {
+            for (Paintable obj : graphicalWidget.getObjectManager().getGroup(appData.getLayersKey())) {
+                obj.setColor(dataProvider.getMinorLayersColor());
+            }
+        }
+
+        updateCurrentView();
     }
 
     /**
