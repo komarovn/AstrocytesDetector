@@ -300,8 +300,6 @@ public class OperationsImpl implements Operations {
         double k1 = 0.56E-4;
         double k2 = 1.3E-4;
 
-        astrocytesCenters = new ArrayList<Point>();
-
         /*float[] data = new float[density.rows() * (int) density.elemSize()];
         density.get(0, 10, data);*/
 
