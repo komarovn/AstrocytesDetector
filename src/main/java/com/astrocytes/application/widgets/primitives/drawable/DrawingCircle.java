@@ -27,6 +27,7 @@ import java.awt.geom.Ellipse2D;
 
 public class DrawingCircle extends SimpleCircle implements Paintable {
     private Color objectColor;
+    private int strokeWidth = 2;
 
     public DrawingCircle(Double xCenter, Double yCenter, Double radius) {
         this(xCenter, yCenter, radius, Color.YELLOW);
@@ -46,7 +47,7 @@ public class DrawingCircle extends SimpleCircle implements Paintable {
     public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom) {
         if (isFull()) {
             graphics.setPaint(objectColor);
-            graphics.setStroke(new BasicStroke(zoom < 1.0 ? 1 : (int) (2 * zoom)));
+            graphics.setStroke(new BasicStroke(zoom < 1.0 ? 1 : (int) (strokeWidth * zoom)));
 
             float radius = (float) (zoom * getRadius());
             float xStart = (float) (zoom * getxCenter() - shiftX - radius / 2);
@@ -58,6 +59,6 @@ public class DrawingCircle extends SimpleCircle implements Paintable {
 
     @Override
     public boolean testPoint(int x, int y) {
-        return false;
+        return Math.pow(getxCenter() - x, 2) + Math.pow(getyCenter() - y, 2) <= Math.pow(getRadius(), 2);
     }
 }

@@ -22,6 +22,7 @@ package com.astrocytes.application.widgets.instrument;
 
 import com.astrocytes.application.widgets.primitives.drawable.Paintable;
 
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class PointerInstrument extends Instrument {
@@ -38,11 +39,24 @@ public class PointerInstrument extends Instrument {
 
     @Override
     public void onMouseDown(MouseEvent e) {
+        int globX = (int) ((e.getX() + getEditor().getOffsetX()) / getEditor().getZoomValue());
+        int globY = (int) ((e.getY() + getEditor().getOffsetY()) / getEditor().getZoomValue());
+        Paintable selectedObj = null;
+
         for (Paintable obj : getEditor().getObjectManager().getAllPaintables()) {
-            int globX = e.getX();
-            int globY = e.getY();
-            obj.testPoint(globX, globY);
+            if (obj.testPoint(globX, globY)) {
+                selectedObj = obj;
+                break;
+            }
         }
+
+        if (selectedObj != null) {
+            //TODO: something
+            //selectedObj.setColor(new Color(198, 198, 198));
+            getEditor().updateWidget();
+        }
+
+        System.out.println("x: " + globX + ", y: " + globY);
     }
 
     @Override
