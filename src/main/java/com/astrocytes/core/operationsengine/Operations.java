@@ -105,4 +105,5 @@ public interface Operations {
      */
     public List<Point> findAstrocytes(Integer widthRectangle, Integer heightRectangle, Integer centerX, Integer centerY);
 
+    public Mat drawCellBounds();
 }

@@ -63,6 +63,7 @@
             <MenuItem fx:id="findAstrocytesAutoMenuItem" mnemonicParsing="false" text="Draw Astrocytes" />
             <MenuItem fx:id="findNeuronsMenuItem" mnemonicParsing="false" text="Draw Neurons" />
             <MenuItem fx:id="drawLayersMenuItem" mnemonicParsing="false" text="Draw Layer Delimiters" />
+            <MenuItem fx:id="drawCellBoundsMenuItem" mnemonicParsing="false" text="Draw Cell Bounds" />
       </items>
     </Menu>
       <Menu mnemonicParsing="false" text="Statistics">
