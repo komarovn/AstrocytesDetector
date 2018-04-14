@@ -20,6 +20,7 @@
  */
 package com.astrocytes.application.widgets.instrument;
 
+import com.astrocytes.application.resources.ApplicationConstants;
 import com.astrocytes.application.widgets.primitives.drawable.Paintable;
 
 import java.awt.*;
@@ -69,7 +70,7 @@ public class PointerInstrument extends Instrument {
     private void select() {
         if (selectedObj != null) {
             selectedObjColor = selectedObj.getColor();
-            selectedObj.setColor(new Color(198, 198, 198));
+            selectedObj.setColor(ApplicationConstants.SELECTION_COLOR);
             getEditor().updateWidget();
         }
     }

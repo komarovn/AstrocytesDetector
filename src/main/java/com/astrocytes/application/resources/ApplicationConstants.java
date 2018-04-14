@@ -37,5 +37,6 @@ public abstract class ApplicationConstants {
     public static final Color DEFAULT_NEURONS_COLOR = new Color(217, 255, 125);
     public static final Color DEFAULT_MAJOR_LAYERS_COLOR = new Color(212, 52, 64);
     public static final Color DEFAULT_MINOR_LAYERS_COLOR = new Color(18, 92, 214);
+    public static final Color SELECTION_COLOR = new Color(198, 198, 198);
 
 }
