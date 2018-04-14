@@ -20,6 +20,7 @@
  */
 package com.astrocytes.application.widgets;
 
+import com.astrocytes.application.resources.ApplicationConstants;
 import com.astrocytes.application.widgets.instrument.Instrument;
 import com.astrocytes.application.widgets.instrument.InstrumentType;
 import com.astrocytes.application.widgets.primitives.drawable.Paintable;
@@ -28,6 +29,7 @@ import com.astrocytes.core.ImageHelper;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
@@ -36,15 +38,19 @@ public class ImageEditor extends GraphicalWidget {
 
     private InstrumentType activeInstrument;
     private List<Instrument> instruments = new ArrayList<Instrument>();
-    private LayerManager objManager = new LayerManager();
+    private LayerManager layerManager = new LayerManager();
+    private RegionManager regionManager = new RegionManager();
 
     public ImageEditor() {
         this(null, null);
+        initInstrumentListeners();
+        regionManager.setLayerManager(layerManager);
     }
 
     public ImageEditor(Integer width, Integer height) {
         super(width, height);
         initInstrumentListeners();
+        regionManager.setLayerManager(layerManager);
     }
 
     private void initInstrumentListeners() {
@@ -91,21 +97,25 @@ public class ImageEditor extends GraphicalWidget {
         return null;
     }
 
-    public LayerManager getObjectManager() {
-        return this.objManager;
+    public LayerManager getLayerManager() {
+        return this.layerManager;
+    }
+
+    public RegionManager getRegionManager() {
+        return this.regionManager;
     }
 
     @Override
     public void reset() {
         super.reset();
         this.activeInstrument = InstrumentType.DEFAULT;
-        this.objManager.clearAll();
+        this.layerManager.clearAll();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        for (Paintable obj : this.objManager.getAllPaintables()) {
+        for (Paintable obj : this.layerManager.getAllPaintables()) {
             obj.paint((Graphics2D) g, getOffsetX(), getOffsetY(), getZoomValue());
         }
     }
@@ -120,7 +130,7 @@ public class ImageEditor extends GraphicalWidget {
             Graphics2D g = result.createGraphics();
             setupRenderHints(g);
 
-            for (Paintable obj : this.objManager.getAllPaintables()) {
+            for (Paintable obj : this.layerManager.getAllPaintables()) {
                 obj.paint(g, 0, 0, 1.0);
             }
             return result;
@@ -128,15 +138,12 @@ public class ImageEditor extends GraphicalWidget {
         return null;
     }
 
-    //TODO: remove!
-    public List<SimpleLine> getHorizontalLines() {
-        Collections.sort(new ArrayList<Integer>(), new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return  o1 - o2;
-            }
-        });
-        return null;
+    @Override
+    public void setWidgetSize(Integer width, Integer height) {
+        super.setWidgetSize(width, height);
+        if (regionManager != null) {
+            regionManager.setRegionSize(widgetWidth, widgetHeight);
+        }
     }
 
     protected class ImageEditorListener extends GraphicalWidgetListener {
@@ -166,11 +173,19 @@ public class ImageEditor extends GraphicalWidget {
         public void mouseDragged(MouseEvent e) {
             super.mouseDragged(e);
             if (currentView != null) {
+                regionManager.setRegion(getOffsetX(), getOffsetY());
+
                 Instrument instrument = getActiveInstrument();
                 if (instrument != null) {
                     instrument.onMouseDrag(e);
                 }
             }
+        }
+
+        @Override
+        public void mouseWheelMoved(MouseWheelEvent e) {
+            super.mouseWheelMoved(e);
+            regionManager.setZoom(getZoomValue());
         }
     }
 

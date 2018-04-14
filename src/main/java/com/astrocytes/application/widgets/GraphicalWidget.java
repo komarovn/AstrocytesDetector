@@ -39,10 +39,8 @@ public class GraphicalWidget extends JPanel {
     protected BufferedImage currentView;
 
     private Integer currentX, currentY;
-    private Integer widgetWidth;
-    private Integer widgetHeight;
-    protected Integer imageWidth;
-    protected Integer imageHeight;
+    protected Integer widgetWidth, widgetHeight;
+    protected Integer imageWidth, imageHeight;
 
     private Boolean panEnabled = true;
     private Boolean zoomEnabled = true;
@@ -178,7 +176,6 @@ public class GraphicalWidget extends JPanel {
             currentX = zoomedImage.getWidth() - currentX > imageWidth ? currentX : zoomedImage.getWidth() - imageWidth;
             currentY = zoomedImage.getHeight() - currentY > imageHeight ? currentY : zoomedImage.getHeight() - imageHeight;
             currentView = zoomedImage.getSubimage(currentX, currentY, imageWidth, imageHeight);
-            //System.out.println("currentX = " + currentX + "; currentY = " + currentY);
         }
     }
 

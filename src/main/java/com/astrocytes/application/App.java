@@ -294,16 +294,16 @@ public class App {
             }
 
             if (appData.getMainLayersKey() == null) {
-                appData.setMainLayersKey(graphicalWidget.getObjectManager().createLayer());
+                appData.setMainLayersKey(graphicalWidget.getLayerManager().createLayer());
             }
             if (appData.getLayersKey() == null) {
-                appData.setLayersKey(graphicalWidget.getObjectManager().createLayer());
+                appData.setLayersKey(graphicalWidget.getLayerManager().createLayer());
             }
-            graphicalWidget.getObjectManager().getLayer(appData.getMainLayersKey()).clear();
-            graphicalWidget.getObjectManager().getLayer(appData.getLayersKey()).clear();
-            graphicalWidget.getObjectManager().getLayer(appData.getMainLayersKey()).add(layers.get(0));
-            graphicalWidget.getObjectManager().getLayer(appData.getMainLayersKey()).add(layers.get(layers.size() - 1));
-            graphicalWidget.getObjectManager().getLayer(appData.getLayersKey()).addAll(layers.subList(1, layers.size() - 2));
+            graphicalWidget.getLayerManager().getLayer(appData.getMainLayersKey()).clear();
+            graphicalWidget.getLayerManager().getLayer(appData.getLayersKey()).clear();
+            graphicalWidget.getLayerManager().getLayer(appData.getMainLayersKey()).add(layers.get(0));
+            graphicalWidget.getLayerManager().getLayer(appData.getMainLayersKey()).add(layers.get(layers.size() - 1));
+            graphicalWidget.getLayerManager().getLayer(appData.getLayersKey()).addAll(layers.subList(1, layers.size() - 2));
 
             if (appData.getNeuronsKey() != null) {
                 executeFindNeurons();
@@ -320,10 +320,10 @@ public class App {
     public void executeFindNeurons() {
         if (image != null) {
             if (appData.getNeuronsKey() == null) {
-                appData.setNeuronsKey(graphicalWidget.getObjectManager().createLayer());
+                appData.setNeuronsKey(graphicalWidget.getLayerManager().createLayer());
             }
-            graphicalWidget.getObjectManager().getLayer(appData.getNeuronsKey()).clear();
-            graphicalWidget.getObjectManager().getLayer(appData.getNeuronsKey()).addAll(operationsExecutor.getNeurons());
+            graphicalWidget.getLayerManager().getLayer(appData.getNeuronsKey()).clear();
+            graphicalWidget.getLayerManager().getLayer(appData.getNeuronsKey()).addAll(operationsExecutor.getNeurons());
             updateCurrentView();
         }
     }
@@ -362,10 +362,10 @@ public class App {
             DialogFindAstrocytes dialog = new DialogFindAstrocytes(this, graphicalWidget.getImage());
             if (dialog.isApplied()) {
                 if (appData.getAstrocytesKey() == null) {
-                    appData.setAstrocytesKey(graphicalWidget.getObjectManager().createLayer());
+                    appData.setAstrocytesKey(graphicalWidget.getLayerManager().createLayer());
                 }
-                graphicalWidget.getObjectManager().getLayer(appData.getAstrocytesKey()).clear();
-                graphicalWidget.getObjectManager().getLayer(appData.getAstrocytesKey()).addAll(operationsExecutor.applyFindAstocytes());
+                graphicalWidget.getLayerManager().getLayer(appData.getAstrocytesKey()).clear();
+                graphicalWidget.getLayerManager().getLayer(appData.getAstrocytesKey()).addAll(operationsExecutor.applyFindAstocytes());
                 updateCurrentView();
                 menuController.setLayerStatisticsEnabled(true);
             }
@@ -375,10 +375,10 @@ public class App {
     public void executeFindAstrocytesAuto() {
         if (image != null) {
             if (appData.getAstrocytesKey() == null) {
-                appData.setAstrocytesKey(graphicalWidget.getObjectManager().createLayer());
+                appData.setAstrocytesKey(graphicalWidget.getLayerManager().createLayer());
             }
-            graphicalWidget.getObjectManager().getLayer(appData.getAstrocytesKey()).clear();
-            graphicalWidget.getObjectManager().getLayer(appData.getAstrocytesKey()).addAll(operationsExecutor.getAstrocytes());
+            graphicalWidget.getLayerManager().getLayer(appData.getAstrocytesKey()).clear();
+            graphicalWidget.getLayerManager().getLayer(appData.getAstrocytesKey()).addAll(operationsExecutor.getAstrocytes());
             updateCurrentView();
         }
     }
@@ -402,25 +402,25 @@ public class App {
      */
     public void executeSettings() {
         if (appData.getNeuronsKey() != null) {
-            for (Paintable obj : graphicalWidget.getObjectManager().getLayer(appData.getNeuronsKey())) {
+            for (Paintable obj : graphicalWidget.getLayerManager().getLayer(appData.getNeuronsKey())) {
                 obj.setColor(dataProvider.getNeuronsColor());
             }
         }
 
         if (appData.getAstrocytesKey() != null) {
-            for (Paintable obj : graphicalWidget.getObjectManager().getLayer(appData.getAstrocytesKey())) {
+            for (Paintable obj : graphicalWidget.getLayerManager().getLayer(appData.getAstrocytesKey())) {
                 obj.setColor(dataProvider.getAstrocytesColor());
             }
         }
 
         if (appData.getMainLayersKey() != null) {
-            for (Paintable obj : graphicalWidget.getObjectManager().getLayer(appData.getMainLayersKey())) {
+            for (Paintable obj : graphicalWidget.getLayerManager().getLayer(appData.getMainLayersKey())) {
                 obj.setColor(dataProvider.getMajorLayersColor());
             }
         }
 
         if (appData.getLayersKey() != null) {
-            for (Paintable obj : graphicalWidget.getObjectManager().getLayer(appData.getLayersKey())) {
+            for (Paintable obj : graphicalWidget.getLayerManager().getLayer(appData.getLayersKey())) {
                 obj.setColor(dataProvider.getMinorLayersColor());
             }
         }

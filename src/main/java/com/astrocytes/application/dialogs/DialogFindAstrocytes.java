@@ -56,8 +56,8 @@ public class DialogFindAstrocytes extends AbstractDialog {
         preview.setImage(image);
         preview.setOriginalImage(ImageHelper.convertMatToBufferedImage(
                 owner.getOperationsExecutor().getOperations().getSourceImage()));
-        this.boundingRectangleKey = preview.getObjectManager().createLayer();
-        this.astrocytesKey = preview.getObjectManager().createLayer();
+        this.boundingRectangleKey = preview.getLayerManager().createLayer();
+        this.astrocytesKey = preview.getLayerManager().createLayer();
         preview.processPreviewImage();
         preview.selectInstrument(InstrumentType.ZOOM_AND_PAN);
         setVisible(true);
@@ -148,14 +148,14 @@ public class DialogFindAstrocytes extends AbstractDialog {
     }
 
     private void processPreview() {
-        java.util.List<Paintable> rectangles = preview.getObjectManager().getLayer(this.boundingRectangleKey);
+        java.util.List<Paintable> rectangles = preview.getLayerManager().getLayer(this.boundingRectangleKey);
         if (rectangles.size() > 0) {
             boundingRectangle = (SimpleRectangle) rectangles.get(0);
         }
         Operations operations = new OperationsImpl();
         operations.setSourceImage(ImageHelper.convertBufferedImageToMat(preview.getOriginalImageView()));
         if (boundingRectangle != null && boundingRectangle.isFull()) {
-            preview.getObjectManager().getLayer(astrocytesKey).clear();
+            preview.getLayerManager().getLayer(astrocytesKey).clear();
             java.util.List<Point> centers = operations.findAstrocytes(boundingRectangle.getWidth(),
                     boundingRectangle.getHeight(),
                     boundingRectangle.getCenterX(),
@@ -166,7 +166,7 @@ public class DialogFindAstrocytes extends AbstractDialog {
                 astrocytes.add(new DrawingCircle((double) center.getX(), (double) center.getY(), 4.0));
             }
 
-            preview.getObjectManager().getLayer(astrocytesKey).addAll(astrocytes);
+            preview.getLayerManager().getLayer(astrocytesKey).addAll(astrocytes);
         }
         else {
             preview.updatePreview(preview.getOriginalImageView());

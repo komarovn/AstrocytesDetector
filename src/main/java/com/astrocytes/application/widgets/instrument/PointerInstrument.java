@@ -46,29 +46,33 @@ public class PointerInstrument extends Instrument {
 
     @Override
     public void onMouseDown(MouseEvent e) {
-        int globX = (int) ((e.getX() + getEditor().getOffsetX()) / getEditor().getZoomValue());
-        int globY = (int) ((e.getY() + getEditor().getOffsetY()) / getEditor().getZoomValue());
-
         revertSelection();
-
-        for (Paintable obj : getEditor().getObjectManager().getAllPaintables()) {
-            if (obj.testPoint(globX, globY)) {
-                selectedObj = obj;
-                break;
-            }
-        }
-
+        testSelection(e.getX(), e.getY());
         select();
     }
 
     @Override
     public void onMouseDrag(MouseEvent e) {
-
+        revertSelection();
+        testSelection(e.getX(), e.getY());
+        select();
     }
 
     @Override
     public void onMouseUp(MouseEvent e) {
 
+    }
+
+    private void testSelection(int x, int y) {
+        int globX = (int) ((x + getEditor().getOffsetX()) / getEditor().getZoomValue());
+        int globY = (int) ((y + getEditor().getOffsetY()) / getEditor().getZoomValue());
+
+        for (Paintable obj : getEditor().getRegionManager().getRegionPaintables()) {
+            if (obj.testPoint(globX, globY)) {
+                selectedObj = obj;
+                break;
+            }
+        }
     }
 
     private void select() {
