@@ -34,6 +34,7 @@ public class RegionManager {
 
     public void setLayerManager(LayerManager layerManager) {
         this.layerManager = layerManager;
+        updateRegion();
     }
 
     public List<Paintable> getRegionPaintables() {

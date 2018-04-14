@@ -69,8 +69,13 @@ public class DrawingPolygonalChain extends AbstractPrimitive implements Paintabl
 
     @Override
     public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom) {
+        this.paint(graphics, shiftX, shiftY, zoom, getColor());
+    }
+
+    @Override
+    public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom, Color color) {
         for (DrawingLine part : chainParts) {
-            part.paint(graphics, shiftX, shiftY, zoom);
+            part.paint(graphics, shiftX, shiftY, zoom, color);
         }
     }
 

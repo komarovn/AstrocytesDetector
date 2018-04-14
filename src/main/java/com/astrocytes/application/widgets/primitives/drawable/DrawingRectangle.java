@@ -49,8 +49,13 @@ public class DrawingRectangle extends SimpleRectangle implements Paintable {
 
     @Override
     public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom) {
+        this.paint(graphics, shiftX, shiftY, zoom, getColor());
+    }
+
+    @Override
+    public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom, Color color) {
         if (isFull()) {
-            graphics.setPaint(objectColor);
+            graphics.setPaint(color);
             graphics.setStroke(new BasicStroke(1));
 
             float x = (float) (zoom * getLeftX() - shiftX);

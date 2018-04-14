@@ -57,15 +57,20 @@ public class DrawingLine extends SimpleLine implements Paintable {
     }
 
     @Override
-    public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoomScale) {
+    public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom) {
+        this.paint(graphics, shiftX, shiftY, zoom, getColor());
+    }
+
+    @Override
+    public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom, Color color) {
         if (isFull()) {
             graphics.setPaint(objectColor);
-            graphics.setStroke(new BasicStroke(zoomScale < 1.0 ? 1 : (int) (2 * zoomScale)));
+            graphics.setStroke(new BasicStroke(zoom < 1.0 ? 1 : (int) (2 * zoom)));
 
-            float xStart = (float) (zoomScale * getxStart() - shiftX);
-            float yStart = (float) (zoomScale * getyStart() - shiftY);
-            float xEnd = (float) (zoomScale * getxEnd() - shiftX);
-            float yEnd = (float) (zoomScale * getyEnd() - shiftY);
+            float xStart = (float) (zoom * getxStart() - shiftX);
+            float yStart = (float) (zoom * getyStart() - shiftY);
+            float xEnd = (float) (zoom * getxEnd() - shiftX);
+            float yEnd = (float) (zoom * getyEnd() - shiftY);
 
             graphics.draw(new Line2D.Float(xStart, yStart, xEnd, yEnd));
         }

@@ -26,6 +26,8 @@ public interface Paintable {
 
     public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom);
 
+    public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom, Color color);
+
     public void setColor(Color color);
 
     public Color getColor();

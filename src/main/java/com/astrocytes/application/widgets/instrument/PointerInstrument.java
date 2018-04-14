@@ -20,15 +20,12 @@
  */
 package com.astrocytes.application.widgets.instrument;
 
-import com.astrocytes.application.resources.ApplicationConstants;
 import com.astrocytes.application.widgets.primitives.drawable.Paintable;
 
-import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class PointerInstrument extends Instrument {
     private Paintable selectedObj;
-    private Color selectedObjColor;
 
     @Override
     public InstrumentType getType() {
@@ -38,10 +35,6 @@ public class PointerInstrument extends Instrument {
     @Override
     public void activate() {
         getEditor().lockZoomAndPan();
-    }
-
-    public Paintable getSelection() {
-        return this.selectedObj;
     }
 
     @Override
@@ -54,7 +47,7 @@ public class PointerInstrument extends Instrument {
     @Override
     public void onMouseDrag(MouseEvent e) {
         revertSelection();
-        testSelection(e.getX(), e.getY());
+        testHover(e.getX(), e.getY());
         select();
     }
 
@@ -75,21 +68,34 @@ public class PointerInstrument extends Instrument {
         }
     }
 
+    private void testHover(int x, int y) {
+        int globX = (int) ((x + getEditor().getOffsetX()) / getEditor().getZoomValue());
+        int globY = (int) ((y + getEditor().getOffsetY()) / getEditor().getZoomValue());
+
+        getEditor().getSelectionModel().hover(null);
+        getEditor().updateWidget();
+        for (Paintable obj : getEditor().getRegionManager().getRegionPaintables()) {
+            if (obj.testPoint(globX, globY)) {
+                getEditor().getSelectionModel().hover(obj);
+                getEditor().updateWidget();
+                break;
+            }
+        }
+    }
+
     private void select() {
         if (selectedObj != null) {
-            selectedObjColor = selectedObj.getColor();
-            selectedObj.setColor(ApplicationConstants.SELECTION_COLOR);
+            getEditor().getSelectionModel().addSelection(selectedObj);
             getEditor().updateWidget();
         }
     }
 
     private void revertSelection() {
-        if (selectedObj != null && selectedObjColor != null) {
-            selectedObj.setColor(selectedObjColor);
+        if (selectedObj != null) {
+            getEditor().getSelectionModel().clearSelection();
             getEditor().updateWidget();
         }
 
         selectedObj = null;
-        selectedObjColor = null;
     }
 }

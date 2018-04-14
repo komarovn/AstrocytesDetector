@@ -24,7 +24,6 @@ import com.astrocytes.application.resources.ApplicationConstants;
 import com.astrocytes.application.widgets.instrument.Instrument;
 import com.astrocytes.application.widgets.instrument.InstrumentType;
 import com.astrocytes.application.widgets.primitives.drawable.Paintable;
-import com.astrocytes.application.widgets.primitives.SimpleLine;
 import com.astrocytes.core.ImageHelper;
 
 import java.awt.*;
@@ -40,6 +39,7 @@ public class ImageEditor extends GraphicalWidget {
     private List<Instrument> instruments = new ArrayList<Instrument>();
     private LayerManager layerManager = new LayerManager();
     private RegionManager regionManager = new RegionManager();
+    private SelectionModel selectionModel = new SelectionModel();
 
     public ImageEditor() {
         this(null, null);
@@ -105,6 +105,10 @@ public class ImageEditor extends GraphicalWidget {
         return this.regionManager;
     }
 
+    public SelectionModel getSelectionModel() {
+        return selectionModel;
+    }
+
     @Override
     public void reset() {
         super.reset();
@@ -115,8 +119,14 @@ public class ImageEditor extends GraphicalWidget {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        for (Paintable obj : this.layerManager.getAllPaintables()) {
-            obj.paint((Graphics2D) g, getOffsetX(), getOffsetY(), getZoomValue());
+        for (Paintable obj : this.regionManager.getRegionPaintables()) {
+            if (getSelectionModel().isSelected(obj)) {
+                obj.paint((Graphics2D) g, getOffsetX(), getOffsetY(), getZoomValue(), ApplicationConstants.SELECTION_COLOR);
+            } else if (getSelectionModel().isHovered(obj)) {
+                obj.paint((Graphics2D) g, getOffsetX(), getOffsetY(), getZoomValue(), ApplicationConstants.SELECTION_COLOR);
+            } else {
+                obj.paint((Graphics2D) g, getOffsetX(), getOffsetY(), getZoomValue());
+            }
         }
     }
 
