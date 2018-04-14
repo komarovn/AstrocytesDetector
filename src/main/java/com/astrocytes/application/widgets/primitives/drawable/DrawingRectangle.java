@@ -26,7 +26,7 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class DrawingRectangle extends SimpleRectangle implements Paintable {
-    private Color drawingColor;
+    private Color objectColor;
 
     public DrawingRectangle() {
         this(Color.BLUE);
@@ -34,18 +34,23 @@ public class DrawingRectangle extends SimpleRectangle implements Paintable {
 
     public DrawingRectangle(Color color) {
         super();
-        this.drawingColor = color;
+        this.objectColor = color;
     }
 
     @Override
     public void setColor(Color color) {
-        this.drawingColor = color;
+        this.objectColor = color;
+    }
+
+    @Override
+    public Color getColor() {
+        return this.objectColor;
     }
 
     @Override
     public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom) {
         if (isFull()) {
-            graphics.setPaint(drawingColor);
+            graphics.setPaint(objectColor);
             graphics.setStroke(new BasicStroke(1));
 
             float x = (float) (zoom * getLeftX() - shiftX);

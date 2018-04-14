@@ -44,6 +44,11 @@ public class DrawingCircle extends SimpleCircle implements Paintable {
     }
 
     @Override
+    public Color getColor() {
+        return this.objectColor;
+    }
+
+    @Override
     public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoom) {
         if (isFull()) {
             graphics.setPaint(objectColor);

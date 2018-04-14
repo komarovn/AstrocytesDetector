@@ -52,6 +52,11 @@ public class DrawingLine extends SimpleLine implements Paintable {
     }
 
     @Override
+    public Color getColor() {
+        return this.objectColor;
+    }
+
+    @Override
     public void paint(Graphics2D graphics, int shiftX, int shiftY, double zoomScale) {
         if (isFull()) {
             graphics.setPaint(objectColor);

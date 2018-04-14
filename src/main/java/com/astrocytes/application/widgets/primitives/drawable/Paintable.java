@@ -28,5 +28,7 @@ public interface Paintable {
 
     public void setColor(Color color);
 
+    public Color getColor();
+
     public boolean testPoint(int x, int y);
 }

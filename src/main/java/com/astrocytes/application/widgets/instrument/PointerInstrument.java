@@ -26,6 +26,8 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class PointerInstrument extends Instrument {
+    private Paintable selectedObj;
+    private Color selectedObjColor;
 
     @Override
     public InstrumentType getType() {
@@ -41,7 +43,8 @@ public class PointerInstrument extends Instrument {
     public void onMouseDown(MouseEvent e) {
         int globX = (int) ((e.getX() + getEditor().getOffsetX()) / getEditor().getZoomValue());
         int globY = (int) ((e.getY() + getEditor().getOffsetY()) / getEditor().getZoomValue());
-        Paintable selectedObj = null;
+
+        revertSelection();
 
         for (Paintable obj : getEditor().getObjectManager().getAllPaintables()) {
             if (obj.testPoint(globX, globY)) {
@@ -50,13 +53,7 @@ public class PointerInstrument extends Instrument {
             }
         }
 
-        if (selectedObj != null) {
-            //TODO: something
-            //selectedObj.setColor(new Color(198, 198, 198));
-            getEditor().updateWidget();
-        }
-
-        System.out.println("x: " + globX + ", y: " + globY);
+        select();
     }
 
     @Override
@@ -67,5 +64,23 @@ public class PointerInstrument extends Instrument {
     @Override
     public void onMouseUp(MouseEvent e) {
 
+    }
+
+    private void select() {
+        if (selectedObj != null) {
+            selectedObjColor = selectedObj.getColor();
+            selectedObj.setColor(new Color(198, 198, 198));
+            getEditor().updateWidget();
+        }
+    }
+
+    private void revertSelection() {
+        if (selectedObj != null && selectedObjColor != null) {
+            selectedObj.setColor(selectedObjColor);
+            getEditor().updateWidget();
+        }
+
+        selectedObj = null;
+        selectedObjColor = null;
     }
 }

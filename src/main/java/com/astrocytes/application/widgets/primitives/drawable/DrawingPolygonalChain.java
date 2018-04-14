@@ -53,6 +53,11 @@ public class DrawingPolygonalChain extends AbstractPrimitive implements Paintabl
     }
 
     @Override
+    public Color getColor() {
+        return this.objectColor;
+    }
+
+    @Override
     public boolean isFull() {
         for (DrawingLine part : chainParts) {
             if (!part.isFull()) {
