@@ -20,12 +20,16 @@
  */
 package com.astrocytes.application.widgets.instrument;
 
+import com.astrocytes.application.widgets.primitives.drawable.DrawingRectangle;
 import com.astrocytes.application.widgets.primitives.drawable.Paintable;
 
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class PointerInstrument extends Instrument {
     private Paintable selectedObj;
+    private DrawingRectangle selectionRectangle;
+    private String rectLayer = null;
 
     @Override
     public InstrumentType getType() {
@@ -42,16 +46,26 @@ public class PointerInstrument extends Instrument {
         revertSelection();
         testSelection(e.getX(), e.getY());
         select();
+        selectionRectangle = new DrawingRectangle(new Color(130, 150, 240, 70));
+        if (rectLayer == null) {
+            rectLayer = getEditor().getLayerManager().createLayer();
+        }
+        getEditor().getLayerManager().getLayer(rectLayer).add(selectionRectangle);
     }
 
     @Override
     public void onMouseDrag(MouseEvent e) {
-
+        selectionRectangle.setEndPoint(e.getX(), e.getY());
+        if (!selectionRectangle.isFull()) {
+            selectionRectangle.setStartPoint(e.getX(), e.getY());
+        }
+        getEditor().repaint();
     }
 
     @Override
     public void onMouseUp(MouseEvent e) {
-
+        getEditor().getLayerManager().getLayer(rectLayer).clear();
+        getEditor().repaint();
     }
 
     @Override
