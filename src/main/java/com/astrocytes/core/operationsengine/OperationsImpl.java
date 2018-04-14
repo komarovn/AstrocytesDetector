@@ -472,7 +472,16 @@ public class OperationsImpl implements Operations {
         }
     }
 
-    private Mat applyRayCastingSegmentation(Mat preparedImage) {
+    @Override
+    public Mat drawCellBounds() {
+        if (this.preparedImage == null) {
+            makePreparedImage();
+        }
+
+        return applyRayCastingSegmentation();
+    }
+
+    private Mat applyRayCastingSegmentation() {
         //Mat cannyEdges = CoreOperations.cannyFilter(sourceImage, 26, 58);
         Mat contours = new Mat(preparedImage.rows(), preparedImage.cols(), CvType.CV_32S);
         int contoursCount = /*neurons.size();*/ CoreOperations.drawAllContours(CoreOperations.erode(preparedImage, 5), contours);

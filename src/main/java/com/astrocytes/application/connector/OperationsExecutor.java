@@ -119,6 +119,10 @@ public class OperationsExecutor {
         return result;
     }
 
+    public BufferedImage drawCellBounds() {
+        return ImageHelper.convertMatToBufferedImage(operations.drawCellBounds());
+    }
+
     public Operations getOperations() {
         return operations;
     }

@@ -383,6 +383,13 @@ public class App {
         }
     }
 
+    public void executeDrawCellBounds() {
+        if (image != null) {
+            image = operationsExecutor.drawCellBounds();
+            updateCurrentView();
+        }
+    }
+
     /*public void executeKmeans() {
         if (image != null) {
             image = operationsExecutor.applyKmeans(image);

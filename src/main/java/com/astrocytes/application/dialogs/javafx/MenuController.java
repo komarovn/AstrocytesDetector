@@ -88,6 +88,9 @@ public class MenuController extends AbstractController {
     private MenuItem drawLayersMenuItem;
 
     @FXML
+    private MenuItem drawCellBoundsMenuItem;
+
+    @FXML
     private MenuItem layersStatistics;
 
     @Override
@@ -178,6 +181,12 @@ public class MenuController extends AbstractController {
                 mainApp.executeDrawLayers();
             }
         });
+        drawCellBoundsMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                mainApp.executeDrawCellBounds();
+            }
+        });
 
         /* ---Statistics --- */
         layersStatistics.setOnAction(new EventHandler<ActionEvent>() {
@@ -198,6 +207,7 @@ public class MenuController extends AbstractController {
         findAstrocytes.setDisable(!isAvailable);
         findAstrocytesAutoMenuItem.setDisable(!isAvailable);
         drawLayersMenuItem.setDisable(!isAvailable);
+        drawCellBoundsMenuItem.setDisable(!isAvailable);
         layersStatistics.setDisable(true); //TODO: why constant value?
     }
 
