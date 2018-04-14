@@ -46,14 +46,17 @@ public class PointerInstrument extends Instrument {
 
     @Override
     public void onMouseDrag(MouseEvent e) {
-        revertSelection();
-        testHover(e.getX(), e.getY());
-        select();
+
     }
 
     @Override
     public void onMouseUp(MouseEvent e) {
 
+    }
+
+    @Override
+    public void onMouseMoved(MouseEvent e) {
+        testHover(e.getX(), e.getY());
     }
 
     private void testSelection(int x, int y) {

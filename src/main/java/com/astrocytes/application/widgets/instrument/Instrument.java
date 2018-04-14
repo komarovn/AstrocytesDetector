@@ -41,10 +41,12 @@ public abstract class Instrument {
 
     public abstract void activate();
 
-    public abstract void onMouseDown(MouseEvent e);
+    public void onMouseDown(MouseEvent e) { }
 
-    public abstract void onMouseDrag(MouseEvent e);
+    public void onMouseDrag(MouseEvent e) { }
 
-    public abstract void onMouseUp(MouseEvent e);
+    public void onMouseUp(MouseEvent e) { }
+
+    public void onMouseMoved(MouseEvent e) { }
 
 }

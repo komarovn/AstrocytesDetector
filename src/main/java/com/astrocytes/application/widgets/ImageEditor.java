@@ -197,6 +197,17 @@ public class ImageEditor extends GraphicalWidget {
             super.mouseWheelMoved(e);
             regionManager.setZoom(getZoomValue());
         }
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            super.mouseMoved(e);
+            if (currentView != null) {
+                Instrument instrument = getActiveInstrument();
+                if (instrument != null) {
+                    instrument.onMouseMoved(e);
+                }
+            }
+        }
     }
 
 }

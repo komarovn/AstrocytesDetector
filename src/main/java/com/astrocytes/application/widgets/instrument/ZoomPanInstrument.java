@@ -20,8 +20,6 @@
  */
 package com.astrocytes.application.widgets.instrument;
 
-import java.awt.event.MouseEvent;
-
 public class ZoomPanInstrument extends Instrument {
 
     @Override
@@ -34,18 +32,4 @@ public class ZoomPanInstrument extends Instrument {
         getEditor().unlockZoomAndPan();
     }
 
-    @Override
-    public void onMouseDown(MouseEvent e) {
-
-    }
-
-    @Override
-    public void onMouseDrag(MouseEvent e) {
-
-    }
-
-    @Override
-    public void onMouseUp(MouseEvent e) {
-
-    }
 }
