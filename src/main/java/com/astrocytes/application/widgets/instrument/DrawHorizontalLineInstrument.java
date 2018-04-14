@@ -44,7 +44,7 @@ public class DrawHorizontalLineInstrument extends Instrument {
     public void onMouseDown(MouseEvent e) {
         this.line = new DrawingLine(Color.ORANGE);
         updateLine(e.getX(), e.getY());
-        getEditor().getObjectManager().getGroup(getLinesKey()).add(this.line);
+        getEditor().getObjectManager().getLayer(getLinesKey()).add(this.line);
         getEditor().repaint();
         this.isDrawingState = true;
     }
@@ -76,7 +76,7 @@ public class DrawHorizontalLineInstrument extends Instrument {
 
     private String getLinesKey() {
         if (this.linesKey == null) {
-            this.linesKey = getEditor().getObjectManager().createGroup();
+            this.linesKey = getEditor().getObjectManager().createLayer();
         }
         return this.linesKey;
     }

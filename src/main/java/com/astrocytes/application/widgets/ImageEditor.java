@@ -36,7 +36,7 @@ public class ImageEditor extends GraphicalWidget {
 
     private InstrumentType activeInstrument;
     private List<Instrument> instruments = new ArrayList<Instrument>();
-    private ObjectManager objManager = new ObjectManager();
+    private LayerManager objManager = new LayerManager();
 
     public ImageEditor() {
         this(null, null);
@@ -91,7 +91,7 @@ public class ImageEditor extends GraphicalWidget {
         return null;
     }
 
-    public ObjectManager getObjectManager() {
+    public LayerManager getObjectManager() {
         return this.objManager;
     }
 

@@ -47,8 +47,8 @@ public class DrawRectangleInstrument extends Instrument {
         int startY = (int) ((e.getY() + getEditor().getOffsetY()) / getEditor().getZoomValue());
         this.rectangle.setStartPoint(startX, startY);
         this.rectangle.setEndPoint(startX, startY);
-        getEditor().getObjectManager().getGroup(getRectanglesKey()).clear();
-        getEditor().getObjectManager().getGroup(getRectanglesKey()).add(this.rectangle);
+        getEditor().getObjectManager().getLayer(getRectanglesKey()).clear();
+        getEditor().getObjectManager().getLayer(getRectanglesKey()).add(this.rectangle);
         this.isDrawingState = true;
     }
 
@@ -78,7 +78,7 @@ public class DrawRectangleInstrument extends Instrument {
 
     private String getRectanglesKey() {
         if (this.rectangleKey == null) {
-            this.rectangleKey = getEditor().getObjectManager().createGroup();
+            this.rectangleKey = getEditor().getObjectManager().createLayer();
         }
         return this.rectangleKey;
     }

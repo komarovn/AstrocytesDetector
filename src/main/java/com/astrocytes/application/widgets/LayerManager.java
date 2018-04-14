@@ -24,31 +24,31 @@ import com.astrocytes.application.widgets.primitives.drawable.Paintable;
 
 import java.util.*;
 
-public class ObjectManager {
-    private Map<String, List<Paintable>> groups = new HashMap<String, List<Paintable>>();
+public class LayerManager {
+    private Map<String, List<Paintable>> layers = new HashMap<String, List<Paintable>>();
 
-    public String createGroup() {
+    public String createLayer() {
         String key = UUID.randomUUID().toString();
-        this.groups.put(key, new ArrayList<Paintable>());
+        this.layers.put(key, new ArrayList<Paintable>());
         return key;
     }
 
-    public void destroyGroup(String key) {
-        this.groups.remove(key);
+    public void removeLayer(String key) {
+        this.layers.remove(key);
     }
 
     public void clearAll() {
-        this.groups.clear();
+        this.layers.clear();
     }
 
-    public List<Paintable> getGroup(String key) {
-        return this.groups.get(key);
+    public List<Paintable> getLayer(String key) {
+        return this.layers.get(key);
     }
 
     public List<Paintable> getAllPaintables() {
         List<Paintable> result = new ArrayList<Paintable>();
 
-        for (List<Paintable> group : this.groups.values()) {
+        for (List<Paintable> group : this.layers.values()) {
             result.addAll(group);
         }
 

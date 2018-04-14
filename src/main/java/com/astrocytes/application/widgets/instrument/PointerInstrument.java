@@ -40,6 +40,10 @@ public class PointerInstrument extends Instrument {
         getEditor().lockZoomAndPan();
     }
 
+    public Paintable getSelection() {
+        return this.selectedObj;
+    }
+
     @Override
     public void onMouseDown(MouseEvent e) {
         int globX = (int) ((e.getX() + getEditor().getOffsetX()) / getEditor().getZoomValue());
