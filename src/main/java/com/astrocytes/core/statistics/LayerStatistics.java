@@ -20,7 +20,7 @@
  */
 package com.astrocytes.core.statistics;
 
-import com.astrocytes.core.primitives.Line;
+import com.astrocytes.core.CoreConstants;
 import com.astrocytes.core.primitives.Point;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -29,46 +29,42 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LayerStatistics {
-    private Map<Integer, Integer> quantityInHorizontalLayers = new HashMap<Integer, Integer>();
 
-    private void countAstrocytesByLayers(List<Point> astrocyteCenters, List<Line> layers) {
-        for (int i = 0; i < layers.size() + 1; i++) {
-            quantityInHorizontalLayers.put(i, 0);
-        }
-
-        for (Point center : astrocyteCenters) {
-            int numberOfLayer = 0;
-            for (Line layer : layers) {
-                if (layer.getyEnd() > center.getY()) {
-                    break;
-                }
-                numberOfLayer++;
-            }
-            quantityInHorizontalLayers.put(numberOfLayer, quantityInHorizontalLayers.get(numberOfLayer) + 1);
-        }
-    }
-
-    public boolean saveLayerStatisticsToXls(List<Point> astrocyteCenters, List<Line> layers, File fileToSave) {
-        countAstrocytesByLayers(astrocyteCenters, layers);
+    public boolean saveLayerStatisticsToXls(Map<Integer, List<Point>> layers,
+                                            List<Point> astrocyteCenters, List<Point> neuronsCenters, File fileToSave) {
         try {
             FileOutputStream outputStream = new FileOutputStream(fileToSave);
 
             HSSFWorkbook workbook = new HSSFWorkbook();
-            HSSFSheet sheet = workbook.createSheet("Astrocytes By Layers");
+            HSSFSheet sheet = workbook.createSheet(CoreConstants.XLS_SPREADSHEET_TITLE);
 
             HSSFRow headerRow = sheet.createRow(0);
             headerRow.createCell(0).setCellValue("Layer #");
-            headerRow.createCell(1).setCellValue("Astrocytes Count");
 
-            for (Map.Entry<Integer, Integer> count : quantityInHorizontalLayers.entrySet()) {
-                HSSFRow row = sheet.createRow(count.getKey() + 1);
-                row.createCell(0).setCellValue(count.getKey() + 1);
-                row.createCell(1).setCellValue(count.getValue());
+            for (int i = 0; i < layers.size() - 1; i++) {
+                HSSFRow row = sheet.createRow(i + 1);
+                row.createCell(0).setCellValue(i + 1);
+            }
+
+            if (astrocyteCenters != null) {
+                headerRow.createCell(1).setCellValue(CoreConstants.XLS_ASTROCYTES_TITLE);
+
+                for (Map.Entry<Integer, Integer> count : count(astrocyteCenters, layers).entrySet()) {
+                    HSSFRow row = sheet.getRow(count.getKey() + 1);
+                    row.createCell(1).setCellValue(count.getValue());
+                }
+            }
+
+            if (neuronsCenters != null) {
+                headerRow.createCell(astrocyteCenters != null ? 2 : 1).setCellValue(CoreConstants.XLS_NEURONS_TITLE);
+
+                for (Map.Entry<Integer, Integer> count : count(neuronsCenters, layers).entrySet()) {
+                    HSSFRow row = sheet.getRow(count.getKey() + 1);
+                    row.createCell(astrocyteCenters != null ? 2 : 1).setCellValue(count.getValue());
+                }
             }
 
             workbook.write(outputStream);
@@ -77,7 +73,48 @@ public class LayerStatistics {
             e.printStackTrace();
             return false;
         }
+
         return true;
     }
 
+    private Map<Integer, Integer> count(List<Point> objs, Map<Integer, List<Point>> layers) {
+        Map<Integer, Integer> result = new HashMap<Integer, Integer>();
+        Collections.sort(objs, new Comparator<Point>() {
+            @Override
+            public int compare(Point p1, Point p2) {
+                return p1.getX() - p2.getX();
+            }
+        });
+
+        for (int i = 0; i < layers.size() - 1; i++) {
+            result.put(i, countLayer(objs, layers.get(i), layers.get(i + 1)));
+        }
+
+        return result;
+    }
+
+    private int countLayer(List<Point> objs, List<Point> first, List<Point> second) {
+        if (objs.size() == 0) return 0;
+
+        int result = 0;
+
+        for (int x = 0; x < first.size(); x++) {
+            int fy = first.get(x).getY();
+            int sy = second.get(x).getY();
+
+            int curIter = 0;
+            while (curIter < objs.size() && objs.get(curIter).getX() <= x) {
+                int objX = objs.get(curIter).getX();
+                int y = objs.get(curIter).getY();
+
+                if (objX == x && fy <= y && y < sy) {
+                    result++;
+                }
+
+                curIter++;
+            }
+        }
+
+        return result;
+    }
 }

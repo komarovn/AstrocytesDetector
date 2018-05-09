@@ -21,6 +21,7 @@
 package com.astrocytes.application.dialogs.javafx;
 
 import com.astrocytes.application.SwingJavaFXHelper;
+import com.astrocytes.core.data.DataProvider;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -73,19 +74,19 @@ public class SettingsController extends AbstractController {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                astrocytesColorPicker.setValue(SwingJavaFXHelper.convertAwtColor(mainApp.getDataProvider().getAstrocytesColor()));
-                neuronsColorPicker.setValue(SwingJavaFXHelper.convertAwtColor(mainApp.getDataProvider().getNeuronsColor()));
-                majorLayersColorPicker.setValue(SwingJavaFXHelper.convertAwtColor(mainApp.getDataProvider().getMajorLayersColor()));
-                minorLayersColorPicker.setValue(SwingJavaFXHelper.convertAwtColor(mainApp.getDataProvider().getMinorLayersColor()));
+                astrocytesColorPicker.setValue(SwingJavaFXHelper.convertAwtColor(DataProvider.getAstrocytesColor()));
+                neuronsColorPicker.setValue(SwingJavaFXHelper.convertAwtColor(DataProvider.getNeuronsColor()));
+                majorLayersColorPicker.setValue(SwingJavaFXHelper.convertAwtColor(DataProvider.getMajorLayersColor()));
+                minorLayersColorPicker.setValue(SwingJavaFXHelper.convertAwtColor(DataProvider.getMinorLayersColor()));
             }
         });
     }
 
     private void applySettings() {
-        mainApp.getDataProvider().setAstrocytesColor(SwingJavaFXHelper.convertFxColor(astrocytesColorPicker.getValue()));
-        mainApp.getDataProvider().setNeuronsColor(SwingJavaFXHelper.convertFxColor(neuronsColorPicker.getValue()));
-        mainApp.getDataProvider().setMajorLayersColor(SwingJavaFXHelper.convertFxColor(majorLayersColorPicker.getValue()));
-        mainApp.getDataProvider().setMinorLayersColor(SwingJavaFXHelper.convertFxColor(minorLayersColorPicker.getValue()));
+        DataProvider.setAstrocytesColor(SwingJavaFXHelper.convertFxColor(astrocytesColorPicker.getValue()));
+        DataProvider.setNeuronsColor(SwingJavaFXHelper.convertFxColor(neuronsColorPicker.getValue()));
+        DataProvider.setMajorLayersColor(SwingJavaFXHelper.convertFxColor(majorLayersColorPicker.getValue()));
+        DataProvider.setMinorLayersColor(SwingJavaFXHelper.convertFxColor(minorLayersColorPicker.getValue()));
     }
 
     private void closeAction() {

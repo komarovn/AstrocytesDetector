@@ -33,8 +33,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class StatusBarController extends AbstractController {
-    private DataProvider dataProvider = new DataProvider();
-
     @FXML
     private Pane statusBar;
 
@@ -74,7 +72,7 @@ public class StatusBarController extends AbstractController {
     }
 
     private void setScaleBarValue() {
-        int scaleCoeff = dataProvider.getScale() * 2;
+        int scaleCoeff = DataProvider.getScale() * 2;
         scaleBar.setPrefWidth((int) (mainApp.getGraphicalWidget().getZoomValue() * scaleCoeff));
         scaleBarLabel.setText(mainApp.getGraphicalWidget().getZoomValue() * scaleCoeff + " μm");
     }

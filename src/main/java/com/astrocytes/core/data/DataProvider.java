@@ -21,157 +21,185 @@
 package com.astrocytes.core.data;
 
 import com.astrocytes.core.CoreConstants;
+import com.astrocytes.core.primitives.Point;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Gives an access to system's data storage via special methods.
  */
 public class DataProvider {
 
-    public void setWorkingImage(BufferedImage image) {
+    public static void setWorkingImage(BufferedImage image) {
         Data.setImage(image);
     }
 
-    public BufferedImage getWorkingImage() {
+    public static BufferedImage getWorkingImage() {
         return Data.getImage();
     }
 
-    public void setProjectDirectory(String path) {
+    public static void setProjectDirectory(String path) {
         Data.setSetting(CoreConstants.PROJECT_DIR, path);
     }
 
-    public String getProjectDirectory() {
+    public static String getProjectDirectory() {
         return (String) Data.getSetting(CoreConstants.PROJECT_DIR);
     }
 
-    public void setProjectName(String name) {
+    public static void setProjectName(String name) {
         Data.setSetting(CoreConstants.PROJECT_NAME, name);
     }
 
-    public String getProjectName() {
+    public static String getProjectName() {
         return (String) Data.getSetting(CoreConstants.PROJECT_NAME);
     }
 
-    public void setWindowWidth(Integer width) {
+    public static void setWindowWidth(Integer width) {
         Data.setSetting(CoreConstants.WINDOW_WIDTH, width);
     }
 
-    public Integer getWindowWidth() {
+    public static Integer getWindowWidth() {
         return (Integer) Data.getSetting(CoreConstants.WINDOW_WIDTH);
     }
 
-    public void setWindowHeight(Integer height) {
+    public static void setWindowHeight(Integer height) {
         Data.setSetting(CoreConstants.WINDOW_HEIGHT, height);
     }
 
-    public Integer getWindowHeight() {
+    public static Integer getWindowHeight() {
         return (Integer) Data.getSetting(CoreConstants.WINDOW_HEIGHT);
     }
 
-    public void setScale(Integer scale) {
+    public static void setScale(Integer scale) {
         Data.setParameter(CoreConstants.SCALE, scale);
     }
 
-    public Integer getScale() {
+    public static Integer getScale() {
         return (Integer) Data.getParameter(CoreConstants.SCALE);
     }
 
-    public void setAstrocytesColor(Color color) {
+    public static void setAstrocytesColor(Color color) {
         Data.setParameter(CoreConstants.ASTROCYTES_COLOR, color);
     }
 
-    public Color getAstrocytesColor() {
+    public static Color getAstrocytesColor() {
         return (Color) Data.getParameter(CoreConstants.ASTROCYTES_COLOR);
     }
 
-    public void setNeuronsColor(Color color) {
+    public static void setNeuronsColor(Color color) {
         Data.setParameter(CoreConstants.NEURONS_COLOR, color);
     }
 
-    public Color getNeuronsColor() {
+    public static Color getNeuronsColor() {
         return (Color) Data.getParameter(CoreConstants.NEURONS_COLOR);
     }
 
-    public void setMajorLayersColor(Color color) {
+    public static void setMajorLayersColor(Color color) {
         Data.setParameter(CoreConstants.MAJOR_LAYERS_COLOR, color);
     }
 
-    public Color getMajorLayersColor() {
+    public static Color getMajorLayersColor() {
         return (Color) Data.getParameter(CoreConstants.MAJOR_LAYERS_COLOR);
     }
 
-    public void setMinorLayersColor(Color color) {
+    public static void setMinorLayersColor(Color color) {
         Data.setParameter(CoreConstants.MINOR_LAYERS_COLOR, color);
     }
 
-    public Color getMinorLayersColor() {
+    public static Color getMinorLayersColor() {
         return (Color) Data.getParameter(CoreConstants.MINOR_LAYERS_COLOR);
     }
 
-    public void setCannyMinThreshold(Integer minThreshold) {
+    public static void setCannyMinThreshold(Integer minThreshold) {
         Data.setParameter(CoreConstants.CANNY_MIN_THRESH, minThreshold);
     }
 
-    public Integer getCannyMinThreshold() {
+    public static Integer getCannyMinThreshold() {
         return (Integer) Data.getParameter(CoreConstants.CANNY_MIN_THRESH);
     }
 
-    public void setCannyMaxThreshold(Integer maxThreshold) {
+    public static void setCannyMaxThreshold(Integer maxThreshold) {
         Data.setParameter(CoreConstants.CANNY_MAX_THRESH, maxThreshold);
     }
 
-    public Integer getCannyMaxThreshold() {
+    public static Integer getCannyMaxThreshold() {
         return (Integer) Data.getParameter(CoreConstants.CANNY_MAX_THRESH);
     }
 
-    public void setRadiusMathMorphology(Integer radius) {
+    public static void setRadiusMathMorphology(Integer radius) {
         Data.setParameter(CoreConstants.RADIUS_DIL_ER, radius);
     }
 
-    public Integer getRadiusMathMorphology() {
+    public static Integer getRadiusMathMorphology() {
         return (Integer) Data.getParameter(CoreConstants.RADIUS_DIL_ER);
     }
 
-    public void setBoundingRectangleHeight(Integer height) {
+    public static void setBoundingRectangleHeight(Integer height) {
         Data.setParameter(CoreConstants.BOUNDING_RECTANGLE_HEIGHT, height);
     }
 
-    public Integer getBoundingRectangleHeight() {
+    public static Integer getBoundingRectangleHeight() {
         return (Integer) Data.getParameter(CoreConstants.BOUNDING_RECTANGLE_HEIGHT);
     }
 
-    public void setBoundingRectangleWidth(Integer width) {
+    public static void setBoundingRectangleWidth(Integer width) {
         Data.setParameter(CoreConstants.BOUNDING_RECTANGLE_WIDTH, width);
     }
 
-    public Integer getBoundingRectangleWidth() {
+    public static Integer getBoundingRectangleWidth() {
         return (Integer) Data.getParameter(CoreConstants.BOUNDING_RECTANGLE_WIDTH);
     }
 
-    public void setBoundingRectangleCenterX(Integer centerX) {
+    public static void setBoundingRectangleCenterX(Integer centerX) {
         Data.setParameter(CoreConstants.BOUNDING_RECTANGLE_CENTER_X, centerX);
     }
 
-    public Integer getBoundingRectangleCenterX() {
+    public static Integer getBoundingRectangleCenterX() {
         return (Integer) Data.getParameter(CoreConstants.BOUNDING_RECTANGLE_CENTER_X);
     }
 
-    public void setBoundingRectangleCenterY(Integer centerY) {
+    public static void setBoundingRectangleCenterY(Integer centerY) {
         Data.setParameter(CoreConstants.BOUNDING_RECTANGLE_CENTER_Y, centerY);
     }
 
-    public Integer getBoundingRectangleCenterY() {
+    public static Integer getBoundingRectangleCenterY() {
         return (Integer) Data.getParameter(CoreConstants.BOUNDING_RECTANGLE_CENTER_Y);
+    }
+
+    public static void setLayers(Map<Integer, List<Point>> layers) {
+        Data.setRawData(CoreConstants.LAYERS, layers);
+    }
+
+    public static Map<Integer, List<Point>> getLayers() {
+        return (Map<Integer, List<Point>>) Data.getRawData(CoreConstants.LAYERS);
+    }
+
+    public static void setNeurons(List<Point> neurons) {
+        Data.setRawData(CoreConstants.NEURONS, neurons);
+    }
+
+    public static List<Point> getNeurons() {
+        return (List<Point>) Data.getRawData(CoreConstants.NEURONS);
+    }
+
+    public static void setAstrocytes(List<Point> astrocytes) {
+        Data.setRawData(CoreConstants.ASTROCYTES, astrocytes);
+    }
+
+    public static List<Point> getAstrocytes() {
+        return (List<Point>) Data.getRawData(CoreConstants.ASTROCYTES);
     }
 
     /**
      * Clear all data stored in the system.
      */
-    public void destroyAllData() {
+    public static void destroyAllData() {
         Data.destroyImage();
         Data.destroyParameters();
         Data.destroySettings();
+        Data.destroyRawData();
     }
 }

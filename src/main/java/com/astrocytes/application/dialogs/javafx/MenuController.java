@@ -21,6 +21,7 @@
 package com.astrocytes.application.dialogs.javafx;
 
 import com.astrocytes.application.connector.StatisticsExecutor;
+import com.astrocytes.core.data.DataProvider;
 import com.astrocytes.core.exception.LoadProjectException;
 import com.astrocytes.core.exception.SaveProjectException;
 import com.astrocytes.core.manage.ProjectManager;
@@ -243,9 +244,9 @@ public class MenuController extends AbstractController {
     }
 
     private void saveProject(File selectedDirectory) {
-        File projectDir = new File(selectedDirectory, mainApp.getDataProvider().getProjectName());
+        File projectDir = new File(selectedDirectory, DataProvider.getProjectName());
         projectDir.mkdir();
-        mainApp.getDataProvider().setProjectDirectory(projectDir.getPath());
+        DataProvider.setProjectDirectory(projectDir.getPath());
         try {
             manager.saveProject(projectDir);
         } catch (IOException|SaveProjectException e) {
@@ -296,8 +297,7 @@ public class MenuController extends AbstractController {
         exportDialog.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Spreadsheet (*.xls)", "*.xls"));
         File file = exportDialog.showSaveDialog(menuBar.getScene().getWindow());
         if (file != null) {
-            StatisticsExecutor.saveLayerStatisticsToXls(mainApp.getOperationsExecutor().getOperations().getAstrocytesCenters(),
-                    null, file);
+            StatisticsExecutor.saveLayerStatisticsToXls(file);
         }
     }
 

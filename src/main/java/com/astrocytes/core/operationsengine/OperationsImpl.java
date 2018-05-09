@@ -258,15 +258,13 @@ public class OperationsImpl implements Operations {
 
         Map<Integer, List<com.astrocytes.core.primitives.Point>> result =
                 new HashMap<Integer, List<com.astrocytes.core.primitives.Point>>();
-        int stepSize = 10;
 
         for (int row = 0; row < this.layerBounds.rows(); row++) {
             List<com.astrocytes.core.primitives.Point> layer = new ArrayList<com.astrocytes.core.primitives.Point>();
 
-            for (int col = 0; col < this.layerBounds.cols(); col = Math.min(this.layerBounds.cols() - 1, col + stepSize)) {
+            for (int col = 0; col < this.layerBounds.cols(); col++) {
                 int y = (int) this.layerBounds.get(row, col)[0];
                 layer.add(new com.astrocytes.core.primitives.Point(col, y));
-                if (col == this.layerBounds.cols() - 1) { break; }
             }
 
             result.put(row, layer);

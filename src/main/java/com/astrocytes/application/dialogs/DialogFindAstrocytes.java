@@ -30,6 +30,7 @@ import com.astrocytes.application.widgets.instrument.InstrumentType;
 import com.astrocytes.application.resources.StringResources;
 import com.astrocytes.application.widgets.PreviewImageEditor;
 import com.astrocytes.application.widgets.primitives.SimpleRectangle;
+import com.astrocytes.core.data.DataProvider;
 import com.astrocytes.core.operationsengine.OperationsImpl;
 import com.astrocytes.core.operationsengine.Operations;
 import com.astrocytes.core.primitives.Point;
@@ -136,10 +137,10 @@ public class DialogFindAstrocytes extends AbstractDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (boundingRectangle.isFull()) {
-                    dataProvider.setBoundingRectangleWidth(boundingRectangle.getWidth());
-                    dataProvider.setBoundingRectangleHeight(boundingRectangle.getHeight());
-                    dataProvider.setBoundingRectangleCenterX(boundingRectangle.getCenterX() + preview.getOffsetX());
-                    dataProvider.setBoundingRectangleCenterY(boundingRectangle.getCenterY() + preview.getOffsetY());
+                    DataProvider.setBoundingRectangleWidth(boundingRectangle.getWidth());
+                    DataProvider.setBoundingRectangleHeight(boundingRectangle.getHeight());
+                    DataProvider.setBoundingRectangleCenterX(boundingRectangle.getCenterX() + preview.getOffsetX());
+                    DataProvider.setBoundingRectangleCenterY(boundingRectangle.getCenterY() + preview.getOffsetY());
                     setApplied(true);
                     setVisible(false);
                 }

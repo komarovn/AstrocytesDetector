@@ -20,30 +20,19 @@
  */
 package com.astrocytes.application.connector;
 
-import com.astrocytes.application.widgets.primitives.SimpleLine;
-import com.astrocytes.core.primitives.Line;
-import com.astrocytes.core.primitives.Point;
+import com.astrocytes.core.data.DataProvider;
 import com.astrocytes.core.statistics.LayerStatistics;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class StatisticsExecutor {
 
-    public static void saveLayerStatisticsToXls(List<Point> astrocyteCenters, List<SimpleLine> layers, File fileToSave) {
+    public static void saveLayerStatisticsToXls(File fileToSave) {
+        if (DataProvider.getLayers() == null) return;
+
         LayerStatistics layerStatistics = new LayerStatistics();
-        layerStatistics.saveLayerStatisticsToXls(astrocyteCenters, convertToLines(layers), fileToSave);
+        layerStatistics.saveLayerStatisticsToXls(DataProvider.getLayers(),
+                DataProvider.getAstrocytes(), DataProvider.getNeurons(), fileToSave);
     }
 
-    private static java.util.List<Line> convertToLines(java.util.List<SimpleLine> lines) {
-        java.util.List<Line> result = new ArrayList<Line>();
-
-        for (SimpleLine line : lines) {
-            Line resultLine = new Line(line.getxStart(), line.getyStart(), line.getxEnd(), line.getyEnd());
-            result.add(resultLine);
-        }
-
-        return result;
-    }
 }

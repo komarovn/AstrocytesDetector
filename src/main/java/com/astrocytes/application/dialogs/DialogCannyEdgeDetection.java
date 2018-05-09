@@ -26,6 +26,7 @@ import com.astrocytes.application.widgets.instrument.InstrumentType;
 import com.astrocytes.application.widgets.instrument.ZoomPanInstrument;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.application.widgets.PreviewImageEditor;
+import com.astrocytes.core.data.DataProvider;
 import com.astrocytes.core.operationsengine.OperationsImpl;
 import com.astrocytes.application.resources.StringResources;
 import com.astrocytes.core.operationsengine.Operations;
@@ -161,8 +162,8 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
         proceedAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dataProvider.setCannyMinThreshold(getMinThresh());
-                dataProvider.setCannyMaxThreshold(getMaxThresh());
+                DataProvider.setCannyMinThreshold(getMinThresh());
+                DataProvider.setCannyMaxThreshold(getMaxThresh());
                 setApplied(true);
                 setVisible(false);
             }

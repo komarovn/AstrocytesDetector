@@ -34,7 +34,6 @@ import java.io.IOException;
 
 public class FindAstrocytesTest {
     private OperationsExecutor operationsExecutor = new OperationsExecutor();
-    private DataProvider dataProvider = new DataProvider();
     private BufferedImage testImage;
 
     private void prepare() {
@@ -43,22 +42,22 @@ public class FindAstrocytesTest {
             BufferedImage bufferedImage = ImageIO.read(file);
             operationsExecutor.setOriginalImage(bufferedImage);
             testImage = bufferedImage;
-            dataProvider.setCannyMinThreshold(26);
-            dataProvider.setCannyMaxThreshold(58);
-            dataProvider.setRadiusMathMorphology(2);
-            dataProvider.setScale(50);
+            DataProvider.setCannyMinThreshold(26);
+            DataProvider.setCannyMaxThreshold(58);
+            DataProvider.setRadiusMathMorphology(2);
+            DataProvider.setScale(50);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void testCanny() {
-        dataProvider.setCannyMinThreshold(26);
-        dataProvider.setCannyMaxThreshold(58);
-        dataProvider.setBoundingRectangleHeight(20);
-        dataProvider.setBoundingRectangleWidth(20);
-        dataProvider.setBoundingRectangleCenterX(10);
-        dataProvider.setBoundingRectangleCenterY(10);
+        DataProvider.setCannyMinThreshold(26);
+        DataProvider.setCannyMaxThreshold(58);
+        DataProvider.setBoundingRectangleHeight(20);
+        DataProvider.setBoundingRectangleWidth(20);
+        DataProvider.setBoundingRectangleCenterX(10);
+        DataProvider.setBoundingRectangleCenterY(10);
         testImage = operationsExecutor.applyCannyEdgeDetection();
     }
 

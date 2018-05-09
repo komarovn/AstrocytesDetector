@@ -45,9 +45,20 @@ public abstract class CoreConstants {
     public static final String MAJOR_LAYERS_COLOR = "majorLayersColor";
     public static final String MINOR_LAYERS_COLOR = "minorLayersColor";
 
+    /* RAW data */
+    public static final String LAYERS = "layers";
+    public static final String NEURONS = "neurons";
+    public static final String ASTROCYTES = "astrocytes";
+
     /* File names */
     public static final String FILE_SETTINGS = "settings.xml";
     public static final String FILE_PARAMETERS = "parameters.xml";
     public static final String FILE_IMAGE = "image.jpg";
+
+    /* Statistics */
+    public static final String XLS_SPREADSHEET_TITLE = "Statistics by Layers";
+    public static final String XLS_LAYERS_TITLE = "";
+    public static final String XLS_ASTROCYTES_TITLE = "Astrocytes Count";
+    public static final String XLS_NEURONS_TITLE = "Neurons Count";
 
 }

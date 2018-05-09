@@ -61,7 +61,6 @@ public class App {
     private ToolbarController toolbarController;
     private StatusBarController statusBarController;
 
-    private DataProvider dataProvider = new DataProvider();
     private OperationsExecutor operationsExecutor = new OperationsExecutor();
     protected BufferedImage image;
     private LocalStorage appData;
@@ -111,8 +110,8 @@ public class App {
         statusBarController = (StatusBarController) SwingJavaFXHelper.initFX(statusBar, getClass().getResource("/fxml/StatusBar.fxml"));
         statusBarController.setMainApp(this);
 
-        dataProvider.setWindowWidth(ApplicationConstants.DEFAULT_WINDOW_WIDTH);
-        dataProvider.setWindowHeight(ApplicationConstants.DEFAULT_WINDOW_HEIGHT);
+        DataProvider.setWindowWidth(ApplicationConstants.DEFAULT_WINDOW_WIDTH);
+        DataProvider.setWindowHeight(ApplicationConstants.DEFAULT_WINDOW_HEIGHT);
     }
 
     private void initListeners() {
@@ -133,10 +132,10 @@ public class App {
     }
 
     private void initSettings() {
-        dataProvider.setAstrocytesColor(ApplicationConstants.DEFAULT_ASTROCYTES_COLOR);
-        dataProvider.setNeuronsColor(ApplicationConstants.DEFAULT_NEURONS_COLOR);
-        dataProvider.setMajorLayersColor(ApplicationConstants.DEFAULT_MAJOR_LAYERS_COLOR);
-        dataProvider.setMinorLayersColor(ApplicationConstants.DEFAULT_MINOR_LAYERS_COLOR);
+        DataProvider.setAstrocytesColor(ApplicationConstants.DEFAULT_ASTROCYTES_COLOR);
+        DataProvider.setNeuronsColor(ApplicationConstants.DEFAULT_NEURONS_COLOR);
+        DataProvider.setMajorLayersColor(ApplicationConstants.DEFAULT_MAJOR_LAYERS_COLOR);
+        DataProvider.setMinorLayersColor(ApplicationConstants.DEFAULT_MINOR_LAYERS_COLOR);
     }
 
     private void updateGrahicalWidget() {
@@ -151,13 +150,13 @@ public class App {
     }
 
     private void updateWindowSize() {
-        frame.setSize(new Dimension(dataProvider.getWindowWidth(), dataProvider.getWindowHeight()));
+        frame.setSize(new Dimension(DataProvider.getWindowWidth(), DataProvider.getWindowHeight()));
         frame.repaint();
     }
 
     private void updateSizeSettings() {
-        dataProvider.setWindowWidth((int) frame.getSize().getWidth());
-        dataProvider.setWindowHeight((int) frame.getSize().getHeight());
+        DataProvider.setWindowWidth((int) frame.getSize().getWidth());
+        DataProvider.setWindowHeight((int) frame.getSize().getHeight());
     }
 
     protected class MainPanelBlock extends JPanel {
@@ -193,13 +192,9 @@ public class App {
         return operationsExecutor;
     }
 
-    public DataProvider getDataProvider() {
-        return dataProvider;
-    }
-
     public void resetAll() {
         this.image = null;
-        dataProvider.destroyAllData();
+        DataProvider.destroyAllData();
         appData.clearAll();
         graphicalWidget.reset();
         initSettings();
@@ -237,13 +232,13 @@ public class App {
         if (imagePath != null) {
             resetAll();
 
-            dataProvider.setProjectName(projectName);
-            dataProvider.setScale(scale);
+            DataProvider.setProjectName(projectName);
+            DataProvider.setScale(scale);
 
             BufferedImage bufferedImage = ImageHelper.loadImage(imagePath);
             this.image = bufferedImage;
             operationsExecutor.setOriginalImage(bufferedImage);
-            dataProvider.setWorkingImage(operationsExecutor.getOriginalImage());
+            DataProvider.setWorkingImage(operationsExecutor.getOriginalImage());
 
             updateSizeSettings();
             updateWindowSize();
@@ -290,7 +285,7 @@ public class App {
 
             for (int i = 0; i < layers.size(); i++) {
                 layers.get(i).setColor(i == 0 || i == layers.size() - 1 ?
-                        dataProvider.getMajorLayersColor() : dataProvider.getMinorLayersColor());
+                        DataProvider.getMajorLayersColor() : DataProvider.getMinorLayersColor());
             }
 
             if (appData.getMainLayersKey() == null) {
@@ -303,7 +298,7 @@ public class App {
             graphicalWidget.getLayerManager().getLayer(appData.getLayersKey()).clear();
             graphicalWidget.getLayerManager().getLayer(appData.getMainLayersKey()).add(layers.get(0));
             graphicalWidget.getLayerManager().getLayer(appData.getMainLayersKey()).add(layers.get(layers.size() - 1));
-            graphicalWidget.getLayerManager().getLayer(appData.getLayersKey()).addAll(layers.subList(1, layers.size() - 2));
+            graphicalWidget.getLayerManager().getLayer(appData.getLayersKey()).addAll(layers.subList(1, layers.size() - 1));
 
             if (appData.getNeuronsKey() != null) {
                 executeFindNeurons();
@@ -314,6 +309,7 @@ public class App {
             }
 
             updateCurrentView();
+            menuController.setLayerStatisticsEnabled(true);
         }
     }
 
@@ -367,7 +363,6 @@ public class App {
                 graphicalWidget.getLayerManager().getLayer(appData.getAstrocytesKey()).clear();
                 graphicalWidget.getLayerManager().getLayer(appData.getAstrocytesKey()).addAll(operationsExecutor.applyFindAstocytes());
                 updateCurrentView();
-                menuController.setLayerStatisticsEnabled(true);
             }
         }
     }
@@ -403,25 +398,25 @@ public class App {
     public void executeSettings() {
         if (appData.getNeuronsKey() != null) {
             for (Paintable obj : graphicalWidget.getLayerManager().getLayer(appData.getNeuronsKey())) {
-                obj.setColor(dataProvider.getNeuronsColor());
+                obj.setColor(DataProvider.getNeuronsColor());
             }
         }
 
         if (appData.getAstrocytesKey() != null) {
             for (Paintable obj : graphicalWidget.getLayerManager().getLayer(appData.getAstrocytesKey())) {
-                obj.setColor(dataProvider.getAstrocytesColor());
+                obj.setColor(DataProvider.getAstrocytesColor());
             }
         }
 
         if (appData.getMainLayersKey() != null) {
             for (Paintable obj : graphicalWidget.getLayerManager().getLayer(appData.getMainLayersKey())) {
-                obj.setColor(dataProvider.getMajorLayersColor());
+                obj.setColor(DataProvider.getMajorLayersColor());
             }
         }
 
         if (appData.getLayersKey() != null) {
             for (Paintable obj : graphicalWidget.getLayerManager().getLayer(appData.getLayersKey())) {
-                obj.setColor(dataProvider.getMinorLayersColor());
+                obj.setColor(DataProvider.getMinorLayersColor());
             }
         }
 
@@ -440,8 +435,8 @@ public class App {
      */
     public void processLoadedProject() {
         operationsExecutor = new OperationsExecutor();
-        operationsExecutor.setOriginalImage(dataProvider.getWorkingImage());
-        image = dataProvider.getWorkingImage();
+        operationsExecutor.setOriginalImage(DataProvider.getWorkingImage());
+        image = DataProvider.getWorkingImage();
         image = operationsExecutor.applyCannyEdgeDetection();
         //image = operationsExecutor.applyDilateAndErode(image);
         //image = operationsExecutor.applyFindAstocytes(image);

@@ -27,6 +27,7 @@ import com.astrocytes.application.widgets.instrument.ZoomPanInstrument;
 import com.astrocytes.core.ImageHelper;
 import com.astrocytes.application.resources.StringResources;
 import com.astrocytes.application.widgets.PreviewImageEditor;
+import com.astrocytes.core.data.DataProvider;
 import com.astrocytes.core.operationsengine.OperationsImpl;
 import com.astrocytes.core.operationsengine.Operations;
 
@@ -126,7 +127,7 @@ public class DialogDilateErode extends AbstractDialog {
         proceedAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dataProvider.setRadiusMathMorphology(getInstrumentRadius());
+                DataProvider.setRadiusMathMorphology(getInstrumentRadius());
                 setApplied(true);
                 setVisible(false);
             }

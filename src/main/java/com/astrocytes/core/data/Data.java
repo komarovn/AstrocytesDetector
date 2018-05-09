@@ -34,12 +34,14 @@ class Data {
      */
     private HashMap<String, Object> settings;
     private HashMap<String, Object> parameters;
+    private HashMap<String, Object> rawData;
     private BufferedImage image;
     private static Data singleton;
 
     private Data() {
         settings = new HashMap<>();
         parameters = new HashMap<>();
+        rawData = new HashMap<>();
     }
 
     static {
@@ -68,6 +70,14 @@ class Data {
         return singleton.settings.get(key);
     }
 
+    static void setRawData(@NotNull String key, @NotNull Object value) {
+        singleton.rawData.put(key, value);
+    }
+
+    static Object getRawData(@NotNull String key) {
+        return singleton.rawData.get(key);
+    }
+
     static BufferedImage getImage() {
         return singleton.image;
     }
@@ -85,6 +95,10 @@ class Data {
 
     static void destroySettings() {
         singleton.settings.clear();
+    }
+
+    static void destroyRawData() {
+        singleton.rawData.clear();
     }
 
     static void destroyImage() {

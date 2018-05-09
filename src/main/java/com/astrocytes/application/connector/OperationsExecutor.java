@@ -37,7 +37,6 @@ import java.util.Map;
 
 public class OperationsExecutor {
     private Operations operations = new OperationsImpl();
-    private DataProvider dataProvider = new DataProvider();
 
     public void setOriginalImage(BufferedImage in) {
         Mat sourceImage = ImageHelper.convertBufferedImageToMat(in);
@@ -54,22 +53,22 @@ public class OperationsExecutor {
     }
 
     public BufferedImage applyCannyEdgeDetection() {
-        Mat result = operations.applyCannyEdgeDetection(dataProvider.getCannyMinThreshold(),
-                dataProvider.getCannyMaxThreshold());
+        Mat result = operations.applyCannyEdgeDetection(DataProvider.getCannyMinThreshold(),
+                DataProvider.getCannyMaxThreshold());
         return ImageHelper.convertMatToBufferedImage(result);
     }
 
     public BufferedImage applyDilateAndErode() {
-        Mat result = operations.applyMathMorphology(dataProvider.getRadiusMathMorphology());
+        Mat result = operations.applyMathMorphology(DataProvider.getRadiusMathMorphology());
         return ImageHelper.convertMatToBufferedImage(result);
     }
 
     public List<DrawingCircle> applyFindAstocytes() {
         List<DrawingCircle> result = new ArrayList<DrawingCircle>();
-        List<Point> centers = operations.findAstrocytes(dataProvider.getBoundingRectangleWidth(),
-                dataProvider.getBoundingRectangleHeight(),
-                dataProvider.getBoundingRectangleCenterX(),
-                dataProvider.getBoundingRectangleCenterY());
+        List<Point> centers = operations.findAstrocytes(DataProvider.getBoundingRectangleWidth(),
+                DataProvider.getBoundingRectangleHeight(),
+                DataProvider.getBoundingRectangleCenterX(),
+                DataProvider.getBoundingRectangleCenterY());
 
         for (Point astrocyte : centers) {
             result.add(new DrawingCircle(astrocyte.getX().doubleValue(), astrocyte.getY().doubleValue(), 6.0));
@@ -81,9 +80,13 @@ public class OperationsExecutor {
     public List<DrawingCircle> getAstrocytes() {
         List<DrawingCircle> result = new ArrayList<DrawingCircle>();
 
-        for (Point astrocyte : operations.getAstrocytesCenters()) {
+        if (DataProvider.getAstrocytes() == null) {
+            DataProvider.setAstrocytes(operations.getAstrocytesCenters());
+        }
+
+        for (Point astrocyte : DataProvider.getAstrocytes()) {
             result.add(new DrawingCircle(astrocyte.getX().doubleValue(), astrocyte.getY().doubleValue(),
-                    6.0, dataProvider.getAstrocytesColor()));
+                    6.0, DataProvider.getAstrocytesColor()));
         }
 
         return result;
@@ -92,9 +95,13 @@ public class OperationsExecutor {
     public List<DrawingCircle> getNeurons() {
         List<DrawingCircle> result = new ArrayList<DrawingCircle>();
 
-        for (Point neuron : operations.getNeuronsCenters()) {
+        if (DataProvider.getNeurons() == null) {
+            DataProvider.setNeurons(operations.getNeuronsCenters());
+        }
+
+        for (Point neuron : DataProvider.getNeurons()) {
             result.add(new DrawingCircle(neuron.getX().doubleValue(), neuron.getY().doubleValue(),
-                    8.0, dataProvider.getNeuronsColor()));
+                    8.0, DataProvider.getNeuronsColor()));
         }
 
         return result;
@@ -103,14 +110,22 @@ public class OperationsExecutor {
     public List<DrawingPolygonalChain> getLayers() {
         List<DrawingPolygonalChain> result = new ArrayList<DrawingPolygonalChain>();
 
-        for (Map.Entry<Integer, List<Point>> delimiter : operations.getLayerDelimiters().entrySet()) {
-            DrawingPolygonalChain chain = new DrawingPolygonalChain(dataProvider.getMinorLayersColor());
+        if (DataProvider.getLayers() == null) {
+            DataProvider.setLayers(operations.getLayerDelimiters());
+        }
 
-            for (int i = 0; i < delimiter.getValue().size() - 2; i++) {
+        int stepSize = 10;
+
+        for (Map.Entry<Integer, List<Point>> delimiter : DataProvider.getLayers().entrySet()) {
+            DrawingPolygonalChain chain = new DrawingPolygonalChain(DataProvider.getMinorLayersColor());
+
+            for (int i = 0; i < delimiter.getValue().size() - 1;
+                 i = Math.min(delimiter.getValue().size() - 1, i + stepSize)) {
                 Point startPoint = delimiter.getValue().get(i);
-                Point endPoint = delimiter.getValue().get(i + 1);
+                Point endPoint = delimiter.getValue().get(Math.min(delimiter.getValue().size() - 1, i + stepSize));
                 chain.addChainPart(new DrawingLine((double) startPoint.getX(), (double) startPoint.getY(),
                         (double) endPoint.getX(), (double) endPoint.getY()));
+                if (i == delimiter.getValue().size() - 1) break;
             }
 
             result.add(chain);

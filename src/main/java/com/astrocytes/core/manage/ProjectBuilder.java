@@ -38,8 +38,6 @@ public class ProjectBuilder {
     private final String PROJECT_PARAMS_TAG = "project-params";
     private final String APP_SETTINGS_TAG = "app-settings";
 
-    private DataProvider dataProvider = new DataProvider();
-
     public void saveParameters(File file) throws SaveProjectException {
         saveXML(file, PROJECT_PARAMS_TAG, "parameter");
     }
@@ -66,66 +64,66 @@ public class ProjectBuilder {
             document.appendChild(rootElement);
 
             if (rootName.equals(PROJECT_PARAMS_TAG)) {
-                if (dataProvider.getScale() != null) {
+                if (DataProvider.getScale() != null) {
                     addElement(paramName, CoreConstants.SCALE,
-                            dataProvider.getScale().toString(), rootElement, document);
+                            DataProvider.getScale().toString(), rootElement, document);
                 }
 
-                if (dataProvider.getCannyMinThreshold() != null) {
+                if (DataProvider.getCannyMinThreshold() != null) {
                     addElement(paramName, CoreConstants.CANNY_MIN_THRESH,
-                            dataProvider.getCannyMinThreshold().toString(), rootElement, document);
+                            DataProvider.getCannyMinThreshold().toString(), rootElement, document);
                 }
 
-                if (dataProvider.getCannyMaxThreshold() != null) {
+                if (DataProvider.getCannyMaxThreshold() != null) {
                     addElement(paramName, CoreConstants.CANNY_MAX_THRESH,
-                            dataProvider.getCannyMaxThreshold().toString(), rootElement, document);
+                            DataProvider.getCannyMaxThreshold().toString(), rootElement, document);
                 }
 
-                if (dataProvider.getRadiusMathMorphology() != null) {
+                if (DataProvider.getRadiusMathMorphology() != null) {
                     addElement(paramName, CoreConstants.RADIUS_DIL_ER,
-                            dataProvider.getRadiusMathMorphology().toString(), rootElement, document);
+                            DataProvider.getRadiusMathMorphology().toString(), rootElement, document);
                 }
 
-                if (dataProvider.getBoundingRectangleHeight() != null) {
+                if (DataProvider.getBoundingRectangleHeight() != null) {
                     addElement(paramName, CoreConstants.BOUNDING_RECTANGLE_HEIGHT,
-                            dataProvider.getBoundingRectangleHeight().toString(), rootElement, document);
+                            DataProvider.getBoundingRectangleHeight().toString(), rootElement, document);
                 }
 
-                if (dataProvider.getBoundingRectangleWidth() != null) {
+                if (DataProvider.getBoundingRectangleWidth() != null) {
                     addElement(paramName, CoreConstants.BOUNDING_RECTANGLE_WIDTH,
-                            dataProvider.getBoundingRectangleWidth().toString(), rootElement, document);
+                            DataProvider.getBoundingRectangleWidth().toString(), rootElement, document);
                 }
 
-                if (dataProvider.getBoundingRectangleCenterX() != null) {
+                if (DataProvider.getBoundingRectangleCenterX() != null) {
                     addElement(paramName, CoreConstants.BOUNDING_RECTANGLE_CENTER_X,
-                            dataProvider.getBoundingRectangleCenterX().toString(), rootElement, document);
+                            DataProvider.getBoundingRectangleCenterX().toString(), rootElement, document);
                 }
 
-                if (dataProvider.getBoundingRectangleCenterY() != null) {
+                if (DataProvider.getBoundingRectangleCenterY() != null) {
                     addElement(paramName, CoreConstants.BOUNDING_RECTANGLE_CENTER_Y,
-                            dataProvider.getBoundingRectangleCenterY().toString(), rootElement, document);
+                            DataProvider.getBoundingRectangleCenterY().toString(), rootElement, document);
                 }
             }
 
             if (rootName.equals(APP_SETTINGS_TAG)) {
-                if (dataProvider.getProjectDirectory() != null) {
+                if (DataProvider.getProjectDirectory() != null) {
                     addElement(paramName, CoreConstants.PROJECT_DIR,
-                            dataProvider.getProjectDirectory(), rootElement, document);
+                            DataProvider.getProjectDirectory(), rootElement, document);
                 }
 
-                if (dataProvider.getProjectName() != null) {
+                if (DataProvider.getProjectName() != null) {
                     addElement(paramName, CoreConstants.PROJECT_NAME,
-                            dataProvider.getProjectName(), rootElement, document);
+                            DataProvider.getProjectName(), rootElement, document);
                 }
 
-                if (dataProvider.getWindowWidth() != null) {
+                if (DataProvider.getWindowWidth() != null) {
                     addElement(paramName, CoreConstants.WINDOW_WIDTH,
-                            dataProvider.getWindowWidth().toString(), rootElement, document);
+                            DataProvider.getWindowWidth().toString(), rootElement, document);
                 }
 
-                if (dataProvider.getWindowHeight() != null) {
+                if (DataProvider.getWindowHeight() != null) {
                     addElement(paramName, CoreConstants.WINDOW_HEIGHT,
-                            dataProvider.getWindowHeight().toString(), rootElement, document);
+                            DataProvider.getWindowHeight().toString(), rootElement, document);
                 }
             }
 
@@ -160,40 +158,40 @@ public class ProjectBuilder {
                 Node node = root.item(i);
                 switch (node.getAttributes().item(0).getNodeValue()) {
                     case CoreConstants.SCALE:
-                        dataProvider.setScale(Integer.valueOf(node.getTextContent()));
+                        DataProvider.setScale(Integer.valueOf(node.getTextContent()));
                         break;
                     case CoreConstants.CANNY_MIN_THRESH:
-                        dataProvider.setCannyMinThreshold(Integer.valueOf(node.getTextContent()));
+                        DataProvider.setCannyMinThreshold(Integer.valueOf(node.getTextContent()));
                         break;
                     case CoreConstants.CANNY_MAX_THRESH:
-                        dataProvider.setCannyMaxThreshold(Integer.valueOf(node.getTextContent()));
+                        DataProvider.setCannyMaxThreshold(Integer.valueOf(node.getTextContent()));
                         break;
                     case CoreConstants.RADIUS_DIL_ER:
-                        dataProvider.setRadiusMathMorphology(Integer.valueOf(node.getTextContent()));
+                        DataProvider.setRadiusMathMorphology(Integer.valueOf(node.getTextContent()));
                         break;
                     case CoreConstants.BOUNDING_RECTANGLE_HEIGHT:
-                        dataProvider.setBoundingRectangleHeight(Integer.valueOf(node.getTextContent()));
+                        DataProvider.setBoundingRectangleHeight(Integer.valueOf(node.getTextContent()));
                         break;
                     case CoreConstants.BOUNDING_RECTANGLE_WIDTH:
-                        dataProvider.setBoundingRectangleWidth(Integer.valueOf(node.getTextContent()));
+                        DataProvider.setBoundingRectangleWidth(Integer.valueOf(node.getTextContent()));
                         break;
                     case CoreConstants.BOUNDING_RECTANGLE_CENTER_X:
-                        dataProvider.setBoundingRectangleCenterX(Integer.valueOf(node.getTextContent()));
+                        DataProvider.setBoundingRectangleCenterX(Integer.valueOf(node.getTextContent()));
                         break;
                     case CoreConstants.BOUNDING_RECTANGLE_CENTER_Y:
-                        dataProvider.setBoundingRectangleCenterY(Integer.valueOf(node.getTextContent()));
+                        DataProvider.setBoundingRectangleCenterY(Integer.valueOf(node.getTextContent()));
                         break;
                     case CoreConstants.PROJECT_DIR:
-                        dataProvider.setProjectDirectory(node.getTextContent());
+                        DataProvider.setProjectDirectory(node.getTextContent());
                         break;
                     case CoreConstants.PROJECT_NAME:
-                        dataProvider.setProjectName(node.getTextContent());
+                        DataProvider.setProjectName(node.getTextContent());
                         break;
                     case CoreConstants.WINDOW_WIDTH:
-                        dataProvider.setWindowWidth(Integer.valueOf(node.getTextContent()));
+                        DataProvider.setWindowWidth(Integer.valueOf(node.getTextContent()));
                         break;
                     case CoreConstants.WINDOW_HEIGHT:
-                        dataProvider.setWindowHeight(Integer.valueOf(node.getTextContent()));
+                        DataProvider.setWindowHeight(Integer.valueOf(node.getTextContent()));
                         break;
                 }
             }

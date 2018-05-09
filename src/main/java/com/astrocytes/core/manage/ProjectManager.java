@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class ProjectManager {
-    private DataProvider dataProvider = new DataProvider();
     private ProjectBuilder projectBuilder = new ProjectBuilder();
 
     public void saveProject(File projectDir) throws IOException, SaveProjectException {
@@ -42,17 +41,17 @@ public class ProjectManager {
         projectBuilder.saveSettings(settings);
         File image = new File(projectDir, CoreConstants.FILE_IMAGE);
         image.createNewFile();
-        ImageHelper.saveImage(dataProvider.getWorkingImage(), image);
+        ImageHelper.saveImage(DataProvider.getWorkingImage(), image);
     }
 
     public void loadProject(File projectDir) throws LoadProjectException {
-        dataProvider.destroyAllData();
+        DataProvider.destroyAllData();
         File settings = new File(projectDir, CoreConstants.FILE_SETTINGS);
         File parameters = new File(projectDir, CoreConstants.FILE_PARAMETERS);
         projectBuilder.loadParameters(parameters);
         projectBuilder.loadSettings(settings);
         File image = new File(projectDir, CoreConstants.FILE_IMAGE);
-        dataProvider.setWorkingImage(ImageHelper.loadImage(image));
+        DataProvider.setWorkingImage(ImageHelper.loadImage(image));
     }
 
 }
