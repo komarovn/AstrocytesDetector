@@ -30,6 +30,7 @@ class Data {
     /**
      * settings   - storage of system setting (e.g. window size)
      * parameters - storage of project's parameters (e.g. values of thresholds)
+     * rawData    - storage of RAW data
      * image      - original working image
      */
     private HashMap<String, Object> settings;
