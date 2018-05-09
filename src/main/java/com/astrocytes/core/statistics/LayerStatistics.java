@@ -22,9 +22,11 @@ package com.astrocytes.core.statistics;
 
 import com.astrocytes.core.CoreConstants;
 import com.astrocytes.core.primitives.Point;
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellType;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,11 +44,13 @@ public class LayerStatistics {
             HSSFSheet sheet = workbook.createSheet(CoreConstants.XLS_SPREADSHEET_TITLE);
 
             HSSFRow headerRow = sheet.createRow(0);
-            headerRow.createCell(0).setCellValue("Layer #");
+            headerRow.createCell(0).setCellValue(CoreConstants.XLS_LAYERS_TITLE);
 
             for (int i = 0; i < layers.size() - 1; i++) {
                 HSSFRow row = sheet.createRow(i + 1);
-                row.createCell(0).setCellValue(i + 1);
+                HSSFCell cell = row.createCell(0);
+                cell.setCellType(CellType.STRING);
+                cell.setCellValue(String.valueOf(i < 1 ? i + 1 : (i == 1 ? "2 - 3" : i + 2)));
             }
 
             if (astrocyteCenters != null) {
@@ -54,19 +58,27 @@ public class LayerStatistics {
 
                 for (Map.Entry<Integer, Integer> count : count(astrocyteCenters, layers).entrySet()) {
                     HSSFRow row = sheet.getRow(count.getKey() + 1);
-                    row.createCell(1).setCellValue(count.getValue());
+                    HSSFCell cell = row.createCell(1);
+                    cell.setCellType(CellType.NUMERIC);
+                    cell.setCellValue(count.getValue());
                 }
             }
 
             if (neuronsCenters != null) {
-                headerRow.createCell(astrocyteCenters != null ? 2 : 1).setCellValue(CoreConstants.XLS_NEURONS_TITLE);
+                int colIdx = astrocyteCenters != null ? 2 : 1;
+                headerRow.createCell(colIdx).setCellValue(CoreConstants.XLS_NEURONS_TITLE);
 
                 for (Map.Entry<Integer, Integer> count : count(neuronsCenters, layers).entrySet()) {
                     HSSFRow row = sheet.getRow(count.getKey() + 1);
-                    row.createCell(astrocyteCenters != null ? 2 : 1).setCellValue(count.getValue());
+                    HSSFCell cell = row.createCell(astrocyteCenters != null ? 2 : 1);
+                    cell.setCellType(CellType.NUMERIC);
+                    cell.setCellValue(count.getValue());
                 }
             }
 
+            sheet.autoSizeColumn(0);
+            sheet.autoSizeColumn(1);
+            sheet.autoSizeColumn(2);
             workbook.write(outputStream);
             outputStream.close();
         } catch (IOException e) {

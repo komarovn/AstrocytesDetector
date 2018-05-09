@@ -57,7 +57,7 @@ public abstract class CoreConstants {
 
     /* Statistics */
     public static final String XLS_SPREADSHEET_TITLE = "Statistics by Layers";
-    public static final String XLS_LAYERS_TITLE = "";
+    public static final String XLS_LAYERS_TITLE = "Layer #";
     public static final String XLS_ASTROCYTES_TITLE = "Astrocytes Count";
     public static final String XLS_NEURONS_TITLE = "Neurons Count";
 
