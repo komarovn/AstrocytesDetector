@@ -33,6 +33,7 @@ public abstract class CoreConstants {
     public static final String SCALE = "scale";
     public static final String CANNY_MIN_THRESH = "cannyMinThresh";
     public static final String CANNY_MAX_THRESH = "cannyMaxThresh";
+    public static final String IS_CANNY_USE_IMAGE = "cannyUseImage";
     public static final String RADIUS_DIL_ER = "radiusDilEr";
 
     public static final String BOUNDING_RECTANGLE_HEIGHT = "boundingRectangleHeight";

@@ -55,8 +55,9 @@ public interface Operations {
      *
      * @param minThreshold - minimal thresh
      * @param maxThreshold - maximal thresh
+     * @param useImage - is use source image
      */
-    public Mat applyCannyEdgeDetection(Integer minThreshold, Integer maxThreshold);
+    public Mat applyCannyEdgeDetection(Integer minThreshold, Integer maxThreshold, Boolean useImage);
 
     /**
      * Make closing operation (dilation and erosion) for contours after applying Canny edge detection operation.

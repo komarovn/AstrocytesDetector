@@ -129,6 +129,14 @@ public class DataProvider {
         return (Integer) Data.getParameter(CoreConstants.CANNY_MAX_THRESH);
     }
 
+    public static void setCannyUseImage(Boolean value) {
+        Data.setParameter(CoreConstants.IS_CANNY_USE_IMAGE, value);
+    }
+
+    public static Boolean isCannyUseImage() {
+        return (Boolean) Data.getParameter(CoreConstants.IS_CANNY_USE_IMAGE);
+    }
+
     public static void setRadiusMathMorphology(Integer radius) {
         Data.setParameter(CoreConstants.RADIUS_DIL_ER, radius);
     }

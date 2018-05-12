@@ -1,10 +1,10 @@
 /*
  * Copyright (c) Lobachevsky University, 2017. All rights reserved.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ * Permission isUseImage hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal with the Software without restriction, including without limitation
  * the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
- * to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ * to permit persons to whom the Software isUseImage furnished to do so, subject to the following conditions:
  * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
  * disclaimer.
  * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
@@ -47,6 +47,7 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
     private JFormattedTextField maxTextBox;
     private JSlider minThreshold;
     private JSlider maxThreshold;
+    private JCheckBox isUseImage;
     private PreviewImageEditor preview;
 
     public DialogCannyEdgeDetection(App owner, BufferedImage image) {
@@ -55,6 +56,7 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
         preview.setImage(image);
         preview.processPreviewImage();
         preview.selectInstrument(InstrumentType.ZOOM_AND_PAN);
+        DataProvider.setCannyUseImage(false);
         setVisible(true);
     }
 
@@ -85,7 +87,8 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
             maxTextBox.setColumns(5);
 
             minThresholdLabel = new JLabel(StringResources.MINIMUM_THRESHOLD);
-            maxThresholdLabel =new JLabel(StringResources.MAXIMUM_THRESHOLD);
+            maxThresholdLabel = new JLabel(StringResources.MAXIMUM_THRESHOLD);
+            isUseImage = new JCheckBox(StringResources.IS_USE_SOURCE_IMAGE, false);
 
             preview = new PreviewImageEditor(ApplicationConstants.PREVIEW_WINDOW_WIDTH,
                     ApplicationConstants.PREVIEW_WINDOW_HEIGHT) {
@@ -128,9 +131,12 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
             gridBagConstraints.gridwidth = 2;
             gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
             add(maxThreshold, gridBagConstraints);
+            gridBagConstraints.gridy++;
+            add(isUseImage, gridBagConstraints);
 
             addListeners(minThreshold, minTextbox, true);
             addListeners(maxThreshold, maxTextBox, false);
+            addCheckboxListener(isUseImage);
         }
 
         private void addListeners(final JSlider slider, final JFormattedTextField textField, final Boolean isMinimum) {
@@ -154,6 +160,16 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
                 }
             });
             slider.addMouseListener(preview.getMouseAdapter());
+        }
+
+        private void addCheckboxListener(final JCheckBox checkBox) {
+            checkBox.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    DataProvider.setCannyUseImage(checkBox.isSelected());
+                    processPreview();
+                }
+            });
         }
     }
 
@@ -182,8 +198,8 @@ public class DialogCannyEdgeDetection extends AbstractDialog {
         BufferedImage currentView = preview.getCurrentView();
         Operations operations = new OperationsImpl();
         operations.setSourceImage(ImageHelper.convertBufferedImageToMat(currentView));
-        BufferedImage resultPreview = ImageHelper.convertMatToBufferedImage(
-                operations.applyCannyEdgeDetection(minThreshold.getValue(), maxThreshold.getValue()));
+        BufferedImage resultPreview = ImageHelper.convertMatToBufferedImage(operations.applyCannyEdgeDetection(
+                minThreshold.getValue(), maxThreshold.getValue(), DataProvider.isCannyUseImage()));
         preview.updatePreview(resultPreview);
     }
 

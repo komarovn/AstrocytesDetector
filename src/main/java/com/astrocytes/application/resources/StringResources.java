@@ -65,6 +65,8 @@ public abstract class StringResources {
 
     public static final String MAXIMUM_THRESHOLD = "Maximum Threshold: ";
 
+    public static final String IS_USE_SOURCE_IMAGE = "Use Source Image";
+
     /* --- Dilate and Erode --- */
     public static final String RADIUS_DILATE_ERODE = "Radius of instrument: ";
 

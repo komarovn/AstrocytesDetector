@@ -69,8 +69,13 @@ public class OperationsImpl implements Operations {
     }
 
     @Override
-    public Mat applyCannyEdgeDetection(Integer minThreshold, Integer maxThreshold) {
+    public Mat applyCannyEdgeDetection(Integer minThreshold, Integer maxThreshold, Boolean useImage) {
         CoreOperations.cannyFilter(currentImage, minThreshold, maxThreshold).copyTo(currentImage);
+
+        if (useImage != null && useImage) {
+            //TODO: replace black to origin, white - to blue
+        }
+
         return currentImage;
     }
 
