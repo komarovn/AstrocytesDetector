@@ -29,6 +29,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,14 @@ public class ToolbarController extends AbstractController {
         setImageOnButton(zoomAndPanButton, "zoom-and-pan");
         setImageOnButton(horizontalLineButton, "h-line");
         addListeners();
+
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                selectButton(zoomAndPanButton);
+                mainApp.getGraphicalWidget().selectInstrument(InstrumentType.ZOOM_AND_PAN);
+            }
+        });
     }
 
     private void addListeners() {

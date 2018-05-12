@@ -308,7 +308,7 @@ public class App {
                 executeFindAstrocytesAuto();
             }
 
-            updateCurrentView();
+            graphicalWidget.updateWidget();
             menuController.setLayerStatisticsEnabled(true);
         }
     }
@@ -320,7 +320,7 @@ public class App {
             }
             graphicalWidget.getLayerManager().getLayer(appData.getNeuronsKey()).clear();
             graphicalWidget.getLayerManager().getLayer(appData.getNeuronsKey()).addAll(operationsExecutor.getNeurons());
-            updateCurrentView();
+            graphicalWidget.updateWidget();
         }
     }
 
@@ -374,7 +374,7 @@ public class App {
             }
             graphicalWidget.getLayerManager().getLayer(appData.getAstrocytesKey()).clear();
             graphicalWidget.getLayerManager().getLayer(appData.getAstrocytesKey()).addAll(operationsExecutor.getAstrocytes());
-            updateCurrentView();
+            graphicalWidget.updateWidget();
         }
     }
 
