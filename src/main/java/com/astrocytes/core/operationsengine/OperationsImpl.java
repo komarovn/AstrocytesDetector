@@ -25,7 +25,9 @@ import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 import static java.lang.Math.PI;
 import static org.opencv.imgproc.Imgproc.*;
@@ -73,7 +75,17 @@ public class OperationsImpl implements Operations {
         CoreOperations.cannyFilter(currentImage, minThreshold, maxThreshold).copyTo(currentImage);
 
         if (useImage != null && useImage) {
-            //TODO: replace black to origin, white - to blue
+            Mat result = sourceImage.clone();
+
+            for (int col = 0; col < result.cols(); col++) {
+                for (int row = 0; row < result.rows(); row++) {
+                    if (currentImage.get(row, col)[0] != 0) {
+                        result.put(row, col, 255.0, 0.0, 0.0);
+                    }
+                }
+            }
+
+            result.copyTo(currentImage);
         }
 
         return currentImage;
