@@ -24,6 +24,7 @@ import com.astrocytes.core.CoreConstants;
 import com.astrocytes.core.data.DataProvider;
 import com.astrocytes.core.exception.LoadProjectException;
 import com.astrocytes.core.exception.SaveProjectException;
+import com.astrocytes.core.primitives.Point;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -37,6 +38,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 public class ProjectBuilder {
 
@@ -131,12 +134,32 @@ public class ProjectBuilder {
     public void saveRaw(File file) throws SaveProjectException {
         try {
             Document document = createDocument(null);
-            String paramName = "item";
-
             Element rootElement = document.createElement("raw-data");
             document.appendChild(rootElement);
 
-            //TODO: insert data
+            if (DataProvider.getAstrocytes() != null) {
+                addPointsList(DataProvider.getAstrocytes(), "astrocytes", document, rootElement);
+            }
+
+            if (DataProvider.getNeurons() != null) {
+                addPointsList(DataProvider.getNeurons(), "neurons", document, rootElement);
+            }
+
+            if (DataProvider.getLayers() != null) {
+                String mapName = "layers";
+                String mapItemName = "border";
+                Map<Integer, List<Point>> data = DataProvider.getLayers();
+
+                Element map = document.createElement(mapName);
+                rootElement.appendChild(map);
+
+                for (Map.Entry<Integer, List<Point>> entry : data.entrySet()) {
+                    Element mapItem = document.createElement(mapItemName);
+                    map.appendChild(mapItem);
+                    mapItem.setAttribute("key", String.valueOf(entry.getKey()));
+                    addPointsList(entry.getValue(), null, document, mapItem);
+                }
+            }
 
             saveDocument(document, file);
         } catch (Exception e) {
@@ -257,4 +280,20 @@ public class ProjectBuilder {
         root.appendChild(parElement);
     }
 
+    private void addPointsList(List<Point> data, String listName, Document document, Element root) {
+        Element list = root;
+
+        if (listName != null) {
+            list = document.createElement(listName);
+            root.appendChild(list);
+        }
+
+        for (Point obj : data) {
+            Element listItem = document.createElement("item");
+
+            listItem.setAttribute("x", String.valueOf(obj.getX()));
+            listItem.setAttribute("y", String.valueOf(obj.getY()));
+            list.appendChild(listItem);
+        }
+    }
 }
