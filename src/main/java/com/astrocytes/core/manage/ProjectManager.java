@@ -37,8 +37,11 @@ public class ProjectManager {
         settings.createNewFile();
         File parameters = new File(projectDir, CoreConstants.FILE_PARAMETERS);
         parameters.createNewFile();
+        File rawData = new File(projectDir, CoreConstants.FILE_RAW_DATA);
+        rawData.createNewFile();
         projectBuilder.saveParameters(parameters);
         projectBuilder.saveSettings(settings);
+        projectBuilder.saveRaw(rawData);
         File image = new File(projectDir, CoreConstants.FILE_IMAGE);
         image.createNewFile();
         ImageHelper.saveImage(DataProvider.getWorkingImage(), image);
@@ -48,8 +51,10 @@ public class ProjectManager {
         DataProvider.destroyAllData();
         File settings = new File(projectDir, CoreConstants.FILE_SETTINGS);
         File parameters = new File(projectDir, CoreConstants.FILE_PARAMETERS);
+        File rawData = new File(projectDir, CoreConstants.FILE_RAW_DATA);
         projectBuilder.loadParameters(parameters);
         projectBuilder.loadSettings(settings);
+        projectBuilder.loadRaw(rawData);
         File image = new File(projectDir, CoreConstants.FILE_IMAGE);
         DataProvider.setWorkingImage(ImageHelper.loadImage(image));
     }

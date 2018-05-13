@@ -54,6 +54,7 @@ public abstract class CoreConstants {
     /* File names */
     public static final String FILE_SETTINGS = "settings.xml";
     public static final String FILE_PARAMETERS = "parameters.xml";
+    public static final String FILE_RAW_DATA = "raw.xml";
     public static final String FILE_IMAGE = "image.jpg";
 
     /* Statistics */
