@@ -27,6 +27,7 @@ import com.astrocytes.application.widgets.instrument.DrawHorizontalLineInstrumen
 import com.astrocytes.application.widgets.instrument.PointerInstrument;
 import com.astrocytes.application.widgets.instrument.ZoomPanInstrument;
 import com.astrocytes.application.widgets.message.WarningMessage;
+import com.astrocytes.application.widgets.primitives.drawable.DrawingCircle;
 import com.astrocytes.application.widgets.primitives.drawable.DrawingPolygonalChain;
 import com.astrocytes.application.widgets.primitives.drawable.Paintable;
 import com.astrocytes.core.ImageHelper;
@@ -357,11 +358,7 @@ public class App {
         if (image != null) {
             DialogFindAstrocytes dialog = new DialogFindAstrocytes(this, graphicalWidget.getImage());
             if (dialog.isApplied()) {
-                if (appData.getAstrocytesKey() == null) {
-                    appData.setAstrocytesKey(graphicalWidget.getLayerManager().createLayer());
-                }
-                graphicalWidget.getLayerManager().getLayer(appData.getAstrocytesKey()).clear();
-                graphicalWidget.getLayerManager().getLayer(appData.getAstrocytesKey()).addAll(operationsExecutor.applyFindAstocytes());
+                addAstrocytes(operationsExecutor.applyFindAstocytes());
                 updateCurrentView();
             }
         }
@@ -369,13 +366,17 @@ public class App {
 
     public void executeFindAstrocytesAuto() {
         if (image != null) {
-            if (appData.getAstrocytesKey() == null) {
-                appData.setAstrocytesKey(graphicalWidget.getLayerManager().createLayer());
-            }
-            graphicalWidget.getLayerManager().getLayer(appData.getAstrocytesKey()).clear();
-            graphicalWidget.getLayerManager().getLayer(appData.getAstrocytesKey()).addAll(operationsExecutor.getAstrocytes());
+            addAstrocytes(operationsExecutor.getAstrocytes());
             graphicalWidget.updateWidget();
         }
+    }
+
+    private void addAstrocytes(List<DrawingCircle> data) {
+        if (appData.getAstrocytesKey() == null) {
+            appData.setAstrocytesKey(graphicalWidget.getLayerManager().createLayer());
+        }
+        graphicalWidget.getLayerManager().getLayer(appData.getAstrocytesKey()).clear();
+        graphicalWidget.getLayerManager().getLayer(appData.getAstrocytesKey()).addAll(data);
     }
 
     public void executeDrawCellBounds() {
@@ -384,13 +385,6 @@ public class App {
             updateCurrentView();
         }
     }
-
-    /*public void executeKmeans() {
-        if (image != null) {
-            image = operationsExecutor.applyKmeans(image);
-            updateCurrentView();
-        }
-    }*/
 
     /**
      * Apply new Settings.
@@ -434,14 +428,41 @@ public class App {
      * Process chain of operations for loaded project.
      */
     public void processLoadedProject() {
+        resetAll();
+
         operationsExecutor = new OperationsExecutor();
         operationsExecutor.setOriginalImage(DataProvider.getWorkingImage());
         image = DataProvider.getWorkingImage();
-        image = operationsExecutor.applyCannyEdgeDetection();
-        //image = operationsExecutor.applyDilateAndErode(image);
-        //image = operationsExecutor.applyFindAstocytes(image);
+
+        if (DataProvider.getCannyMinThreshold() != null &&
+                DataProvider.getCannyMaxThreshold() != null) {
+            image = operationsExecutor.applyCannyEdgeDetection();
+        }
+
+        if (DataProvider.getRadiusMathMorphology() != null) {
+            image = operationsExecutor.applyDilateAndErode();
+        }
+
+        if (DataProvider.getBoundingRectangleWidth() != null &&
+                DataProvider.getBoundingRectangleHeight() != null &&
+                DataProvider.getBoundingRectangleCenterX() != null &&
+                DataProvider.getBoundingRectangleCenterY() != null) {
+            addAstrocytes(operationsExecutor.applyFindAstocytes());
+        }
+
+        if (DataProvider.getLayers() != null) {
+            executeDrawLayers();
+        }
+
+        if (DataProvider.getAstrocytes() != null) {
+            executeFindAstrocytesAuto();
+        }
+
+        if (DataProvider.getNeurons() != null) {
+            executeFindNeurons();
+        }
+
         menuController.setAvailability(true);
-        graphicalWidget.reset();
         updateWindowSize();
         updateCurrentView();
         updateGrahicalWidget();

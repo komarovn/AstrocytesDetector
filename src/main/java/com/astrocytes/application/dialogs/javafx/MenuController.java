@@ -259,6 +259,7 @@ public class MenuController extends AbstractController {
             DirectoryChooser saveProjectDialog = new DirectoryChooser();
             saveProjectDialog.setTitle(StringResources.OPEN_PROJECT);
             File selectedDirectory = saveProjectDialog.showDialog(menuBar.getScene().getWindow());
+
             if (selectedDirectory != null) {
                 manager.loadProject(selectedDirectory);
                 SwingUtilities.invokeLater(new Runnable() {
