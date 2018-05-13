@@ -21,6 +21,7 @@
 package com.astrocytes.core.manage;
 
 import com.astrocytes.core.CoreConstants;
+import com.astrocytes.core.ImageHelper;
 import com.astrocytes.core.data.DataProvider;
 import com.astrocytes.core.exception.LoadProjectException;
 import com.astrocytes.core.exception.SaveProjectException;
@@ -36,6 +37,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -124,6 +126,15 @@ public class ProjectBuilder {
                 addElement(paramName, CoreConstants.WINDOW_HEIGHT,
                         DataProvider.getWindowHeight().toString(), rootElement, document);
             }
+
+            addElement(paramName, CoreConstants.ASTROCYTES_COLOR,
+                    ImageHelper.convertToHex(DataProvider.getAstrocytesColor()), rootElement, document);
+            addElement(paramName, CoreConstants.NEURONS_COLOR,
+                    ImageHelper.convertToHex(DataProvider.getNeuronsColor()), rootElement, document);
+            addElement(paramName, CoreConstants.MAJOR_LAYERS_COLOR,
+                    ImageHelper.convertToHex(DataProvider.getMajorLayersColor()), rootElement, document);
+            addElement(paramName, CoreConstants.MINOR_LAYERS_COLOR,
+                    ImageHelper.convertToHex(DataProvider.getMinorLayersColor()), rootElement, document);
 
             saveDocument(document, file);
         } catch (Exception e) {
@@ -227,6 +238,18 @@ public class ProjectBuilder {
                         break;
                     case CoreConstants.WINDOW_HEIGHT:
                         DataProvider.setWindowHeight(Integer.valueOf(node.getTextContent()));
+                        break;
+                    case CoreConstants.ASTROCYTES_COLOR:
+                        DataProvider.setAstrocytesColor(Color.decode(node.getTextContent()));
+                        break;
+                    case CoreConstants.NEURONS_COLOR:
+                        DataProvider.setNeuronsColor(Color.decode(node.getTextContent()));
+                        break;
+                    case CoreConstants.MAJOR_LAYERS_COLOR:
+                        DataProvider.setMajorLayersColor(Color.decode(node.getTextContent()));
+                        break;
+                    case CoreConstants.MINOR_LAYERS_COLOR:
+                        DataProvider.setMinorLayersColor(Color.decode(node.getTextContent()));
                         break;
                 }
             }

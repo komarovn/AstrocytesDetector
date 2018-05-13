@@ -24,6 +24,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.DataBufferByte;
@@ -97,6 +98,16 @@ public abstract class ImageHelper {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String convertToHex(Color color) {
+        String hex = Integer.toHexString(color.getRGB() & 0xffffff);
+
+        if (hex.length() < 6) {
+            hex = "000000".substring(0, 6 - hex.length()) + hex;
+        }
+
+        return "#" + hex;
     }
 
 }
